@@ -1,0 +1,37 @@
+---
+import "@/styles/global.css";
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale?: Locale;
+}
+
+const {
+  title,
+  description = t("en", "site.description"),
+  locale = "en",
+} = Astro.props;
+
+const pageTitle = title
+  ? `${title} — SmartHomeGuides`
+  : "SmartHomeGuides — Smart home guides for everyone";
+---
+
+<!doctype html>
+<html lang={locale} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content">
+    <slot />
+  </body>
+</html>

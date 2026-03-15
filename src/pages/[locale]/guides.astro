@@ -1,0 +1,83 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { t, languages, getLocaleFromSlug, removeLocaleFromSlug } from "@i18n/index";
+import type { Locale } from "@i18n/index";
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
+
+const allDocs = await getCollection("docs", (entry) => {
+  return !entry.data.draft && getLocaleFromSlug(entry.id) === locale;
+});
+
+type Category = "fundamentals" | "intermediate" | "advanced" | "glossary";
+const categories: Category[] = [
+  "fundamentals",
+  "intermediate",
+  "advanced",
+  "glossary",
+];
+
+const grouped = categories.map((cat) => ({
+  key: cat,
+  title: t(locale, `categories.${cat}.title` as const),
+  description: t(locale, `categories.${cat}.description` as const),
+  guides: allDocs.filter((doc) => doc.data.category === cat),
+}));
+---
+
+<BaseLayout title={t(locale, "nav.guides")} locale={locale}>
+  <main class="mx-auto max-w-5xl px-4 py-12">
+    <h1 class="text-4xl font-bold">{t(locale, "nav.guides")}</h1>
+    <p class="mt-2 text-base-content/70">
+      {t(locale, "site.description")}
+    </p>
+
+    <div class="mt-10 grid gap-8 sm:grid-cols-2">
+      {
+        grouped.map((cat) => (
+          <div class="card bg-base-200 shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title">{cat.title}</h2>
+              <p class="text-sm text-base-content/70">{cat.description}</p>
+              {cat.guides.length > 0 ? (
+                <ul class="mt-4 space-y-2">
+                  {cat.guides.map((guide) => (
+                    <li>
+                      <a
+                        href={`/${locale}/${cat.key}/${removeLocaleFromSlug(guide.id)}`}
+                        class="link link-hover"
+                      >
+                        {guide.data.title}
+                      </a>
+                      {guide.data.difficulty && (
+                        <span class="badge badge-sm badge-outline ml-2">
+                          {t(
+                            locale,
+                            `guide.difficulty.${guide.data.difficulty}` as const,
+                          )}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="mt-4 text-sm italic text-base-content/50">
+                  {locale === "fr"
+                    ? "Guides à venir..."
+                    : "Guides coming soon..."}
+                </p>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

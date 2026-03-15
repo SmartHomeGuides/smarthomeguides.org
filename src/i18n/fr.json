@@ -1,0 +1,59 @@
+{
+  "site": {
+    "title": "SmartHomeGuides",
+    "description": "Guides open source et communautaires pour les passionnés de domotique, de tous niveaux."
+  },
+  "nav": {
+    "home": "Accueil",
+    "guides": "Guides",
+    "glossary": "Glossaire",
+    "contributors": "Contributeurs",
+    "search": "Rechercher",
+    "zenMode": "Mode Zen",
+    "language": "Langue"
+  },
+  "categories": {
+    "fundamentals": {
+      "title": "Fondamentaux",
+      "description": "Commencez ici. Apprenez les bases de la domotique, les protocoles et votre premier montage."
+    },
+    "intermediate": {
+      "title": "Intermédiaire",
+      "description": "Progressez avec les tableaux de bord, les automatisations, MQTT et les assistants vocaux."
+    },
+    "advanced": {
+      "title": "Avancé",
+      "description": "Firmware personnalisé, capteurs DIY, IA locale et sécurité avancée."
+    },
+    "glossary": {
+      "title": "Glossaire",
+      "description": "Référence consultable des termes, protocoles et acronymes de la maison connectée."
+    }
+  },
+  "guide": {
+    "readingTime": "{minutes} min de lecture",
+    "lastUpdated": "Dernière mise à jour",
+    "prerequisites": "Prérequis",
+    "whatYouLearned": "Ce que vous avez appris",
+    "nextSteps": "Prochaines étapes",
+    "editThisPage": "Modifier cette page",
+    "tableOfContents": "Table des matières",
+    "difficulty": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Des guides domotique pour tous",
+      "subtitle": "Tutoriels open source et communautaires pour la maison connectée — de votre première prise connectée au firmware personnalisé.",
+      "cta": "Commencer",
+      "secondary": "Parcourir les guides"
+    }
+  },
+  "footer": {
+    "openSource": "Open source. Porté par la communauté.",
+    "license": "Code : MIT. Contenu : CC BY-SA 4.0."
+  }
+}

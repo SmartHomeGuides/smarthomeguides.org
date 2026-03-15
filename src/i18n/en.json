@@ -1,0 +1,59 @@
+{
+  "site": {
+    "title": "SmartHomeGuides",
+    "description": "Open-source, community-driven guides for home automation enthusiasts at every level."
+  },
+  "nav": {
+    "home": "Home",
+    "guides": "Guides",
+    "glossary": "Glossary",
+    "contributors": "Contributors",
+    "search": "Search",
+    "zenMode": "Zen Mode",
+    "language": "Language"
+  },
+  "categories": {
+    "fundamentals": {
+      "title": "Fundamentals",
+      "description": "Start here. Learn the basics of home automation, protocols, and your first setup."
+    },
+    "intermediate": {
+      "title": "Intermediate",
+      "description": "Level up with dashboards, automations, MQTT, and voice assistants."
+    },
+    "advanced": {
+      "title": "Advanced",
+      "description": "Custom firmware, DIY sensors, local AI, and advanced security."
+    },
+    "glossary": {
+      "title": "Glossary",
+      "description": "Searchable reference of smart home terms, protocols, and acronyms."
+    }
+  },
+  "guide": {
+    "readingTime": "{minutes} min read",
+    "lastUpdated": "Last updated",
+    "prerequisites": "Prerequisites",
+    "whatYouLearned": "What you learned",
+    "nextSteps": "Next steps",
+    "editThisPage": "Edit this page",
+    "tableOfContents": "Table of contents",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Smart home guides for everyone",
+      "subtitle": "Open-source, community-driven tutorials for home automation",
+      "cta": "Start learning",
+      "secondary": "Browse guides"
+    }
+  },
+  "footer": {
+    "openSource": "Open source. Community driven.",
+    "license": "Code: MIT. Content: CC BY-SA 4.0."
+  }
+}
