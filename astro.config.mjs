@@ -5,7 +5,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://smarthomeguides.org",
+  site: "https://smarthomeguides.github.io",
+  base: "/smarthomeguides.org",
 
   i18n: {
     defaultLocale: "en",
