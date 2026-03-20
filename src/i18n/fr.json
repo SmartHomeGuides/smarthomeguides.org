@@ -4,6 +4,8 @@
     "description": "Guides open source et communautaires pour les passionnés de domotique, de tous niveaux."
   },
   "nav": {
+    "title": "SmartHome",
+    "subtitle": "Guides",
     "home": "Accueil",
     "guides": "Guides",
     "glossary": "Glossaire",

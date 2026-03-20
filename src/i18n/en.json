@@ -4,6 +4,8 @@
     "description": "Open-source, community-driven guides for home automation enthusiasts at every level."
   },
   "nav": {
+    "title": "SmartHome",
+    "subtitle": "Guides",
     "home": "Home",
     "guides": "Guides",
     "glossary": "Glossary",
