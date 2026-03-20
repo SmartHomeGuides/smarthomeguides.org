@@ -1,0 +1,56 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import { getGuideSlug } from "@lib/guides";
+import type { Category } from "@lib/guides";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  locale: Locale;
+  category: Category;
+  guides: CollectionEntry<"docs">[];
+  activeSlug?: string;
+}
+
+const { locale, category, guides, activeSlug } = Astro.props;
+import { getBase } from "@lib/guides";
+const base = getBase();
+---
+
+<div>
+  <h3 class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-base-content/50">
+    {t(locale, `categories.${category}.title` as const)}
+  </h3>
+  <ul class="menu menu-sm w-full gap-0.5">
+    {
+      guides.length > 0 ? (
+        guides.map((guide) => {
+          const slug = getGuideSlug(guide.id);
+          const isActive = slug === activeSlug;
+          return (
+            <li>
+              <a
+                href={`${base}${locale}/${category}/${slug}`}
+                class:list={[{ active: isActive }]}
+              >
+                <span class="flex-1">{guide.data.title}</span>
+                {guide.data.difficulty && (
+                  <span class="badge badge-xs badge-outline">
+                    {t(
+                      locale,
+                      `guide.difficulty.${guide.data.difficulty}` as const,
+                    )}
+                  </span>
+                )}
+              </a>
+            </li>
+          );
+        })
+      ) : (
+        <li class="px-2 text-sm italic text-base-content/50">
+          {t(locale, "guide.comingSoon")}
+        </li>
+      )
+    }
+  </ul>
+</div>

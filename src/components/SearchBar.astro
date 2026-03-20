@@ -1,0 +1,37 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="form-control">
+  <div class="relative">
+    <svg
+      class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/40"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"></path>
+    </svg>
+    <input
+      type="text"
+      placeholder={t(locale, "nav.search")}
+      class="input input-sm input-bordered w-full max-w-xs pl-9 text-sm"
+      disabled
+    />
+    <kbd class="kbd kbd-sm pointer-events-none absolute right-2 top-1/2 -translate-y-1/2"
+      >⌘K</kbd
+    >
+  </div>
+</div>

@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="step relative">
+  <div class="absolute -left-9 top-0 w-6 h-6 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold step-number"></div>
+  <h4 class="font-semibold text-lg mb-2">{title}</h4>
+  <div class="text-base-content/80">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .step {
+    counter-increment: step-counter;
+  }
+  .step-number::before {
+    content: counter(step-counter);
+  }
+</style>

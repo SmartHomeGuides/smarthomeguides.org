@@ -1,0 +1,15 @@
+---
+interface Props {
+  summary: string;
+  open?: boolean;
+}
+
+const { summary, open = false } = Astro.props;
+---
+
+<details class="collapse collapse-arrow bg-base-200 my-4" open={open}>
+  <summary class="collapse-title font-semibold">{summary}</summary>
+  <div class="collapse-content text-sm">
+    <slot />
+  </div>
+</details>

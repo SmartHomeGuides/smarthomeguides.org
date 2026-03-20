@@ -1,0 +1,29 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import type { Category } from "@lib/guides";
+
+interface Props {
+  locale: Locale;
+  category: Category;
+  guideTitle: string;
+}
+
+const { locale, category, guideTitle } = Astro.props;
+import { getBase } from "@lib/guides";
+const base = getBase();
+---
+
+<div class="breadcrumbs text-sm">
+  <ul>
+    <li>
+      <a href={`${base}${locale}/guides`}>{t(locale, "nav.guides")}</a>
+    </li>
+    <li>
+      <a href={`${base}${locale}/${category}/`}>
+        {t(locale, `categories.${category}.title` as const)}
+      </a>
+    </li>
+    <li>{guideTitle}</li>
+  </ul>
+</div>

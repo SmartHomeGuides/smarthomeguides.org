@@ -8,9 +8,11 @@
     "guides": "Guides",
     "glossary": "Glossaire",
     "contributors": "Contributeurs",
-    "search": "Rechercher",
+    "search": "Rechercher des guides...",
     "zenMode": "Mode Zen",
-    "language": "Langue"
+    "language": "Langue",
+    "github": "GitHub",
+    "docs": "Docs"
   },
   "categories": {
     "fundamentals": {
@@ -37,7 +39,12 @@
     "whatYouLearned": "Ce que vous avez appris",
     "nextSteps": "Prochaines étapes",
     "editThisPage": "Modifier cette page",
+    "openAnIssue": "Signaler un problème",
     "tableOfContents": "Table des matières",
+    "onThisPage": "Sur cette page",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "comingSoon": "Guides à venir...",
     "difficulty": {
       "beginner": "Débutant",
       "intermediate": "Intermédiaire",

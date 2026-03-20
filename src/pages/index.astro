@@ -1,28 +1,37 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import Navbar from "@components/Navbar.astro";
+import Footer from "@components/Footer.astro";
 import { t } from "@i18n/index";
 
 const locale = "en";
-const base = import.meta.env.BASE_URL;
+import { getBase } from "@lib/guides";
+const base = getBase();
 ---
 
 <BaseLayout title={t(locale, "home.hero.title")} locale={locale}>
-  <main class="flex min-h-screen flex-col items-center justify-center p-4">
-    <div class="max-w-2xl text-center">
-      <h1 class="text-4xl font-bold sm:text-5xl">
-        {t(locale, "home.hero.title")}
-      </h1>
-      <p class="mt-4 text-lg text-base-content/70">
-        {t(locale, "home.hero.subtitle")}
-      </p>
-      <div class="mt-8 flex flex-wrap justify-center gap-4">
-        <a href={`${base}/en/fundamentals`} class="btn btn-primary">
-          {t(locale, "home.hero.cta")}
-        </a>
-        <a href={`${base}en/guides`} class="btn btn-outline">
-          {t(locale, "home.hero.secondary")}
-        </a>
+  <div class="flex min-h-screen flex-col">
+    <Navbar locale={locale} />
+
+    <main class="flex flex-1 flex-col items-center justify-center p-4">
+      <div class="max-w-2xl text-center">
+        <h1 class="text-4xl font-bold sm:text-5xl">
+          {t(locale, "home.hero.title")}
+        </h1>
+        <p class="mt-4 text-lg text-base-content/70">
+          {t(locale, "home.hero.subtitle")}
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href={`${base}en/fundamentals/`} class="btn btn-primary">
+            {t(locale, "home.hero.cta")}
+          </a>
+          <a href={`${base}en/guides`} class="btn btn-outline">
+            {t(locale, "home.hero.secondary")}
+          </a>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+
+    <Footer locale={locale} />
+  </div>
 </BaseLayout>

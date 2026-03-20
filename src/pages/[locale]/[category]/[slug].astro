@@ -1,0 +1,80 @@
+---
+import { getCollection, render } from "astro:content";
+import DocsLayout from "@layouts/DocsLayout.astro";
+import type { Locale } from "@i18n/index";
+import {
+  getGuideLocale,
+  getGuideCategory,
+  getGuideSlug,
+  getGuidesByCategory,
+  getBase,
+} from "@lib/guides";
+import type { Category } from "@lib/guides";
+
+export async function getStaticPaths() {
+  const allDocs = await getCollection("docs", (entry) => !entry.data.draft);
+
+  return allDocs.map((entry) => ({
+    params: {
+      locale: getGuideLocale(entry.id),
+      category: getGuideCategory(entry.id),
+      slug: getGuideSlug(entry.id),
+    },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { locale, category } = Astro.params as {
+  locale: Locale;
+  category: Category;
+};
+const base = getBase();
+
+const { Content, headings } = await render(entry);
+
+// Get sibling guides for sidebar and prev/next
+const siblings = await getGuidesByCategory(locale, category);
+const currentSlug = getGuideSlug(entry.id);
+const currentIndex = siblings.findIndex(
+  (s) => getGuideSlug(s.id) === currentSlug,
+);
+
+function makeLink(index: number) {
+  const guide = siblings[index];
+  if (!guide) return undefined;
+  return {
+    href: `${base}${locale}/${category}/${getGuideSlug(guide.id)}`,
+    title: guide.data.title,
+  };
+}
+
+const prev = currentIndex > 0 ? makeLink(currentIndex - 1) : undefined;
+const next =
+  currentIndex < siblings.length - 1
+    ? makeLink(currentIndex + 1)
+    : undefined;
+
+// GitHub URLs — adapt the repo path to your actual repo
+const repoBase =
+  "https://github.com/smarthomeguides/smarthomeguides.org";
+const filePath = entry.filePath ?? "";
+const editUrl = `${repoBase}/edit/main/${filePath}`;
+const issueUrl = `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(entry.data.title)}`;
+---
+
+<DocsLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  locale={locale}
+  category={category}
+  guides={siblings}
+  activeSlug={currentSlug}
+  headings={headings}
+  editUrl={editUrl}
+  issueUrl={issueUrl}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</DocsLayout>

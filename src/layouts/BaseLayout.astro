@@ -2,6 +2,7 @@
 import "@/styles/global.css";
 import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
+import { getBase } from "@lib/guides";
 
 interface Props {
   title: string;
@@ -15,17 +16,18 @@ const {
   locale = "en",
 } = Astro.props;
 
+const base = getBase();
 const pageTitle = title
   ? `${title} — SmartHomeGuides`
-  : "SmartHomeGuides — Smart home guides for everyone";
+  : "SmartHomeGuides — Smart Home guides for everyone";
 ---
 
 <!doctype html>
 <html lang={locale} data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="icon" href={`${base}favicon.ico`} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />

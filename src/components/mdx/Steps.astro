@@ -1,0 +1,17 @@
+---
+interface Props {
+  numbered?: boolean;
+}
+
+const { numbered = true } = Astro.props;
+---
+
+<div class:list={["steps ml-4 border-l-2 border-primary pl-6 space-y-6", { "counter-reset-steps": numbered }]}>
+  <slot />
+</div>
+
+<style>
+  .counter-reset-steps {
+    counter-reset: step-counter;
+  }
+</style>

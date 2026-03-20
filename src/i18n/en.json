@@ -8,9 +8,11 @@
     "guides": "Guides",
     "glossary": "Glossary",
     "contributors": "Contributors",
-    "search": "Search",
+    "search": "Search guides...",
     "zenMode": "Zen Mode",
-    "language": "Language"
+    "language": "Language",
+    "github": "GitHub",
+    "docs": "Docs"
   },
   "categories": {
     "fundamentals": {
@@ -37,7 +39,12 @@
     "whatYouLearned": "What you learned",
     "nextSteps": "Next steps",
     "editThisPage": "Edit this page",
+    "openAnIssue": "Open an issue",
     "tableOfContents": "Table of contents",
+    "onThisPage": "On this page",
+    "previous": "Previous",
+    "next": "Next",
+    "comingSoon": "Guides coming soon...",
     "difficulty": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
@@ -46,7 +53,7 @@
   },
   "home": {
     "hero": {
-      "title": "Smart home guides for everyone",
+      "title": "Smart Home guides for everyone",
       "subtitle": "Open-source, community-driven tutorials for home automation",
       "cta": "Start learning",
       "secondary": "Browse guides"

@@ -1,0 +1,25 @@
+---
+interface Props {
+  type?: "info" | "tip" | "warning" | "danger";
+  title?: string;
+}
+
+const { type = "info", title } = Astro.props;
+
+const styles: Record<string, { alert: string; icon: string; defaultTitle: string }> = {
+  info: { alert: "alert-info", icon: "ℹ️", defaultTitle: "Info" },
+  tip: { alert: "alert-success", icon: "💡", defaultTitle: "Tip" },
+  warning: { alert: "alert-warning", icon: "⚠️", defaultTitle: "Warning" },
+  danger: { alert: "alert-error", icon: "🚨", defaultTitle: "Danger" },
+};
+
+const { alert, icon, defaultTitle } = styles[type];
+---
+
+<div class={`alert ${alert} my-4`} role="alert">
+  <span class="text-lg">{icon}</span>
+  <div>
+    <h4 class="font-bold">{title ?? defaultTitle}</h4>
+    <div class="text-sm"><slot /></div>
+  </div>
+</div>
