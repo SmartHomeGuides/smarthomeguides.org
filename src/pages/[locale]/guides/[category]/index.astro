@@ -83,7 +83,7 @@ const categoryDescription = t(locale, `categories.${category}.description` as co
             <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {guides.map((guide) => {
                 const slug = getGuideSlug(guide.id);
-                const href = `${base}${locale}/${category}/${slug}`;
+                const href = `${base}${locale}/guides/${category}/${slug}`;
                 const difficulty = guide.data.difficulty;
                 const badgeClass =
                   difficulty === "beginner"

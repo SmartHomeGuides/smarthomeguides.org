@@ -21,7 +21,7 @@ const base = getBase();
         categories.map((cat) => (
           <a
             role="tab"
-            href={`${base}${locale}/${cat}/`}
+            href={`${base}${locale}/guides/${cat}/`}
             class:list={["tab", { "tab-active": cat === activeCategory }]}
           >
             {t(locale, `categories.${cat}.title` as const)}

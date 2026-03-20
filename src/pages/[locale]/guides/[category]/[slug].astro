@@ -45,7 +45,7 @@ function makeLink(index: number) {
   const guide = siblings[index];
   if (!guide) return undefined;
   return {
-    href: `${base}${locale}/${category}/${getGuideSlug(guide.id)}`,
+    href: `${base}${locale}/guides/${category}/${getGuideSlug(guide.id)}`,
     title: guide.data.title,
   };
 }

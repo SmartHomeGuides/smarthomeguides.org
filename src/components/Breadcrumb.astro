@@ -20,7 +20,7 @@ const base = getBase();
       <a href={`${base}${locale}/guides`}>{t(locale, "nav.guides")}</a>
     </li>
     <li>
-      <a href={`${base}${locale}/${category}/`}>
+      <a href={`${base}${locale}/guides/${category}/`}>
         {t(locale, `categories.${category}.title` as const)}
       </a>
     </li>

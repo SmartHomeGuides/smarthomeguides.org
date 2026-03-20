@@ -55,7 +55,7 @@ const grouped = categories.map((cat) => ({
                     {cat.guides.map((guide) => (
                       <li>
                         <a
-                          href={`${base}${locale}/${getGuideCategory(guide.id)}/${getGuideSlug(guide.id)}`}
+                          href={`${base}${locale}/guides/${getGuideCategory(guide.id)}/${getGuideSlug(guide.id)}`}
                           class="link link-hover"
                         >
                           {guide.data.title}
