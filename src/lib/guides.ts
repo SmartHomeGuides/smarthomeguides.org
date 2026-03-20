@@ -52,6 +52,29 @@ export function getGuideSlug(entryId: string): string {
   return filename;
 }
 
+/**
+ * Returns true if the entry represents a category index file (index.{locale}.mdx).
+ * The glob loader strips dots so the ID looks like `fundamentals/indexen`.
+ */
+export function isIndexEntry(entryId: string): boolean {
+  return getGuideSlug(entryId) === "index";
+}
+
+/**
+ * Fetch the index content entry for a category/locale, or undefined if none exists.
+ */
+export async function getIndexEntry(locale: Locale, category: Category) {
+  const all = await getCollection("docs", (entry) => {
+    return (
+      !entry.data.draft &&
+      getGuideLocale(entry.id) === locale &&
+      entry.data.category === category &&
+      isIndexEntry(entry.id)
+    );
+  });
+  return all[0];
+}
+
 export async function getGuidesByCategory(
   locale: Locale,
   category: Category,
@@ -60,7 +83,8 @@ export async function getGuidesByCategory(
     return (
       !entry.data.draft &&
       getGuideLocale(entry.id) === locale &&
-      entry.data.category === category
+      entry.data.category === category &&
+      !isIndexEntry(entry.id)
     );
   });
 }

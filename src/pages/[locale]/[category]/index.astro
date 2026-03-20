@@ -1,5 +1,7 @@
 ---
+import { render } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import DocsLayout from "@layouts/DocsLayout.astro";
 import Navbar from "@components/Navbar.astro";
 import CategoryTabs from "@components/CategoryTabs.astro";
 import Footer from "@components/Footer.astro";
@@ -9,6 +11,8 @@ import {
   categories,
   getGuidesByCategory,
   getGuideSlug,
+  getIndexEntry,
+  getBase,
 } from "@lib/guides";
 import type { Category } from "@lib/guides";
 
@@ -26,48 +30,98 @@ const { locale, category } = Astro.params as {
   locale: Locale;
   category: Category;
 };
-import { getBase } from "@lib/guides";
 const base = getBase();
 
+const indexEntry = await getIndexEntry(locale, category);
 const guides = await getGuidesByCategory(locale, category);
-const hasGuides = guides.length > 0;
-const redirectUrl = hasGuides
-  ? `${base}${locale}/${category}/${getGuideSlug(guides[0].id)}`
+
+let Content: any = null;
+let headings: any[] = [];
+
+if (indexEntry) {
+  const rendered = await render(indexEntry);
+  Content = rendered.Content;
+  headings = rendered.headings;
+}
+
+const repoBase = "https://github.com/smarthomeguides/smarthomeguides.org";
+const filePath = indexEntry?.filePath ?? "";
+const editUrl = indexEntry ? `${repoBase}/edit/main/${filePath}` : undefined;
+const issueUrl = indexEntry
+  ? `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(indexEntry.data.title)}`
   : undefined;
+
+const categoryTitle = t(locale, `categories.${category}.title` as const);
+const categoryDescription = t(locale, `categories.${category}.description` as const);
 ---
 
 {
-  redirectUrl ? (
-    <html lang={locale}>
-      <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
-        <link rel="canonical" href={redirectUrl} />
-        <title>Redirecting...</title>
-      </head>
-      <body>
-        <p>
-          Redirecting to <a href={redirectUrl}>{redirectUrl}</a>...
-        </p>
-      </body>
-    </html>
-  ) : (
-    <BaseLayout
-      title={t(locale, `categories.${category}.title` as const)}
+  indexEntry && Content ? (
+    <DocsLayout
+      title={indexEntry.data.title}
+      description={indexEntry.data.description}
       locale={locale}
+      category={category}
+      guides={guides}
+      activeSlug=""
+      headings={headings}
+      editUrl={editUrl ?? ""}
+      issueUrl={issueUrl ?? ""}
     >
+      <Content />
+    </DocsLayout>
+  ) : (
+    <BaseLayout title={categoryTitle} locale={locale}>
       <div class="flex min-h-screen flex-col">
         <Navbar locale={locale} />
         <CategoryTabs locale={locale} activeCategory={category} />
-        <main class="flex flex-1 items-center justify-center p-8">
-          <div class="text-center">
-            <h1 class="text-2xl font-bold">
-              {t(locale, `categories.${category}.title` as const)}
-            </h1>
-            <p class="mt-2 text-base-content/60">
-              {t(locale, "guide.comingSoon")}
-            </p>
-          </div>
+        <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 lg:px-10">
+          <h1 class="text-3xl font-bold">{categoryTitle}</h1>
+          <p class="mt-2 text-base-content/60">{categoryDescription}</p>
+
+          {guides.length > 0 ? (
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {guides.map((guide) => {
+                const slug = getGuideSlug(guide.id);
+                const href = `${base}${locale}/${category}/${slug}`;
+                const difficulty = guide.data.difficulty;
+                const badgeClass =
+                  difficulty === "beginner"
+                    ? "badge-success"
+                    : difficulty === "intermediate"
+                      ? "badge-warning"
+                      : difficulty === "advanced"
+                        ? "badge-error"
+                        : "";
+                return (
+                  <a href={href} class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md">
+                    <div class="card-body">
+                      <h2 class="card-title text-lg">{guide.data.title}</h2>
+                      {guide.data.description && (
+                        <p class="text-sm text-base-content/70">{guide.data.description}</p>
+                      )}
+                      <div class="card-actions mt-2">
+                        {difficulty && (
+                          <span class={`badge badge-sm ${badgeClass}`}>
+                            {t(locale, `guide.difficulty.${difficulty}` as const)}
+                          </span>
+                        )}
+                        {guide.data.readingTime && (
+                          <span class="badge badge-ghost badge-sm">
+                            {t(locale, "guide.readingTime").replace("{minutes}", String(guide.data.readingTime))}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="mt-12 text-center">
+              <p class="text-base-content/60">{t(locale, "guide.comingSoon")}</p>
+            </div>
+          )}
         </main>
         <Footer locale={locale} />
       </div>

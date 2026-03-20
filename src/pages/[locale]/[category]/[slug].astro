@@ -7,12 +7,13 @@ import {
   getGuideCategory,
   getGuideSlug,
   getGuidesByCategory,
+  isIndexEntry,
   getBase,
 } from "@lib/guides";
 import type { Category } from "@lib/guides";
 
 export async function getStaticPaths() {
-  const allDocs = await getCollection("docs", (entry) => !entry.data.draft);
+  const allDocs = await getCollection("docs", (entry) => !entry.data.draft && !isIndexEntry(entry.id));
 
   return allDocs.map((entry) => ({
     params: {
