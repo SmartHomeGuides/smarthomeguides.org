@@ -35,6 +35,7 @@
   "guide": {
     "readingTime": "{minutes} min de lecture",
     "lastUpdated": "Dernière mise à jour",
+    "contributors": "Contributeurs",
     "prerequisites": "Prérequis",
     "whatYouLearned": "Ce que vous avez appris",
     "nextSteps": "Prochaines étapes",

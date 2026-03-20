@@ -10,6 +10,7 @@ import {
   isIndexEntry,
   getBase,
 } from "@lib/guides";
+import { getLastModified, getContributors } from "@lib/git";
 import type { Category } from "@lib/guides";
 
 export async function getStaticPaths() {
@@ -62,6 +63,9 @@ const repoBase =
 const filePath = entry.filePath ?? "";
 const editUrl = `${repoBase}/edit/main/${filePath}`;
 const issueUrl = `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(entry.data.title)}`;
+
+const lastModified = getLastModified(filePath);
+const contributors = getContributors(filePath);
 ---
 
 <DocsLayout
@@ -76,6 +80,8 @@ const issueUrl = `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(
   issueUrl={issueUrl}
   prev={prev}
   next={next}
+  lastModified={lastModified}
+  contributors={contributors}
 >
   <Content />
 </DocsLayout>

@@ -14,6 +14,7 @@ import {
   getIndexEntry,
   getBase,
 } from "@lib/guides";
+import { getLastModified, getContributors } from "@lib/git";
 import type { Category } from "@lib/guides";
 
 export async function getStaticPaths() {
@@ -53,6 +54,10 @@ const issueUrl = indexEntry
 
 const categoryTitle = t(locale, `categories.${category}.title` as const);
 const categoryDescription = t(locale, `categories.${category}.description` as const);
+
+const indexFilePath = indexEntry?.filePath ?? "";
+const lastModified = indexFilePath ? getLastModified(indexFilePath) : undefined;
+const contributors = indexFilePath ? getContributors(indexFilePath) : [];
 ---
 
 {
@@ -67,6 +72,8 @@ const categoryDescription = t(locale, `categories.${category}.description` as co
       headings={headings}
       editUrl={editUrl ?? ""}
       issueUrl={issueUrl ?? ""}
+      lastModified={lastModified}
+      contributors={contributors}
     >
       <Content />
     </DocsLayout>

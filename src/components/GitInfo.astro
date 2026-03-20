@@ -1,0 +1,71 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import type { Contributor } from "@lib/git";
+
+interface Props {
+  locale: Locale;
+  lastModified?: Date;
+  contributors: Contributor[];
+}
+
+const { locale, lastModified, contributors } = Astro.props;
+
+const formattedDate = lastModified
+  ? lastModified.toLocaleDateString(locale, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : undefined;
+---
+
+{
+  (formattedDate || contributors.length > 0) && (
+    <div class="flex flex-wrap items-center gap-4 text-sm text-base-content/60">
+      {formattedDate && (
+        <span>
+          {t(locale, "guide.lastUpdated")}: {formattedDate}
+        </span>
+      )}
+      {contributors.length > 0 && (
+        <div class="flex items-center gap-2">
+          <span>{t(locale, "guide.contributors")}:</span>
+          <div class="avatar-group -space-x-3">
+            {contributors.map((c) =>
+              c.profileUrl ? (
+                <a
+                  href={c.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={c.name}
+                  class="avatar w-8 rounded-full ring-base-100 ring-offset-0 transition-transform hover:z-10 hover:scale-110"
+                >
+                  <img
+                    src={c.avatarUrl}
+                    alt={c.name}
+                    width="32"
+                    height="32"
+                    loading="lazy"
+                    class="rounded-full"
+                  />
+                </a>
+              ) : (
+                <div title={c.name} class="avatar w-8 rounded-full ring-base-100 ring-offset-0">
+                  <img
+                    src={c.avatarUrl}
+                    alt={c.name}
+                    width="32"
+                    height="32"
+                    loading="lazy"
+                    class="rounded-full"
+                  />
+                </div>
+              ),
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

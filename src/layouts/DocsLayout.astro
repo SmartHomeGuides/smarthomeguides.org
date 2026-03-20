@@ -7,8 +7,10 @@ import TableOfContents from "@components/TableOfContents.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import GuideNav from "@components/GuideNav.astro";
 import Footer from "@components/Footer.astro";
+import GitInfo from "@components/GitInfo.astro";
 import type { Locale } from "@i18n/index";
 import type { Category } from "@lib/guides";
+import type { Contributor } from "@lib/git";
 import type { CollectionEntry } from "astro:content";
 
 interface GuideLink {
@@ -34,6 +36,8 @@ interface Props {
   issueUrl?: string;
   prev?: GuideLink;
   next?: GuideLink;
+  lastModified?: Date;
+  contributors?: Contributor[];
 }
 
 const {
@@ -48,6 +52,8 @@ const {
   issueUrl,
   prev,
   next,
+  lastModified,
+  contributors = [],
 } = Astro.props;
 ---
 
@@ -67,6 +73,9 @@ const {
             {/* Center: article */}
             <main class="min-w-0 px-4 py-6 lg:px-10 lg:py-8">
               <Breadcrumb locale={locale} category={category} guideTitle={title} />
+              <div class="mt-4">
+                <GitInfo locale={locale} lastModified={lastModified} contributors={contributors} />
+              </div>
               <div class="prose mt-6">
                 <slot />
               </div>
