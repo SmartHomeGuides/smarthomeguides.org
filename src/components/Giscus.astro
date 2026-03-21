@@ -1,0 +1,87 @@
+---
+/**
+ * Giscus comments & reactions widget.
+ * Powered by GitHub Discussions on smarthomeguides/smarthomeguides.org.
+ *
+ * Before this works you must:
+ *   1. Enable Discussions on the repo
+ *   2. Install the Giscus app: https://github.com/apps/giscus
+ *   3. Create a "Comments" category (or update data-category / data-category-id below)
+ *
+ * Generate your own IDs at https://giscus.app and replace the
+ * data-repo-id / data-category-id placeholders.
+ */
+interface Props {
+  locale?: string;
+  term: string;
+}
+
+const { locale = "en", term } = Astro.props;
+---
+
+<div
+  class="giscus-wrapper mt-10 border-t border-base-300 pt-8"
+  data-giscus-term={term}
+  data-giscus-lang={locale}
+>
+</div>
+
+<script is:inline>
+  (function () {
+    const wrapper = document.querySelector(".giscus-wrapper");
+    if (!wrapper) return;
+
+    const term = wrapper.getAttribute("data-giscus-term");
+    const lang = wrapper.getAttribute("data-giscus-lang") || "en";
+
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "SmartHomeGuides/smarthomeguides.org");
+    script.setAttribute("data-repo-id", "R_kgDORnr-ow");
+    script.setAttribute("data-category", "Comments");
+    script.setAttribute("data-category-id", "IC_kwDORnr-o84C48v5");
+    script.setAttribute("data-mapping", "specific");
+    script.setAttribute("data-term", term);
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "bottom");
+    script.setAttribute("data-theme", "preferred_color_scheme");
+    script.setAttribute("data-lang", lang);
+    script.setAttribute("data-loading", "lazy");
+    script.crossOrigin = "anonymous";
+    script.async = true;
+    wrapper.appendChild(script);
+
+    // Keep Giscus theme in sync with the site theme toggle
+    function updateGiscusTheme() {
+      const theme =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "dark"
+          : "light";
+      const iframe = document.querySelector("iframe.giscus-frame");
+      if (iframe) {
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } },
+          "https://giscus.app",
+        );
+      }
+    }
+
+    const observer = new MutationObserver(function (mutations) {
+      for (let i = 0; i < mutations.length; i++) {
+        if (mutations[i].attributeName === "data-theme") {
+          updateGiscusTheme();
+        }
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true });
+
+    window.addEventListener("message", function (event) {
+      if (event.origin !== "https://giscus.app") return;
+      if (typeof event.data === "object" && event.data.giscus) {
+        updateGiscusTheme();
+      }
+    });
+  })();
+</script>
