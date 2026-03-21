@@ -161,6 +161,14 @@
   margin-right: 0.5rem;
 }
 
+/* Pagefind search result highlighting */
+#search-results mark {
+  background-color: oklch(0.85 0.15 85 / 0.4);
+  color: inherit;
+  border-radius: 0.125rem;
+  padding: 0 0.125rem;
+}
+
 /* Footnotes */
 .prose .footnotes {
   margin-top: 2rem;

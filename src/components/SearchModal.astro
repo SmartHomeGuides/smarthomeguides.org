@@ -1,0 +1,182 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import { Search } from "@lucide/astro";
+import { getBase } from "@lib/guides";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const base = getBase();
+---
+
+<dialog
+  id="search-modal"
+  class="modal modal-top"
+  data-base={base}
+  data-locale={locale}
+  data-no-results={t(locale, "search.noResults")}
+>
+  <div class="modal-box mx-auto mt-16 max-w-2xl p-0">
+    {/* Search input header */}
+    <div class="flex items-center gap-2 border-b border-base-300 px-4 py-3">
+      <Search class="h-5 w-5 shrink-0 text-base-content/40" />
+      <input
+        id="search-input"
+        type="text"
+        placeholder={t(locale, "search.placeholder")}
+        class="w-full bg-transparent text-base outline-none placeholder:text-base-content/40"
+        autocomplete="off"
+      />
+      <kbd class="kbd kbd-sm">Esc</kbd>
+    </div>
+
+    {/* Results area */}
+    <div id="search-results" class="max-h-96 overflow-y-auto"></div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
+<script is:inline>
+  (function () {
+    let pagefind = null;
+    let debounceTimer;
+
+    const modal = document.getElementById("search-modal");
+    const input = document.getElementById("search-input");
+    const resultsContainer = document.getElementById("search-results");
+    if (!modal || !input || !resultsContainer) return;
+
+    const base = modal.dataset.base || "/";
+    const noResultsText = modal.dataset.noResults || "No results found.";
+    let activeIndex = -1;
+
+    async function loadPagefind() {
+      if (pagefind) return pagefind;
+      pagefind = await import(base + "pagefind/pagefind.js");
+      await pagefind.init();
+      return pagefind;
+    }
+
+    function openSearch() {
+      modal.showModal();
+      input.value = "";
+      resultsContainer.innerHTML = "";
+      activeIndex = -1;
+      input.focus();
+    }
+
+    function renderResults(results) {
+      if (results.length === 0) {
+        resultsContainer.innerHTML =
+          '<p class="py-8 text-center text-base-content/50">' +
+          noResultsText +
+          "</p>";
+        return;
+      }
+
+      resultsContainer.innerHTML =
+        '<ul class="menu p-2">' +
+        results
+          .map(function (result, i) {
+            return (
+              "<li>" +
+              '<a href="' +
+              result.url +
+              '"' +
+              ' class="flex flex-col items-start gap-1 rounded-lg' +
+              (i === 0 ? " active" : "") +
+              '"' +
+              ' data-search-result="' +
+              i +
+              '">' +
+              '<span class="font-medium">' +
+              (result.meta && result.meta.title
+                ? result.meta.title
+                : "Untitled") +
+              "</span>" +
+              '<span class="text-sm text-base-content/60 line-clamp-2">' +
+              (result.excerpt || "") +
+              "</span>" +
+              "</a>" +
+              "</li>"
+            );
+          })
+          .join("") +
+        "</ul>";
+      activeIndex = 0;
+    }
+
+    function updateActive(newIndex) {
+      const items = resultsContainer.querySelectorAll("[data-search-result]");
+      if (items.length === 0) return;
+
+      items.forEach(function (item) {
+        item.classList.remove("active");
+      });
+      activeIndex = ((newIndex % items.length) + items.length) % items.length;
+      const active = items[activeIndex];
+      active.classList.add("active");
+      active.scrollIntoView({ block: "nearest" });
+    }
+
+    async function performSearch(query) {
+      if (!query.trim()) {
+        resultsContainer.innerHTML = "";
+        activeIndex = -1;
+        return;
+      }
+
+      const pf = await loadPagefind();
+      const search = await pf.search(query);
+      const results = await Promise.all(
+        search.results.slice(0, 10).map(function (r) {
+          return r.data();
+        }),
+      );
+      renderResults(results);
+    }
+
+    // Debounced input handler
+    input.addEventListener("input", function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function () {
+        performSearch(input.value);
+      }, 200);
+    });
+
+    // Keyboard navigation within modal
+    input.addEventListener("keydown", function (e) {
+      const items = resultsContainer.querySelectorAll("[data-search-result]");
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        updateActive(activeIndex + 1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        updateActive(activeIndex - 1);
+      } else if (e.key === "Enter" && items.length > 0 && activeIndex >= 0) {
+        e.preventDefault();
+        items[activeIndex].click();
+      }
+    });
+
+    // Global Cmd+K / Ctrl+K shortcut
+    document.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        openSearch();
+      }
+    });
+
+    // Trigger from search bar button(s)
+    const trigger = document.getElementById("search-trigger");
+    if (trigger) trigger.addEventListener("click", openSearch);
+    const triggerMobile = document.getElementById("search-trigger-mobile");
+    if (triggerMobile) triggerMobile.addEventListener("click", openSearch);
+  })();
+</script>

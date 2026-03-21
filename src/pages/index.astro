@@ -13,7 +13,10 @@ const base = getBase();
   <div class="flex min-h-screen flex-col">
     <Navbar locale={locale} />
 
-    <main class="flex flex-1 flex-col items-center justify-center p-4">
+    <main
+      class="flex flex-1 flex-col items-center justify-center p-4"
+      data-pagefind-ignore
+    >
       <div class="max-w-2xl text-center">
         <h1 class="text-4xl font-bold sm:text-5xl">
           {t(locale, "home.hero.title")}

@@ -11,16 +11,13 @@ const { locale } = Astro.props;
 ---
 
 <div class="form-control">
-  <div class="relative">
-    <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/40" />
-    <input
-      type="text"
-      placeholder={t(locale, "nav.search")}
-      class="input input-sm input-bordered w-full max-w-xs pl-9 text-sm"
-      disabled
-    />
-    <kbd class="kbd kbd-sm pointer-events-none absolute right-2 top-1/2 -translate-y-1/2"
-      >⌘K</kbd
-    >
-  </div>
+  <button
+    id="search-trigger"
+    type="button"
+    class="input input-sm input-bordered flex w-full max-w-xs cursor-pointer items-center gap-2 pl-3 text-sm text-base-content/40"
+  >
+    <Search class="h-4 w-4 shrink-0" />
+    <span class="flex-1 text-left">{t(locale, "search.placeholder")}</span>
+    <kbd class="kbd kbd-sm">⌘K</kbd>
+  </button>
 </div>

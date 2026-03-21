@@ -71,10 +71,19 @@ const {
         <div class="mx-auto max-w-[1400px]">
           <div class="grid grid-cols-1 xl:grid-cols-[1fr_250px]">
             {/* Center: article */}
-            <main class="min-w-0 px-4 py-6 lg:px-10 lg:py-8">
-              <Breadcrumb locale={locale} category={category} guideTitle={title} />
+            <main class="min-w-0 px-4 py-6 lg:px-10 lg:py-8" data-pagefind-body>
+              <meta data-pagefind-filter="locale" content={locale} />
+              <Breadcrumb
+                locale={locale}
+                category={category}
+                guideTitle={title}
+              />
               <div class="mt-4">
-                <GitInfo locale={locale} lastModified={lastModified} contributors={contributors} />
+                <GitInfo
+                  locale={locale}
+                  lastModified={lastModified}
+                  contributors={contributors}
+                />
               </div>
               <div class="prose mt-6">
                 <slot />
@@ -84,7 +93,9 @@ const {
 
             {/* Right panel: TOC */}
             <aside class="hidden border-l border-base-300 xl:block">
-              <div class="sticky top-[112px] h-[calc(100vh-112px)] overflow-y-auto p-4">
+              <div
+                class="sticky top-[112px] h-[calc(100vh-112px)] overflow-y-auto p-4"
+              >
                 <TableOfContents
                   headings={headings}
                   locale={locale}
@@ -99,8 +110,13 @@ const {
 
       {/* Left sidebar (drawer on mobile, visible on lg+) */}
       <div class="drawer-side z-30">
-        <label for="sidebar-drawer" class="drawer-overlay" aria-label="Close sidebar"></label>
-        <aside class="min-h-full w-[250px] border-r border-base-300 bg-base-100 p-4 pt-6">
+        <label
+          for="sidebar-drawer"
+          class="drawer-overlay"
+          aria-label="Close sidebar"></label>
+        <aside
+          class="min-h-full w-[250px] border-r border-base-300 bg-base-100 p-4 pt-6"
+        >
           <Sidebar
             locale={locale}
             category={category}

@@ -3,7 +3,7 @@ import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
 import SearchBar from "@components/SearchBar.astro";
 import LanguageSwitcher from "@components/LanguageSwitcher.astro";
-import { Menu, Sun, Moon, Github } from "@lucide/astro";
+import { Menu, Sun, Moon, Github, Search } from "@lucide/astro";
 
 interface Props {
   locale: Locale;
@@ -21,9 +21,14 @@ const currentPath = Astro.url.pathname;
     <label for="sidebar-drawer" class="btn btn-ghost btn-sm lg:hidden">
       <Menu class="h-5 w-5" />
     </label>
-    <a href={`${base}${locale}/guides`} class="flex items-center gap-2 text-lg font-bold">
+    <a
+      href={`${base}${locale}/guides`}
+      class="flex items-center gap-2 text-lg font-bold"
+    >
       <span>{t(locale, "nav.title")}</span>
-      <span class="badge badge-primary badge-sm">{t(locale, "nav.subtitle")}</span>
+      <span class="badge badge-primary badge-sm"
+        >{t(locale, "nav.subtitle")}</span
+      >
     </a>
   </div>
 
@@ -32,8 +37,15 @@ const currentPath = Astro.url.pathname;
     <SearchBar locale={locale} />
   </div>
 
-  {/* Right: theme + language + github */}
+  {/* Right: search (mobile) + theme + language + github */}
   <div class="navbar-end gap-1">
+    <button
+      class="btn btn-ghost btn-sm md:hidden"
+      aria-label="Search"
+      id="search-trigger-mobile"
+    >
+      <Search class="h-5 w-5" />
+    </button>
     <button
       id="theme-toggle"
       class="btn btn-ghost btn-sm"
