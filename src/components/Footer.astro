@@ -1,25 +1,34 @@
 ---
 import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
+import { getBase } from "@lib/guides";
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const base = getBase();
 ---
 
 <footer class="border-t border-base-300 bg-base-100">
-  <div class="mx-auto flex max-w-[1400px] flex-col items-center gap-2 px-4 py-6 text-sm text-base-content/60 sm:flex-row sm:justify-between">
+  <div
+    class="mx-auto flex max-w-[1400px] flex-col items-center gap-2 px-4 py-6 text-sm text-base-content/60 sm:flex-row sm:justify-between"
+  >
     <p>{t(locale, "footer.openSource")}</p>
     <p>{t(locale, "footer.license")}</p>
-    <a
-      href="https://github.com/smarthomeguides/smarthomeguides.org"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="link link-hover"
-    >
-      GitHub
-    </a>
+    <div class="flex gap-4">
+      <a href={`${base}${locale}/contributors`} class="link link-hover">
+        {t(locale, "nav.contributors")}
+      </a>
+      <a
+        href="https://github.com/smarthomeguides/smarthomeguides.org"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="link link-hover"
+      >
+        GitHub
+      </a>
+    </div>
   </div>
 </footer>

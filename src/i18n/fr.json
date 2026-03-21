@@ -66,6 +66,18 @@
     "placeholder": "Rechercher…",
     "noResults": "Aucun résultat."
   },
+  "contributors": {
+    "title": "Contributeurs",
+    "description": "Les personnes qui rendent SmartHomeGuides possible.",
+    "mergedPRs": "{count} PR fusionnées",
+    "guidesContributed": "Guides auxquels il/elle a contribué",
+    "rank": {
+      "newcomer": "Nouveau",
+      "contributor": "Contributeur",
+      "advocate": "Ambassadeur",
+      "champion": "Champion"
+    }
+  },
   "footer": {
     "openSource": "Open source. Porté par la communauté.",
     "license": "Code : MIT. Contenu : CC BY-SA 4.0."
