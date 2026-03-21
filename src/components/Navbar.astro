@@ -23,7 +23,7 @@ const currentPath = Astro.url.pathname;
     </label>
     <a
       href={`${base}${locale}/guides`}
-      class="flex items-center gap-2 text-lg font-bold"
+      class="flex flex-col items-center text-lg font-bold sm:flex-row sm:gap-2"
     >
       <span>{t(locale, "nav.title")}</span>
       <span class="badge badge-primary badge-sm"
