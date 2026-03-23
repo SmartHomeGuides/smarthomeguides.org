@@ -4,6 +4,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import DocsLayout from "@layouts/DocsLayout.astro";
 import Navbar from "@components/Navbar.astro";
 import CategoryTabs from "@components/CategoryTabs.astro";
+import GlobalSidebar from "@components/GlobalSidebar.astro";
 import Footer from "@components/Footer.astro";
 import type { Locale } from "@i18n/index";
 import { t, languages } from "@i18n/index";
@@ -36,8 +37,8 @@ const base = getBase();
 const indexEntry = await getIndexEntry(locale, category);
 const guides = await getGuidesByCategory(locale, category);
 
-let Content: any = null;
-let headings: any[] = [];
+let Content: Awaited<ReturnType<typeof render>>["Content"] | null = null;
+let headings: { depth: number; slug: string; text: string }[] = [];
 
 if (indexEntry) {
   const rendered = await render(indexEntry);
@@ -53,7 +54,10 @@ const issueUrl = indexEntry
   : undefined;
 
 const categoryTitle = t(locale, `categories.${category}.title` as const);
-const categoryDescription = t(locale, `categories.${category}.description` as const);
+const categoryDescription = t(
+  locale,
+  `categories.${category}.description` as const,
+);
 
 const indexFilePath = indexEntry?.filePath ?? "";
 const lastModified = indexFilePath ? getLastModified(indexFilePath) : undefined;
@@ -79,58 +83,86 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
     </DocsLayout>
   ) : (
     <BaseLayout title={categoryTitle} locale={locale}>
-      <div class="flex min-h-screen flex-col">
-        <Navbar locale={locale} />
-        <CategoryTabs locale={locale} activeCategory={category} />
-        <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 lg:px-10">
-          <h1 class="text-3xl font-bold">{categoryTitle}</h1>
-          <p class="mt-2 text-base-content/60">{categoryDescription}</p>
+      <div class="drawer">
+        <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
 
-          {guides.length > 0 ? (
-            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {guides.map((guide) => {
-                const slug = getGuideSlug(guide.id);
-                const href = `${base}${locale}/guides/${category}/${slug}`;
-                const difficulty = guide.data.difficulty;
-                const badgeClass =
-                  difficulty === "beginner"
-                    ? "badge-success"
-                    : difficulty === "intermediate"
-                      ? "badge-warning"
-                      : difficulty === "advanced"
-                        ? "badge-error"
-                        : "";
-                return (
-                  <a href={href} class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md">
-                    <div class="card-body">
-                      <h2 class="card-title text-lg">{guide.data.title}</h2>
-                      {guide.data.description && (
-                        <p class="text-sm text-base-content/70">{guide.data.description}</p>
-                      )}
-                      <div class="card-actions mt-2">
-                        {difficulty && (
-                          <span class={`badge badge-sm ${badgeClass}`}>
-                            {t(locale, `guide.difficulty.${difficulty}` as const)}
-                          </span>
+        <div class="drawer-content flex min-h-screen flex-col">
+          <Navbar locale={locale} />
+          <CategoryTabs locale={locale} activeCategory={category} />
+          <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 lg:px-10">
+            <h1 class="text-3xl font-bold">{categoryTitle}</h1>
+            <p class="mt-2 text-base-content/60">{categoryDescription}</p>
+
+            {guides.length > 0 ? (
+              <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {guides.map((guide) => {
+                  const slug = getGuideSlug(guide.id);
+                  const href = `${base}${locale}/guides/${category}/${slug}`;
+                  const difficulty = guide.data.difficulty;
+                  const badgeClass =
+                    difficulty === "beginner"
+                      ? "badge-success"
+                      : difficulty === "intermediate"
+                        ? "badge-warning"
+                        : difficulty === "advanced"
+                          ? "badge-error"
+                          : "";
+                  return (
+                    <a
+                      href={href}
+                      class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md"
+                    >
+                      <div class="card-body">
+                        <h2 class="card-title text-lg">{guide.data.title}</h2>
+                        {guide.data.description && (
+                          <p class="text-sm text-base-content/70">
+                            {guide.data.description}
+                          </p>
                         )}
-                        {guide.data.readingTime && (
-                          <span class="badge badge-ghost badge-sm">
-                            {t(locale, "guide.readingTime").replace("{minutes}", String(guide.data.readingTime))}
-                          </span>
-                        )}
+                        <div class="card-actions mt-2">
+                          {difficulty && (
+                            <span class={`badge badge-sm ${badgeClass}`}>
+                              {t(
+                                locale,
+                                `guide.difficulty.${difficulty}` as const,
+                              )}
+                            </span>
+                          )}
+                          {guide.data.readingTime && (
+                            <span class="badge badge-ghost badge-sm">
+                              {t(locale, "guide.readingTime").replace(
+                                "{minutes}",
+                                String(guide.data.readingTime),
+                              )}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-          ) : (
-            <div class="mt-12 text-center">
-              <p class="text-base-content/60">{t(locale, "guide.comingSoon")}</p>
-            </div>
-          )}
-        </main>
-        <Footer locale={locale} />
+                    </a>
+                  );
+                })}
+              </div>
+            ) : (
+              <div class="mt-12 text-center">
+                <p class="text-base-content/60">
+                  {t(locale, "guide.comingSoon")}
+                </p>
+              </div>
+            )}
+          </main>
+          <Footer locale={locale} />
+        </div>
+
+        <div class="drawer-side z-50">
+          <label
+            for="sidebar-drawer"
+            class="drawer-overlay"
+            aria-label="Close sidebar"
+          />
+          <aside class="min-h-full w-[250px] bg-base-100 p-4 pt-6">
+            <GlobalSidebar locale={locale} activeCategory={category} />
+          </aside>
+        </div>
       </div>
     </BaseLayout>
   )

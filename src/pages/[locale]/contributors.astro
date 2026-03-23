@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Navbar from "@components/Navbar.astro";
+import GlobalSidebar from "@components/GlobalSidebar.astro";
 import Footer from "@components/Footer.astro";
 import { t, languages } from "@i18n/index";
 import type { Locale } from "@i18n/index";
@@ -48,30 +49,42 @@ const RankIcon: Record<ContributorRank, typeof Trophy> = {
 ---
 
 <BaseLayout title={t(locale, "contributors.title")} locale={locale}>
-  <div class="flex min-h-screen flex-col">
-    <Navbar locale={locale} />
+  <div class="drawer">
+    <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
 
-    <main class="mx-auto max-w-5xl flex-1 px-4 py-12" data-pagefind-ignore>
-      <h1 class="text-4xl font-bold">{t(locale, "contributors.title")}</h1>
-      <p class="mt-2 text-base-content/70">
-        {t(locale, "contributors.description")}
-      </p>
+    <div class="drawer-content flex min-h-screen flex-col">
+      <Navbar locale={locale} />
 
-      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          contributors.map((c) => {
-            const Icon = RankIcon[c.rank];
-            return (
-              <div class="card bg-base-200 shadow-sm">
-                <div class="card-body items-center text-center">
-                  <div class="avatar">
-                    <div class="w-20 rounded-full">
-                      {c.profileUrl ? (
-                        <a
-                          href={c.profileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+      <main class="mx-auto max-w-5xl flex-1 px-4 py-12" data-pagefind-ignore>
+        <h1 class="text-4xl font-bold">{t(locale, "contributors.title")}</h1>
+        <p class="mt-2 text-base-content/70">
+          {t(locale, "contributors.description")}
+        </p>
+
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            contributors.map((c) => {
+              const Icon = RankIcon[c.rank];
+              return (
+                <div class="card bg-base-200 shadow-sm">
+                  <div class="card-body items-center text-center">
+                    <div class="avatar">
+                      <div class="w-20 rounded-full">
+                        {c.profileUrl ? (
+                          <a
+                            href={c.profileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={c.avatarUrl}
+                              alt={c.name}
+                              width="80"
+                              height="80"
+                              loading="lazy"
+                            />
+                          </a>
+                        ) : (
                           <img
                             src={c.avatarUrl}
                             alt={c.name}
@@ -79,71 +92,73 @@ const RankIcon: Record<ContributorRank, typeof Trophy> = {
                             height="80"
                             loading="lazy"
                           />
+                        )}
+                      </div>
+                    </div>
+
+                    <h2 class="card-title text-lg">
+                      {c.profileUrl ? (
+                        <a
+                          href={c.profileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="link link-hover"
+                        >
+                          {c.name}
                         </a>
                       ) : (
-                        <img
-                          src={c.avatarUrl}
-                          alt={c.name}
-                          width="80"
-                          height="80"
-                          loading="lazy"
-                        />
+                        c.name
                       )}
-                    </div>
-                  </div>
+                    </h2>
 
-                  <h2 class="card-title text-lg">
-                    {c.profileUrl ? (
-                      <a
-                        href={c.profileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="link link-hover"
-                      >
-                        {c.name}
-                      </a>
-                    ) : (
-                      c.name
+                    <span
+                      class={`badge badge-sm gap-1 ${rankBadgeClass[c.rank]}`}
+                    >
+                      <Icon class="h-3 w-3" />
+                      {t(locale, `contributors.rank.${c.rank}` as const)}
+                    </span>
+
+                    <p class="text-sm text-base-content/60">
+                      {t(locale, "contributors.mergedPRs", {
+                        count: c.mergedPRs,
+                      })}
+                    </p>
+
+                    {c.guides.length > 0 && (
+                      <div class="mt-2 w-full text-left">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-base-content/50">
+                          {t(locale, "contributors.guidesContributed")}
+                        </p>
+                        <ul class="mt-1 space-y-1">
+                          {c.guides.map((g) => (
+                            <li>
+                              <a href={g.href} class="link link-hover text-sm">
+                                {g.title}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
-                  </h2>
-
-                  <span
-                    class={`badge badge-sm gap-1 ${rankBadgeClass[c.rank]}`}
-                  >
-                    <Icon class="h-3 w-3" />
-                    {t(locale, `contributors.rank.${c.rank}` as const)}
-                  </span>
-
-                  <p class="text-sm text-base-content/60">
-                    {t(locale, "contributors.mergedPRs", {
-                      count: c.mergedPRs,
-                    })}
-                  </p>
-
-                  {c.guides.length > 0 && (
-                    <div class="mt-2 w-full text-left">
-                      <p class="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-                        {t(locale, "contributors.guidesContributed")}
-                      </p>
-                      <ul class="mt-1 space-y-1">
-                        {c.guides.map((g) => (
-                          <li>
-                            <a href={g.href} class="link link-hover text-sm">
-                              {g.title}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        }
-      </div>
-    </main>
+              );
+            })
+          }
+        </div>
+      </main>
 
-    <Footer locale={locale} />
+      <Footer locale={locale} />
+    </div>
+
+    <div class="drawer-side z-50">
+      <label
+        for="sidebar-drawer"
+        class="drawer-overlay"
+        aria-label="Close sidebar"></label>
+      <aside class="min-h-full w-[250px] bg-base-100 p-4 pt-6">
+        <GlobalSidebar locale={locale} />
+      </aside>
+    </div>
   </div>
 </BaseLayout>

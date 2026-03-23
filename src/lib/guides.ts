@@ -44,7 +44,7 @@ export function getGuideCategory(entryId: string): Category {
  * e.g. `fundamentals/what-is-home-automationen` → `what-is-home-automation`
  */
 export function getGuideSlug(entryId: string): string {
-  const filename = entryId.split("/").pop()!;
+  const filename = entryId.split("/").pop() ?? "";
   const suffix = filename.slice(-2);
   if (localeKeys.includes(suffix)) {
     return filename.slice(0, -2);
@@ -75,10 +75,7 @@ export async function getIndexEntry(locale: Locale, category: Category) {
   return all[0];
 }
 
-export async function getGuidesByCategory(
-  locale: Locale,
-  category: Category,
-) {
+export async function getGuidesByCategory(locale: Locale, category: Category) {
   return getCollection("docs", (entry) => {
     return (
       !entry.data.draft &&

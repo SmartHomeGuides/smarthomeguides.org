@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Navbar from "@components/Navbar.astro";
 import CategoryTabs from "@components/CategoryTabs.astro";
+import GlobalSidebar from "@components/GlobalSidebar.astro";
 import Footer from "@components/Footer.astro";
 import { t, languages } from "@i18n/index";
 import type { Locale } from "@i18n/index";
@@ -33,56 +34,70 @@ const grouped = categories.map((cat) => ({
 ---
 
 <BaseLayout title={t(locale, "nav.guides")} locale={locale}>
-  <div class="flex min-h-screen flex-col">
-    <Navbar locale={locale} />
-    <CategoryTabs locale={locale} />
+  <div class="drawer">
+    <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
 
-    <main class="mx-auto max-w-5xl flex-1 px-4 py-12">
-      <h1 class="text-4xl font-bold">{t(locale, "nav.guides")}</h1>
-      <p class="mt-2 text-base-content/70">
-        {t(locale, "site.description")}
-      </p>
+    <div class="drawer-content flex min-h-screen flex-col">
+      <Navbar locale={locale} />
+      <CategoryTabs locale={locale} />
 
-      <div class="mt-10 grid gap-8 sm:grid-cols-2">
-        {
-          grouped.map((cat) => (
-            <div class="card bg-base-200 shadow-sm">
-              <div class="card-body">
-                <h2 class="card-title">{cat.title}</h2>
-                <p class="text-sm text-base-content/70">{cat.description}</p>
-                {cat.guides.length > 0 ? (
-                  <ul class="mt-4 space-y-2">
-                    {cat.guides.map((guide) => (
-                      <li>
-                        <a
-                          href={`${base}${locale}/guides/${getGuideCategory(guide.id)}/${getGuideSlug(guide.id)}`}
-                          class="link link-hover"
-                        >
-                          {guide.data.title}
-                        </a>
-                        {guide.data.difficulty && (
-                          <span class="badge badge-sm badge-outline ml-2">
-                            {t(
-                              locale,
-                              `guide.difficulty.${guide.data.difficulty}` as const,
-                            )}
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p class="mt-4 text-sm italic text-base-content/50">
-                    {t(locale, "guide.comingSoon")}
-                  </p>
-                )}
+      <main class="mx-auto max-w-5xl flex-1 px-4 py-12">
+        <h1 class="text-4xl font-bold">{t(locale, "nav.guides")}</h1>
+        <p class="mt-2 text-base-content/70">
+          {t(locale, "site.description")}
+        </p>
+
+        <div class="mt-10 grid gap-8 sm:grid-cols-2">
+          {
+            grouped.map((cat) => (
+              <div class="card bg-base-200 shadow-sm">
+                <div class="card-body">
+                  <h2 class="card-title">{cat.title}</h2>
+                  <p class="text-sm text-base-content/70">{cat.description}</p>
+                  {cat.guides.length > 0 ? (
+                    <ul class="mt-4 space-y-2">
+                      {cat.guides.map((guide) => (
+                        <li>
+                          <a
+                            href={`${base}${locale}/guides/${getGuideCategory(guide.id)}/${getGuideSlug(guide.id)}`}
+                            class="link link-hover"
+                          >
+                            {guide.data.title}
+                          </a>
+                          {guide.data.difficulty && (
+                            <span class="badge badge-sm badge-outline ml-2">
+                              {t(
+                                locale,
+                                `guide.difficulty.${guide.data.difficulty}` as const,
+                              )}
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="mt-4 text-sm italic text-base-content/50">
+                      {t(locale, "guide.comingSoon")}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
-        }
-      </div>
-    </main>
+            ))
+          }
+        </div>
+      </main>
 
-    <Footer locale={locale} />
+      <Footer locale={locale} />
+    </div>
+
+    <div class="drawer-side z-50">
+      <label
+        for="sidebar-drawer"
+        class="drawer-overlay"
+        aria-label="Close sidebar"></label>
+      <aside class="min-h-full w-[250px] bg-base-100 p-4 pt-6">
+        <GlobalSidebar locale={locale} />
+      </aside>
+    </div>
   </div>
 </BaseLayout>

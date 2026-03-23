@@ -1,0 +1,177 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import { categories, getGuideSlug, getBase } from "@lib/guides";
+import type { Category } from "@lib/guides";
+import type { CollectionEntry } from "astro:content";
+import { Home, BookOpen, Users, SquarePen, CircleAlert } from "@lucide/astro";
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  locale: Locale;
+  activeCategory?: Category;
+  guides?: CollectionEntry<"docs">[];
+  activeSlug?: string;
+  headings?: Heading[];
+  editUrl?: string;
+  issueUrl?: string;
+}
+
+const {
+  locale,
+  activeCategory,
+  guides,
+  activeSlug,
+  headings,
+  editUrl,
+  issueUrl,
+} = Astro.props;
+const base = getBase();
+const filteredHeadings =
+  headings?.filter((h) => h.depth >= 2 && h.depth <= 3) ?? [];
+---
+
+<nav>
+  {/* Site navigation */}
+  <ul class="menu menu-sm w-full gap-0.5">
+    <li>
+      <a href={`${base}`}>
+        <Home class="h-4 w-4" />
+        {t(locale, "nav.home")}
+      </a>
+    </li>
+    <li>
+      <a href={`${base}${locale}/guides/`}>
+        <BookOpen class="h-4 w-4" />
+        {t(locale, "nav.guides")}
+      </a>
+    </li>
+    <li>
+      <a href={`${base}${locale}/contributors/`}>
+        <Users class="h-4 w-4" />
+        {t(locale, "nav.contributors")}
+      </a>
+    </li>
+  </ul>
+
+  <div class="divider my-2"></div>
+
+  {/* Categories */}
+  <h3
+    class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-base-content/50"
+  >
+    {t(locale, "nav.guides")}
+  </h3>
+  <ul class="menu menu-sm w-full gap-0.5">
+    {
+      categories.map((cat) => (
+        <li>
+          <a
+            href={`${base}${locale}/guides/${cat}/`}
+            class:list={[{ active: cat === activeCategory }]}
+          >
+            {t(locale, `categories.${cat}.title` as const)}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  {/* Guide list for current category */}
+  {
+    guides && guides.length > 0 && activeCategory && (
+      <>
+        <div class="divider my-2" />
+        <h3 class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-base-content/50">
+          {t(locale, `categories.${activeCategory}.title` as const)}
+        </h3>
+        <ul class="menu menu-sm w-full gap-0.5">
+          {guides.map((guide) => {
+            const slug = getGuideSlug(guide.id);
+            const isActive = slug === activeSlug;
+            return (
+              <li>
+                <a
+                  href={`${base}${locale}/guides/${activeCategory}/${slug}`}
+                  class:list={[{ active: isActive }]}
+                >
+                  <span class="flex-1">{guide.data.title}</span>
+                  {guide.data.difficulty && (
+                    <span class="badge badge-xs badge-outline">
+                      {t(
+                        locale,
+                        `guide.difficulty.${guide.data.difficulty}` as const,
+                      )}
+                    </span>
+                  )}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </>
+    )
+  }
+
+  {/* Table of Contents for current guide */}
+  {
+    filteredHeadings.length > 0 && (
+      <>
+        <div class="divider my-2" />
+        <h3 class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-base-content/50">
+          {t(locale, "guide.onThisPage")}
+        </h3>
+        <ul class="space-y-1 px-2 text-sm">
+          {filteredHeadings.map((h) => (
+            <li>
+              <a
+                href={`#${h.slug}`}
+                class:list={[
+                  "inline-block py-0.5 text-base-content/70 transition-colors hover:text-base-content",
+                  { "pl-4": h.depth === 3 },
+                ]}
+              >
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {/* Edit / Issue actions */}
+  {
+    (editUrl || issueUrl) && (
+      <div class="mt-4 space-y-2 border-t border-base-300 pt-4">
+        {editUrl && (
+          <a
+            href={editUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 px-2 text-sm text-base-content/60 transition-colors hover:text-base-content"
+          >
+            <SquarePen class="h-4 w-4" />
+            {t(locale, "guide.editThisPage")}
+          </a>
+        )}
+        {issueUrl && (
+          <a
+            href={issueUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 px-2 text-sm text-base-content/60 transition-colors hover:text-base-content"
+          >
+            <CircleAlert class="h-4 w-4" />
+            {t(locale, "guide.openAnIssue")}
+          </a>
+        )}
+      </div>
+    )
+  }
+</nav>
