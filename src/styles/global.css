@@ -161,6 +161,12 @@
   margin-right: 0.5rem;
 }
 
+/* Sidebar menu active state uses primary color */
+.drawer-side .menu {
+  --menu-active-bg: var(--color-primary);
+  --menu-active-fg: var(--color-primary-content);
+}
+
 /* Pagefind search result highlighting */
 #search-results mark {
   background-color: oklch(0.85 0.15 85 / 0.4);
