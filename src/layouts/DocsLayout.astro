@@ -1,11 +1,7 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
-import Navbar from "@components/Navbar.astro";
-import CategoryTabs from "@components/CategoryTabs.astro";
-import GlobalSidebar from "@components/GlobalSidebar.astro";
+import SidebarLayout from "@layouts/SidebarLayout.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import GuideNav from "@components/GuideNav.astro";
-import Footer from "@components/Footer.astro";
 import GitInfo from "@components/GitInfo.astro";
 import Giscus from "@components/Giscus.astro";
 import type { Locale } from "@i18n/index";
@@ -15,12 +11,6 @@ import type { Contributor } from "@lib/git";
 interface GuideLink {
   href: string;
   title: string;
-}
-
-interface Heading {
-  depth: number;
-  slug: string;
-  text: string;
 }
 
 interface Props {
@@ -34,7 +24,7 @@ interface Props {
   guideTitle?: string;
   guideHref?: string;
   isGuideLanding?: boolean;
-  headings: Heading[];
+  headings: { depth: number; slug: string; text: string }[];
   editUrl?: string;
   issueUrl?: string;
   prev?: GuideLink;
@@ -64,66 +54,43 @@ const {
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} locale={locale}>
-  <div class="drawer lg:drawer-open">
-    <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
-
-    {/* Main content area (navbar + tabs + center + right) */}
-    <div class="drawer-content flex min-h-screen flex-col">
-      <Navbar locale={locale} />
-      <CategoryTabs locale={locale} activeCategory={category} />
-
-      <div class="mx-auto w-full max-w-[1400px] flex-1">
-        <main class="min-w-0 px-4 py-6 lg:px-10 lg:py-8" data-pagefind-body>
-          <meta data-pagefind-filter="locale" content={locale} />
-          <Breadcrumb
-            locale={locale}
-            category={category}
-            guideTitle={isGuideLanding ? title : (guideTitle ?? title)}
-            chapterTitle={guideTitle && !isGuideLanding ? title : undefined}
-            guideHref={guideHref}
-          />
-          <div class="mt-4">
-            <GitInfo
-              locale={locale}
-              lastModified={lastModified}
-              contributors={contributors}
-            />
-          </div>
-          <div class="prose mt-6">
-            <slot />
-          </div>
-          <GuideNav locale={locale} prev={prev} next={next} />
-          <Giscus
-            locale={locale}
-            term={`${locale}/guides/${category}/${activeGuideSlug}${activeChapterSlug ? `/${activeChapterSlug}` : ""}`}
-          />
-        </main>
-      </div>
-
-      <Footer locale={locale} />
-    </div>
-
-    {/* Left sidebar (drawer on mobile, visible on lg+) */}
-    <div class="drawer-side z-50">
-      <label
-        for="sidebar-drawer"
-        class="drawer-overlay"
-        aria-label="Close sidebar"></label>
-      <aside
-        class="min-h-full w-[250px] border-r border-base-300 bg-base-100 p-4 pt-6"
-      >
-        <GlobalSidebar
+<SidebarLayout
+  title={title}
+  description={description}
+  locale={locale}
+  category={category}
+  guideGroups={guideGroups}
+  activeGuideSlug={activeGuideSlug}
+  activeChapterSlug={activeChapterSlug}
+  headings={headings}
+  editUrl={editUrl}
+  issueUrl={issueUrl}
+>
+  <div class="mx-auto w-full max-w-[1400px] flex-1">
+    <main class="min-w-0 px-4 py-6 lg:px-10 lg:py-8" data-pagefind-body>
+      <meta data-pagefind-filter="locale" content={locale} />
+      <Breadcrumb
+        locale={locale}
+        category={category}
+        guideTitle={isGuideLanding ? title : (guideTitle ?? title)}
+        chapterTitle={guideTitle && !isGuideLanding ? title : undefined}
+        guideHref={guideHref}
+      />
+      <div class="mt-4">
+        <GitInfo
           locale={locale}
-          activeCategory={category}
-          guideGroups={guideGroups}
-          activeGuideSlug={activeGuideSlug}
-          activeChapterSlug={activeChapterSlug}
-          headings={headings}
-          editUrl={editUrl}
-          issueUrl={issueUrl}
+          lastModified={lastModified}
+          contributors={contributors}
         />
-      </aside>
-    </div>
+      </div>
+      <div class="prose mt-6">
+        <slot />
+      </div>
+      <GuideNav locale={locale} prev={prev} next={next} />
+      <Giscus
+        locale={locale}
+        term={`${locale}/guides/${category}/${activeGuideSlug}${activeChapterSlug ? `/${activeChapterSlug}` : ""}`}
+      />
+    </main>
   </div>
-</BaseLayout>
+</SidebarLayout>

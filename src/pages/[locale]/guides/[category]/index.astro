@@ -1,11 +1,7 @@
 ---
 import { render } from "astro:content";
-import BaseLayout from "@layouts/BaseLayout.astro";
+import SidebarLayout from "@layouts/SidebarLayout.astro";
 import DocsLayout from "@layouts/DocsLayout.astro";
-import Navbar from "@components/Navbar.astro";
-import CategoryTabs from "@components/CategoryTabs.astro";
-import GlobalSidebar from "@components/GlobalSidebar.astro";
-import Footer from "@components/Footer.astro";
 import type { Locale } from "@i18n/index";
 import { t, languages } from "@i18n/index";
 import {
@@ -84,162 +80,143 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
       <Content />
     </DocsLayout>
   ) : (
-    <BaseLayout title={categoryTitle} locale={locale}>
-      <div class="drawer">
-        <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
+    <SidebarLayout
+      title={categoryTitle}
+      locale={locale}
+      category={category}
+      guideGroups={guideGroups}
+    >
+      <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 lg:px-10">
+        <h1 class="text-3xl font-bold">{categoryTitle}</h1>
+        <p class="mt-2 text-base-content/60">{categoryDescription}</p>
 
-        <div class="drawer-content flex min-h-screen flex-col">
-          <Navbar locale={locale} />
-          <CategoryTabs locale={locale} activeCategory={category} />
-          <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 lg:px-10">
-            <h1 class="text-3xl font-bold">{categoryTitle}</h1>
-            <p class="mt-2 text-base-content/60">{categoryDescription}</p>
+        {guideGroups.length > 0 ? (
+          <>
+            {/* View toggle */}
+            <div class="mt-6 flex justify-end gap-1">
+              <button
+                id="view-grid"
+                class="btn btn-ghost btn-sm btn-active"
+                aria-label="Grid view"
+              >
+                <LayoutGrid class="h-4 w-4" />
+              </button>
+              <button
+                id="view-list"
+                class="btn btn-ghost btn-sm"
+                aria-label="List view"
+              >
+                <List class="h-4 w-4" />
+              </button>
+            </div>
 
-            {guideGroups.length > 0 ? (
-              <>
-                {/* View toggle */}
-                <div class="mt-6 flex justify-end gap-1">
-                  <button
-                    id="view-grid"
-                    class="btn btn-ghost btn-sm btn-active"
-                    aria-label="Grid view"
-                  >
-                    <LayoutGrid class="h-4 w-4" />
-                  </button>
-                  <button
-                    id="view-list"
-                    class="btn btn-ghost btn-sm"
-                    aria-label="List view"
-                  >
-                    <List class="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* Guide listing container */}
-                <div id="guide-listing" data-view="grid">
-                  {/* Grid view */}
-                  <div class="guide-grid mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {guideGroups.map((group) => {
-                      const firstEntry = group.entries[0];
-                      const href = getGuideEntryUrl(
-                        base,
-                        locale,
-                        category,
-                        firstEntry,
-                      );
-                      const difficulty = group.difficulty;
-                      const badgeClass = getDifficultyBadgeClass(difficulty);
-                      return (
-                        <a
-                          href={href}
-                          class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md"
-                        >
-                          <div class="card-body">
-                            <h2 class="card-title text-lg">
-                              {group.guideTitle}
-                            </h2>
-                            {group.guideDescription && (
-                              <p class="text-sm text-base-content/70">
-                                {group.guideDescription}
-                              </p>
-                            )}
-                            <div class="card-actions mt-2">
-                              {difficulty && (
-                                <span class={`badge badge-sm ${badgeClass}`}>
-                                  {t(
-                                    locale,
-                                    `guide.difficulty.${difficulty}` as const,
-                                  )}
-                                </span>
+            {/* Guide listing container */}
+            <div id="guide-listing" data-view="grid">
+              {/* Grid view */}
+              <div class="guide-grid mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {guideGroups.map((group) => {
+                  const firstEntry = group.entries[0];
+                  const href = getGuideEntryUrl(
+                    base,
+                    locale,
+                    category,
+                    firstEntry,
+                  );
+                  const difficulty = group.difficulty;
+                  const badgeClass = getDifficultyBadgeClass(difficulty);
+                  return (
+                    <a
+                      href={href}
+                      class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md"
+                    >
+                      <div class="card-body">
+                        <h2 class="card-title text-lg">{group.guideTitle}</h2>
+                        {group.guideDescription && (
+                          <p class="text-sm text-base-content/70">
+                            {group.guideDescription}
+                          </p>
+                        )}
+                        <div class="card-actions mt-2">
+                          {difficulty && (
+                            <span class={`badge badge-sm ${badgeClass}`}>
+                              {t(
+                                locale,
+                                `guide.difficulty.${difficulty}` as const,
                               )}
-                              {firstEntry.data.readingTime && (
-                                <span class="badge badge-ghost badge-sm">
-                                  {t(locale, "guide.readingTime").replace(
-                                    "{minutes}",
-                                    String(firstEntry.data.readingTime),
-                                  )}
-                                </span>
+                            </span>
+                          )}
+                          {firstEntry.data.readingTime && (
+                            <span class="badge badge-ghost badge-sm">
+                              {t(locale, "guide.readingTime").replace(
+                                "{minutes}",
+                                String(firstEntry.data.readingTime),
                               )}
-                            </div>
-                          </div>
-                        </a>
-                      );
-                    })}
-                  </div>
-
-                  {/* List view */}
-                  <div class="guide-list mt-4 hidden divide-y divide-base-300">
-                    {guideGroups.map((group) => {
-                      const firstEntry = group.entries[0];
-                      const href = getGuideEntryUrl(
-                        base,
-                        locale,
-                        category,
-                        firstEntry,
-                      );
-                      const difficulty = group.difficulty;
-                      const badgeClass = getDifficultyBadgeClass(difficulty);
-                      return (
-                        <a
-                          href={href}
-                          class="flex items-center gap-4 px-2 py-3 transition-colors hover:bg-base-200 first:rounded-t-lg last:rounded-b-lg"
-                        >
-                          <div class="min-w-0 flex-1">
-                            <span class="font-medium">{group.guideTitle}</span>
-                            {group.guideDescription && (
-                              <p class="mt-0.5 truncate text-sm text-base-content/60">
-                                {group.guideDescription}
-                              </p>
-                            )}
-                          </div>
-                          <div class="flex shrink-0 items-center gap-2">
-                            {difficulty && (
-                              <span class={`badge badge-sm ${badgeClass}`}>
-                                {t(
-                                  locale,
-                                  `guide.difficulty.${difficulty}` as const,
-                                )}
-                              </span>
-                            )}
-                            {firstEntry.data.readingTime && (
-                              <span class="badge badge-ghost badge-sm">
-                                {t(locale, "guide.readingTime").replace(
-                                  "{minutes}",
-                                  String(firstEntry.data.readingTime),
-                                )}
-                              </span>
-                            )}
-                          </div>
-                          <span class="text-base-content/30">&rarr;</span>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div class="mt-12 text-center">
-                <p class="text-base-content/60">
-                  {t(locale, "guide.comingSoon")}
-                </p>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
-            )}
-          </main>
-          <Footer locale={locale} />
-        </div>
 
-        <div class="drawer-side z-50">
-          <label
-            for="sidebar-drawer"
-            class="drawer-overlay"
-            aria-label="Close sidebar"
-          />
-          <aside class="min-h-full w-[250px] bg-base-100 p-4 pt-6">
-            <GlobalSidebar locale={locale} activeCategory={category} />
-          </aside>
-        </div>
-      </div>
-    </BaseLayout>
+              {/* List view */}
+              <div class="guide-list mt-4 hidden divide-y divide-base-300">
+                {guideGroups.map((group) => {
+                  const firstEntry = group.entries[0];
+                  const href = getGuideEntryUrl(
+                    base,
+                    locale,
+                    category,
+                    firstEntry,
+                  );
+                  const difficulty = group.difficulty;
+                  const badgeClass = getDifficultyBadgeClass(difficulty);
+                  return (
+                    <a
+                      href={href}
+                      class="flex items-center gap-4 px-2 py-3 transition-colors hover:bg-base-200 first:rounded-t-lg last:rounded-b-lg"
+                    >
+                      <div class="min-w-0 flex-1">
+                        <span class="font-medium">{group.guideTitle}</span>
+                        {group.guideDescription && (
+                          <p class="mt-0.5 truncate text-sm text-base-content/60">
+                            {group.guideDescription}
+                          </p>
+                        )}
+                      </div>
+                      <div class="flex shrink-0 items-center gap-2">
+                        {difficulty && (
+                          <span class={`badge badge-sm ${badgeClass}`}>
+                            {t(
+                              locale,
+                              `guide.difficulty.${difficulty}` as const,
+                            )}
+                          </span>
+                        )}
+                        {firstEntry.data.readingTime && (
+                          <span class="badge badge-ghost badge-sm">
+                            {t(locale, "guide.readingTime").replace(
+                              "{minutes}",
+                              String(firstEntry.data.readingTime),
+                            )}
+                          </span>
+                        )}
+                      </div>
+                      <span class="text-base-content/30">&rarr;</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div class="mt-12 text-center">
+            <p class="text-base-content/60">{t(locale, "guide.comingSoon")}</p>
+          </div>
+        )}
+      </main>
+    </SidebarLayout>
   )
 }
 

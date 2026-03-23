@@ -1,0 +1,71 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Navbar from "@components/Navbar.astro";
+import CategoryTabs from "@components/CategoryTabs.astro";
+import GlobalSidebar from "@components/GlobalSidebar.astro";
+import Footer from "@components/Footer.astro";
+import type { Locale } from "@i18n/index";
+import type { Category, GuideGroup } from "@lib/guides";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+  category?: Category;
+  guideGroups?: GuideGroup[];
+  activeGuideSlug?: string;
+  activeChapterSlug?: string | null;
+  headings?: { depth: number; slug: string; text: string }[];
+  editUrl?: string;
+  issueUrl?: string;
+}
+
+const {
+  title,
+  description,
+  locale,
+  category,
+  guideGroups = [],
+  activeGuideSlug = "",
+  activeChapterSlug,
+  headings = [],
+  editUrl,
+  issueUrl,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <div class="drawer lg:drawer-open">
+    <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
+
+    <div class="drawer-content flex min-h-screen flex-col">
+      <Navbar locale={locale} />
+      <CategoryTabs locale={locale} activeCategory={category} />
+
+      <slot />
+
+      <Footer locale={locale} />
+    </div>
+
+    <div class="drawer-side z-50">
+      <label
+        for="sidebar-drawer"
+        class="drawer-overlay"
+        aria-label="Close sidebar"></label>
+      <aside
+        class="min-h-full w-[250px] border-r border-base-300 bg-base-100 p-4 pt-6"
+      >
+        <GlobalSidebar
+          locale={locale}
+          activeCategory={category}
+          guideGroups={guideGroups}
+          activeGuideSlug={activeGuideSlug}
+          activeChapterSlug={activeChapterSlug}
+          headings={headings}
+          editUrl={editUrl}
+          issueUrl={issueUrl}
+        />
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
