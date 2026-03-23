@@ -33,6 +33,7 @@ interface Props {
   activeChapterSlug?: string | null;
   guideTitle?: string;
   guideHref?: string;
+  isGuideLanding?: boolean;
   headings: Heading[];
   editUrl?: string;
   issueUrl?: string;
@@ -52,6 +53,7 @@ const {
   activeChapterSlug,
   guideTitle,
   guideHref,
+  isGuideLanding,
   headings,
   editUrl,
   issueUrl,
@@ -77,8 +79,8 @@ const {
           <Breadcrumb
             locale={locale}
             category={category}
-            guideTitle={guideTitle ?? title}
-            chapterTitle={guideTitle ? title : undefined}
+            guideTitle={isGuideLanding ? title : (guideTitle ?? title)}
+            chapterTitle={guideTitle && !isGuideLanding ? title : undefined}
             guideHref={guideHref}
           />
           <div class="mt-4">

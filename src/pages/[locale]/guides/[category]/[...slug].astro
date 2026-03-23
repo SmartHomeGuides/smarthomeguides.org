@@ -7,7 +7,8 @@ import {
   getGuideCategory,
   getGuideSlug,
   parseEntryId,
-  isIndexEntry,
+  isCategoryIndexEntry,
+  isGuideIndexEntry,
   getBase,
   getGroupedGuides,
   getGuideEntryUrl,
@@ -17,9 +18,12 @@ import type { Category } from "@lib/guides";
 import { getLastModified, getContributors } from "@lib/git";
 
 export async function getStaticPaths() {
+  // Include all entries except category-level index files.
+  // Guide-level index files (index.en.mdx inside a guide folder) ARE included
+  // — they render as the guide's landing page.
   const allDocs = await getCollection(
     "docs",
-    (entry) => !entry.data.draft && !isIndexEntry(entry.id),
+    (entry) => !entry.data.draft && !isCategoryIndexEntry(entry.id),
   );
 
   return allDocs.map((entry) => ({
@@ -44,7 +48,13 @@ const { Content, headings } = await render(entry);
 // Grouped guides for sidebar
 const guideGroups = await getGroupedGuides(locale, category);
 
-// Linear order for prev/next navigation
+// Active guide/chapter for sidebar highlighting
+const parsed = parseEntryId(entry.id);
+const activeGuideSlug = parsed.guideSlug;
+const activeChapterSlug = parsed.chapterSlug;
+const isGuideLanding = isGuideIndexEntry(entry.id);
+
+// Linear order for prev/next navigation (guide index pages have no prev/next)
 const linearOrder = buildLinearOrder(guideGroups);
 const currentSlug = getGuideSlug(entry.id);
 const currentIndex = linearOrder.findIndex(
@@ -60,25 +70,23 @@ function makeLink(index: number) {
   };
 }
 
-const prev = currentIndex > 0 ? makeLink(currentIndex - 1) : undefined;
-const next =
-  currentIndex < linearOrder.length - 1
+const prev = isGuideLanding
+  ? undefined
+  : currentIndex > 0
+    ? makeLink(currentIndex - 1)
+    : undefined;
+const next = isGuideLanding
+  ? undefined
+  : currentIndex < linearOrder.length - 1
     ? makeLink(currentIndex + 1)
     : undefined;
 
-// Active guide/chapter for sidebar highlighting
-const parsed = parseEntryId(entry.id);
-const activeGuideSlug = parsed.guideSlug;
-const activeChapterSlug = parsed.chapterSlug;
-
-// For multi-page guides, use guideTitle; for single-page, use title
-const displayTitle = entry.data.guideTitle ?? entry.data.title;
-
-// Breadcrumb: for chapters, link back to the guide (first chapter)
+// Breadcrumb: for chapters, link back to the guide root
 const activeGroup = guideGroups.find((g) => g.guideSlug === activeGuideSlug);
+const displayTitle = activeGroup?.guideTitle ?? entry.data.title;
 const guideHref =
-  activeGroup && activeGroup.isMultiPage
-    ? getGuideEntryUrl(base, locale, category, activeGroup.entries[0])
+  activeGroup && activeGroup.isMultiPage && !isGuideLanding
+    ? `${base}${locale}/guides/${category}/${activeGuideSlug}`
     : undefined;
 
 // GitHub URLs
@@ -92,14 +100,17 @@ const contributors = getContributors(filePath);
 ---
 
 <DocsLayout
-  title={entry.data.title}
-  description={entry.data.description}
+  title={isGuideLanding ? displayTitle : entry.data.title}
+  description={activeGroup?.guideDescription ?? entry.data.description}
   locale={locale}
   category={category}
   guideGroups={guideGroups}
   activeGuideSlug={activeGuideSlug}
   activeChapterSlug={activeChapterSlug}
-  guideTitle={activeGroup?.isMultiPage ? displayTitle : undefined}
+  guideTitle={activeGroup?.isMultiPage && !isGuideLanding
+    ? displayTitle
+    : undefined}
+  isGuideLanding={isGuideLanding}
   guideHref={guideHref}
   headings={headings}
   editUrl={editUrl}

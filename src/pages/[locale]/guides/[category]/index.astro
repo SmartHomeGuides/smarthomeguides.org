@@ -103,7 +103,7 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
                     category,
                     firstEntry,
                   );
-                  const difficulty = firstEntry.data.difficulty;
+                  const difficulty = group.difficulty;
                   const badgeClass =
                     difficulty === "beginner"
                       ? "badge-success"
@@ -119,9 +119,9 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
                     >
                       <div class="card-body">
                         <h2 class="card-title text-lg">{group.guideTitle}</h2>
-                        {firstEntry.data.description && (
+                        {group.guideDescription && (
                           <p class="text-sm text-base-content/70">
-                            {firstEntry.data.description}
+                            {group.guideDescription}
                           </p>
                         )}
                         <div class="card-actions mt-2">

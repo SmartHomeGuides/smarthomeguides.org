@@ -1,0 +1,39 @@
+---
+import * as lucideIcons from "@lucide/astro";
+
+interface Props {
+  icon: string;
+  class?: string;
+}
+
+const { icon, class: className = "h-5 w-5" } = Astro.props;
+
+// Check if the icon is an emoji (contains non-ASCII characters)
+const isEmoji = /[^\u0000-\u007F]/.test(icon);
+
+// Look up the Lucide icon by converting kebab-case to PascalCase
+function toPascalCase(str: string): string {
+  return str
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join("");
+}
+
+const LucideIcon = !isEmoji
+  ? (lucideIcons as Record<string, typeof lucideIcons.House>)[
+      toPascalCase(icon)
+    ]
+  : null;
+---
+
+{
+  isEmoji ? (
+    <span class={className} role="img">
+      {icon}
+    </span>
+  ) : LucideIcon ? (
+    <LucideIcon class={className} />
+  ) : (
+    <span class={className}>{icon}</span>
+  )
+}

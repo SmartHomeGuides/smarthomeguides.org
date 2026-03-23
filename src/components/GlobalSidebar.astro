@@ -102,11 +102,25 @@ const filteredHeadings =
 
             if (group.isMultiPage) {
               // Multi-page guide: parent with nested chapters
+              const guideIndexUrl = `${base}${locale}/guides/${activeCategory}/${group.guideSlug}`;
+              const isOnLanding =
+                isActiveGuide &&
+                (!activeChapterSlug || activeChapterSlug === "index");
               return (
                 <li>
                   <details open={isActiveGuide}>
                     <summary class:list={[{ "font-semibold": isActiveGuide }]}>
-                      {group.guideTitle}
+                      <a
+                        href={guideIndexUrl}
+                        class:list={[
+                          "flex-1",
+                          {
+                            "menu-active rounded-field px-2 py-1": isOnLanding,
+                          },
+                        ]}
+                      >
+                        {group.guideTitle}
+                      </a>
                     </summary>
                     <ul>
                       {group.entries.map((entry) => {
@@ -145,11 +159,11 @@ const filteredHeadings =
                   class:list={[{ "menu-active": isActiveGuide }]}
                 >
                   <span class="flex-1">{entry.data.title}</span>
-                  {entry.data.difficulty && (
+                  {group.difficulty && (
                     <span class="badge badge-xs badge-outline">
                       {t(
                         locale,
-                        `guide.difficulty.${entry.data.difficulty}` as const,
+                        `guide.difficulty.${group.difficulty}` as const,
                       )}
                     </span>
                   )}

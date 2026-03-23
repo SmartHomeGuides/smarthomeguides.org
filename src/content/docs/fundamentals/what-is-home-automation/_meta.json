@@ -1,0 +1,15 @@
+{
+  "title": {
+    "en": "What is Home Automation?",
+    "fr": "Qu'est-ce que la domotique ?"
+  },
+  "description": {
+    "en": "A complete beginner's guide to understanding home automation, smart devices, and how to get started with your connected home.",
+    "fr": "Un guide complet pour les débutants pour comprendre la domotique, les appareils connectés et comment démarrer votre maison intelligente."
+  },
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "order": 1,
+  "icon": "house",
+  "tags": ["beginner", "overview", "smart-home"]
+}

@@ -68,11 +68,11 @@ const grouped = await Promise.all(
                             <a href={href} class="link link-hover">
                               {group.guideTitle}
                             </a>
-                            {firstEntry.data.difficulty && (
+                            {group.difficulty && (
                               <span class="badge badge-sm badge-outline ml-2">
                                 {t(
                                   locale,
-                                  `guide.difficulty.${firstEntry.data.difficulty}` as const,
+                                  `guide.difficulty.${group.difficulty}` as const,
                                 )}
                               </span>
                             )}

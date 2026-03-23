@@ -1,6 +1,8 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { languages } from "@i18n/index";
 import type { Locale } from "@i18n/index";
+import fs from "node:fs";
+import path from "node:path";
 
 export type Category =
   | "fundamentals"
@@ -80,12 +82,14 @@ export function getGuideCategory(entryId: string): Category {
 
 /**
  * Returns the full URL slug for an entry.
- * Single-page: `what-is-home-automation`
- * Multi-page:  `what-is-home-automation/01-introduction`
+ * Single-page:       `what-is-home-automation`
+ * Multi-page chapter: `what-is-home-automation/introduction`
+ * Guide index:        `what-is-home-automation` (index page maps to guide root)
  */
 export function getGuideSlug(entryId: string): string {
   const { guideSlug, chapterSlug } = parseEntryId(entryId);
-  return chapterSlug ? `${guideSlug}/${chapterSlug}` : guideSlug;
+  if (!chapterSlug || chapterSlug === "index") return guideSlug;
+  return `${guideSlug}/${chapterSlug}`;
 }
 
 /**
@@ -97,15 +101,28 @@ export function getGuideParentSlug(entryId: string): string {
 }
 
 /**
- * Returns true if the entry represents a category index file.
+ * Returns true if the entry represents a category-level index file
+ * (e.g. `fundamentals/indexen`).
+ */
+export function isCategoryIndexEntry(entryId: string): boolean {
+  const { guideSlug, chapterSlug } = parseEntryId(entryId);
+  return chapterSlug === null && guideSlug === "index";
+}
+
+/**
+ * Returns true if the entry represents a guide-level index file
+ * (e.g. `fundamentals/what-is-home-automation/indexen`).
+ * These render at the guide root URL but are not listed as chapters.
+ */
+export function isGuideIndexEntry(entryId: string): boolean {
+  return parseEntryId(entryId).chapterSlug === "index";
+}
+
+/**
+ * Returns true if the entry is any kind of index file (category or guide level).
  */
 export function isIndexEntry(entryId: string): boolean {
-  const { guideSlug, chapterSlug } = parseEntryId(entryId);
-  // Index at category level: `fundamentals/indexen`
-  if (chapterSlug === null && guideSlug === "index") return true;
-  // Index inside a guide folder: `fundamentals/guide-name/indexen`
-  if (chapterSlug === "index") return true;
-  return false;
+  return isCategoryIndexEntry(entryId) || isGuideIndexEntry(entryId);
 }
 
 // ---------------------------------------------------------------------------
@@ -115,22 +132,57 @@ export function isIndexEntry(entryId: string): boolean {
 export interface GuideGroup {
   guideSlug: string;
   guideTitle: string;
+  guideDescription?: string;
+  difficulty?: "beginner" | "intermediate" | "advanced";
+  icon?: string;
+  tags?: string[];
+  order?: number;
   isMultiPage: boolean;
   entries: CollectionEntry<"docs">[]; // sorted chapters, or single entry
 }
 
+const CONTENT_DIR = path.resolve("src/content/docs");
+
+interface GuideMeta {
+  title: Record<string, string>;
+  description?: Record<string, string>;
+  category?: Category;
+  difficulty?: "beginner" | "intermediate" | "advanced";
+  order?: number;
+  icon?: string;
+  tags?: string[];
+}
+
 /**
- * Extract the numeric prefix from a chapter slug for sorting.
- * `01-introduction` → 1, `02-protocols` → 2, `no-prefix` → Infinity
+ * Load `_meta.json` from a guide folder.
  */
-export function getChapterOrder(chapterSlug: string): number {
-  const match = chapterSlug.match(/^(\d+)/);
-  return match ? parseInt(match[1], 10) : Infinity;
+function loadGuideMeta(
+  category: Category,
+  guideSlug: string,
+): GuideMeta | undefined {
+  const metaPath = path.join(CONTENT_DIR, category, guideSlug, "_meta.json");
+  try {
+    const raw = fs.readFileSync(metaPath, "utf-8");
+    return JSON.parse(raw) as GuideMeta;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Resolve a localized string from a `Record<string, string>`, falling back to English.
+ */
+function resolveLocalized(
+  field: Record<string, string> | undefined,
+  locale: Locale,
+): string | undefined {
+  if (!field) return undefined;
+  return field[locale] ?? field.en;
 }
 
 /**
  * Group entries for a category/locale into GuideGroups.
- * Multi-page guides have their chapters sorted by numeric prefix.
+ * Multi-page guides have their chapters sorted by the frontmatter `order` field.
  */
 export async function getGroupedGuides(
   locale: Locale,
@@ -151,26 +203,52 @@ export async function getGroupedGuides(
 
   const groups: GuideGroup[] = [];
   for (const [guideSlug, groupEntries] of groupMap) {
-    const isMultiPage = groupEntries.some(
-      (e) => parseEntryId(e.id).chapterSlug !== null,
-    );
+    // Filter out guide-level index entries — they're landing pages, not chapters
+    const chapters = groupEntries.filter((e) => !isGuideIndexEntry(e.id));
+    const isMultiPage =
+      chapters.length > 0 &&
+      chapters.some((e) => parseEntryId(e.id).chapterSlug !== null);
 
-    // Sort chapters by numeric prefix
+    // Sort chapters by frontmatter order field
     if (isMultiPage) {
-      groupEntries.sort((a, b) => {
-        const aChapter = parseEntryId(a.id).chapterSlug ?? "";
-        const bChapter = parseEntryId(b.id).chapterSlug ?? "";
-        return getChapterOrder(aChapter) - getChapterOrder(bChapter);
-      });
+      chapters.sort(
+        (a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity),
+      );
     }
 
-    const firstEntry = groupEntries[0];
-    const guideTitle = isMultiPage
-      ? (firstEntry.data.guideTitle ?? firstEntry.data.title)
-      : firstEntry.data.title;
+    const firstEntry = chapters[0] ?? groupEntries[0];
 
-    groups.push({ guideSlug, guideTitle, isMultiPage, entries: groupEntries });
+    if (isMultiPage) {
+      const meta = loadGuideMeta(category, guideSlug);
+      groups.push({
+        guideSlug,
+        guideTitle:
+          resolveLocalized(meta?.title, locale) ?? firstEntry.data.title,
+        guideDescription:
+          resolveLocalized(meta?.description, locale) ??
+          firstEntry.data.description,
+        difficulty: meta?.difficulty ?? firstEntry.data.difficulty,
+        icon: meta?.icon,
+        tags: meta?.tags,
+        order: meta?.order,
+        isMultiPage,
+        entries: chapters,
+      });
+    } else {
+      groups.push({
+        guideSlug,
+        guideTitle: firstEntry.data.title,
+        guideDescription: firstEntry.data.description,
+        difficulty: firstEntry.data.difficulty,
+        order: firstEntry.data.order,
+        isMultiPage,
+        entries: chapters,
+      });
+    }
   }
+
+  // Sort groups by order
+  groups.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
 
   return groups;
 }
@@ -205,8 +283,8 @@ export async function getIndexEntry(locale: Locale, category: Category) {
     return (
       !entry.data.draft &&
       getGuideLocale(entry.id) === locale &&
-      entry.data.category === category &&
-      isIndexEntry(entry.id)
+      getGuideCategory(entry.id) === category &&
+      isCategoryIndexEntry(entry.id)
     );
   });
   return all[0];
@@ -217,7 +295,7 @@ export async function getGuidesByCategory(locale: Locale, category: Category) {
     return (
       !entry.data.draft &&
       getGuideLocale(entry.id) === locale &&
-      entry.data.category === category &&
+      getGuideCategory(entry.id) === category &&
       !isIndexEntry(entry.id)
     );
   });
