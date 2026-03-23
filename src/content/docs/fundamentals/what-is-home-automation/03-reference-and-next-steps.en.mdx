@@ -1,0 +1,77 @@
+---
+title: "Reference & Next Steps"
+description: "Quick reference table for smart home devices and links to continue learning."
+guideTitle: "What is Home Automation?"
+difficulty: beginner
+category: fundamentals
+readingTime: 2
+prerequisites: []
+draft: false
+---
+
+import Callout from "@components/mdx/Callout.astro";
+import Badge from "@components/mdx/Badge.astro";
+import LinkCard from "@components/mdx/LinkCard.astro";
+
+## Example: Lorem Ipsum Routine
+
+```javascript
+const loremRoutine = {
+  trigger: { time: "06:30", days: ["Mon", "Tue", "Wed", "Thu", "Fri"] },
+  conditions: [{ entity: "lorem.ipsum", state: "dolor" }],
+  actions: [
+    { service: "sit.amet", entity: "consectetur.adipiscing", brightness: 30 },
+    { service: "elit.sed", entity: "eiusmod.tempor", temp: 21 },
+    {
+      service: "incididunt.labore",
+      entity: "dolore.magna",
+      playlist: "aliqua",
+    },
+  ],
+};
+```
+
+<Callout type="danger" title="Security reminder">
+  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+  Sed quia consequuntur **magni dolores** eos qui ratione voluptatem sequi
+  nesciunt.
+</Callout>
+
+---
+
+## Quick Reference
+
+| Category | Examples                      | Avg. Cost | Difficulty                              |
+| -------- | ----------------------------- | --------- | --------------------------------------- |
+| Lorem    | Ipsum, dolor, sit             | $15-60    | <Badge variant="success">Easy</Badge>   |
+| Amet     | Consectetur, adipiscing, elit | $30-250   | <Badge variant="warning">Medium</Badge> |
+| Sed      | Eiusmod, tempor, incididunt   | $50-300   | <Badge variant="warning">Medium</Badge> |
+| Labore   | Dolore, magna, aliqua         | $30-200   | <Badge variant="success">Easy</Badge>   |
+| Veniam   | Quis, nostrud, exercitation   | $10-50    | <Badge variant="success">Easy</Badge>   |
+
+---
+
+## What's Next?
+
+<LinkCard
+  title="Choosing Your First Protocol"
+  description="Dive deeper into Zigbee, Z-Wave, Thread, and Matter."
+  href="/en/fundamentals/choosing-a-protocol"
+/>
+
+<LinkCard
+  title="Setting Up Home Assistant"
+  description="Step-by-step guide to installing Home Assistant on a Raspberry Pi."
+  href="/en/intermediate/home-assistant-setup"
+/>
+
+---
+
+## Summary
+
+Lorem ipsum dolor sit amet:
+
+- **Consectetur** adipiscing elit sed do eiusmod
+- **Tempor** incididunt ut labore et dolore magna aliqua
+- **Ut enim** ad minim veniam quis nostrud exercitation
+- **Ullamco** laboris nisi ut aliquip ex ea commodo consequat

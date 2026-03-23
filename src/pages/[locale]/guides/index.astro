@@ -8,9 +8,9 @@ import { t, languages } from "@i18n/index";
 import type { Locale } from "@i18n/index";
 import {
   categories,
-  getAllGuidesForLocale,
-  getGuideSlug,
-  getGuideCategory,
+  getGroupedGuides,
+  getGuideEntryUrl,
+  getBase,
 } from "@lib/guides";
 
 export function getStaticPaths() {
@@ -20,17 +20,16 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params as { locale: Locale };
-import { getBase } from "@lib/guides";
 const base = getBase();
 
-const allDocs = await getAllGuidesForLocale(locale);
-
-const grouped = categories.map((cat) => ({
-  key: cat,
-  title: t(locale, `categories.${cat}.title` as const),
-  description: t(locale, `categories.${cat}.description` as const),
-  guides: allDocs.filter((doc) => doc.data.category === cat),
-}));
+const grouped = await Promise.all(
+  categories.map(async (cat) => ({
+    key: cat,
+    title: t(locale, `categories.${cat}.title` as const),
+    description: t(locale, `categories.${cat}.description` as const),
+    guideGroups: await getGroupedGuides(locale, cat),
+  })),
+);
 ---
 
 <BaseLayout title={t(locale, "nav.guides")} locale={locale}>
@@ -54,26 +53,32 @@ const grouped = categories.map((cat) => ({
                 <div class="card-body">
                   <h2 class="card-title">{cat.title}</h2>
                   <p class="text-sm text-base-content/70">{cat.description}</p>
-                  {cat.guides.length > 0 ? (
+                  {cat.guideGroups.length > 0 ? (
                     <ul class="mt-4 space-y-2">
-                      {cat.guides.map((guide) => (
-                        <li>
-                          <a
-                            href={`${base}${locale}/guides/${getGuideCategory(guide.id)}/${getGuideSlug(guide.id)}`}
-                            class="link link-hover"
-                          >
-                            {guide.data.title}
-                          </a>
-                          {guide.data.difficulty && (
-                            <span class="badge badge-sm badge-outline ml-2">
-                              {t(
-                                locale,
-                                `guide.difficulty.${guide.data.difficulty}` as const,
-                              )}
-                            </span>
-                          )}
-                        </li>
-                      ))}
+                      {cat.guideGroups.map((group) => {
+                        const firstEntry = group.entries[0];
+                        const href = getGuideEntryUrl(
+                          base,
+                          locale,
+                          cat.key,
+                          firstEntry,
+                        );
+                        return (
+                          <li>
+                            <a href={href} class="link link-hover">
+                              {group.guideTitle}
+                            </a>
+                            {firstEntry.data.difficulty && (
+                              <span class="badge badge-sm badge-outline ml-2">
+                                {t(
+                                  locale,
+                                  `guide.difficulty.${firstEntry.data.difficulty}` as const,
+                                )}
+                              </span>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   ) : (
                     <p class="mt-4 text-sm italic text-base-content/50">

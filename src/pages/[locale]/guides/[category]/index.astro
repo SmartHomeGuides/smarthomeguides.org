@@ -10,8 +10,8 @@ import type { Locale } from "@i18n/index";
 import { t, languages } from "@i18n/index";
 import {
   categories,
-  getGuidesByCategory,
-  getGuideSlug,
+  getGroupedGuides,
+  getGuideEntryUrl,
   getIndexEntry,
   getBase,
 } from "@lib/guides";
@@ -35,7 +35,7 @@ const { locale, category } = Astro.params as {
 const base = getBase();
 
 const indexEntry = await getIndexEntry(locale, category);
-const guides = await getGuidesByCategory(locale, category);
+const guideGroups = await getGroupedGuides(locale, category);
 
 let Content: Awaited<ReturnType<typeof render>>["Content"] | null = null;
 let headings: { depth: number; slug: string; text: string }[] = [];
@@ -71,8 +71,8 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
       description={indexEntry.data.description}
       locale={locale}
       category={category}
-      guides={guides}
-      activeSlug=""
+      guideGroups={guideGroups}
+      activeGuideSlug=""
       headings={headings}
       editUrl={editUrl ?? ""}
       issueUrl={issueUrl ?? ""}
@@ -93,12 +93,17 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
             <h1 class="text-3xl font-bold">{categoryTitle}</h1>
             <p class="mt-2 text-base-content/60">{categoryDescription}</p>
 
-            {guides.length > 0 ? (
+            {guideGroups.length > 0 ? (
               <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {guides.map((guide) => {
-                  const slug = getGuideSlug(guide.id);
-                  const href = `${base}${locale}/guides/${category}/${slug}`;
-                  const difficulty = guide.data.difficulty;
+                {guideGroups.map((group) => {
+                  const firstEntry = group.entries[0];
+                  const href = getGuideEntryUrl(
+                    base,
+                    locale,
+                    category,
+                    firstEntry,
+                  );
+                  const difficulty = firstEntry.data.difficulty;
                   const badgeClass =
                     difficulty === "beginner"
                       ? "badge-success"
@@ -113,10 +118,10 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
                       class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md"
                     >
                       <div class="card-body">
-                        <h2 class="card-title text-lg">{guide.data.title}</h2>
-                        {guide.data.description && (
+                        <h2 class="card-title text-lg">{group.guideTitle}</h2>
+                        {firstEntry.data.description && (
                           <p class="text-sm text-base-content/70">
-                            {guide.data.description}
+                            {firstEntry.data.description}
                           </p>
                         )}
                         <div class="card-actions mt-2">
@@ -128,11 +133,11 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
                               )}
                             </span>
                           )}
-                          {guide.data.readingTime && (
+                          {firstEntry.data.readingTime && (
                             <span class="badge badge-ghost badge-sm">
                               {t(locale, "guide.readingTime").replace(
                                 "{minutes}",
-                                String(guide.data.readingTime),
+                                String(firstEntry.data.readingTime),
                               )}
                             </span>
                           )}

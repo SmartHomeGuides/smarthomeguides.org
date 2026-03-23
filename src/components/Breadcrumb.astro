@@ -7,9 +7,11 @@ interface Props {
   locale: Locale;
   category: Category;
   guideTitle: string;
+  chapterTitle?: string;
+  guideHref?: string;
 }
 
-const { locale, category, guideTitle } = Astro.props;
+const { locale, category, guideTitle, chapterTitle, guideHref } = Astro.props;
 import { getBase } from "@lib/guides";
 const base = getBase();
 ---
@@ -24,6 +26,17 @@ const base = getBase();
         {t(locale, `categories.${category}.title` as const)}
       </a>
     </li>
-    <li>{guideTitle}</li>
+    {
+      chapterTitle && guideHref ? (
+        <>
+          <li>
+            <a href={guideHref}>{guideTitle}</a>
+          </li>
+          <li>{chapterTitle}</li>
+        </>
+      ) : (
+        <li>{guideTitle}</li>
+      )
+    }
   </ul>
 </div>

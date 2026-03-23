@@ -1,0 +1,94 @@
+---
+title: "Platforms & Getting Started"
+description: "Explore popular home automation platforms and learn the first steps to set up your smart home."
+guideTitle: "What is Home Automation?"
+difficulty: beginner
+category: fundamentals
+readingTime: 3
+prerequisites: []
+draft: false
+---
+
+import Callout from "@components/mdx/Callout.astro";
+import Steps from "@components/mdx/Steps.astro";
+import Step from "@components/mdx/Step.astro";
+import Details from "@components/mdx/Details.astro";
+
+## Popular Platforms
+
+<Details summary="Platform Alpha">
+  - **Cost**: Lorem ipsum dolor sit amet
+  - **Skill level**: Consectetur
+  - **Pros**: Adipiscing elit, sed do eiusmod
+  - **Cons**: Tempor incididunt ut labore
+
+```yaml
+# Example configuration
+automation:
+  - alias: "Lorem ipsum dolor"
+    trigger:
+      - platform: sun
+        event: sunset
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.lorem
+```
+
+</Details>
+
+<Details summary="Platform Beta">
+  - **Cost**: Ut enim ad minim veniam - **Skill level**: Beginner - **Pros**:
+  Quis nostrud exercitation, ullamco laboris - **Cons**: Nisi ut aliquip, ex ea
+  commodo
+</Details>
+
+<Details summary="Platform Gamma">
+  - **Cost**: Duis aute irure dolor - **Skill level**: Beginner - **Pros**: In
+  reprehenderit in voluptate, velit esse - **Cons**: Cillum dolore, eu fugiat
+  nulla
+</Details>
+
+---
+
+## Getting Started
+
+<Steps>
+  <Step title="Lorem ipsum dolor sit amet">
+    Consectetur **adipiscing elit**:
+    - Sed do eiusmod tempor? → Incididunt
+    - Ut labore et dolore? → Magna aliqua
+    - Ut enim ad minim? → Veniam quis
+  </Step>
+
+  <Step title="Nostrud exercitation">
+    Ullamco laboris nisi:
+    - **Lorem**: Ipsum dolor sit amet
+    - **Consectetur**: Adipiscing elit sed
+    - **Eiusmod**: Tempor incididunt ut
+
+    <Callout type="warning">
+      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+    </Callout>
+
+  </Step>
+
+<Step title="Fugiat nulla pariatur">
+  Excepteur sint occaecat cupidatat non proident, **sunt in culpa** qui officia
+  deserunt mollit anim.
+</Step>
+
+  <Step title="Laborum sed perspiciatis">
+    Unde omnis iste natus error sit voluptatem:
+
+    ```text
+    IF [lorem ipsum]
+    THEN [dolor sit amet]
+    ```
+
+  </Step>
+
+  <Step title="Accusantium doloremque">
+    Laudantium totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+  </Step>
+</Steps>

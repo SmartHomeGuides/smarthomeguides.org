@@ -1,0 +1,77 @@
+---
+title: "Référence et prochaines étapes"
+description: "Tableau de référence rapide pour les appareils connectés et liens pour continuer à apprendre."
+guideTitle: "Qu'est-ce que la domotique ?"
+difficulty: beginner
+category: fundamentals
+readingTime: 2
+prerequisites: []
+draft: false
+---
+
+import Callout from "@components/mdx/Callout.astro";
+import Badge from "@components/mdx/Badge.astro";
+import LinkCard from "@components/mdx/LinkCard.astro";
+
+## Exemple : une routine lorem ipsum
+
+```javascript
+const loremRoutine = {
+  declencheur: { heure: "06:30", jours: ["Lun", "Mar", "Mer", "Jeu", "Ven"] },
+  conditions: [{ entite: "lorem.ipsum", etat: "dolor" }],
+  actions: [
+    { service: "sit.amet", entite: "consectetur.adipiscing", luminosite: 30 },
+    { service: "elit.sed", entite: "eiusmod.tempor", temp: 21 },
+    {
+      service: "incididunt.labore",
+      entite: "dolore.magna",
+      playlist: "aliqua",
+    },
+  ],
+};
+```
+
+<Callout type="danger" title="Rappel de sécurité">
+  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+  Sed quia consequuntur **magni dolores** eos qui ratione voluptatem sequi
+  nesciunt.
+</Callout>
+
+---
+
+## Référence rapide
+
+| Catégorie | Exemples                      | Coût moyen | Difficulté                              |
+| --------- | ----------------------------- | ---------- | --------------------------------------- |
+| Lorem     | Ipsum, dolor, sit             | 15-60 €    | <Badge variant="success">Facile</Badge> |
+| Amet      | Consectetur, adipiscing, elit | 30-250 €   | <Badge variant="warning">Moyen</Badge>  |
+| Sed       | Eiusmod, tempor, incididunt   | 50-300 €   | <Badge variant="warning">Moyen</Badge>  |
+| Labore    | Dolore, magna, aliqua         | 30-200 €   | <Badge variant="success">Facile</Badge> |
+| Veniam    | Quis, nostrud, exercitation   | 10-50 €    | <Badge variant="success">Facile</Badge> |
+
+---
+
+## Et ensuite ?
+
+<LinkCard
+  title="Choisir votre premier protocole"
+  description="Plongez dans Zigbee, Z-Wave, Thread et Matter."
+  href="/fr/fundamentals/choosing-a-protocol"
+/>
+
+<LinkCard
+  title="Installer Home Assistant"
+  description="Guide étape par étape pour installer Home Assistant sur un Raspberry Pi."
+  href="/fr/intermediate/home-assistant-setup"
+/>
+
+---
+
+## Résumé
+
+Lorem ipsum dolor sit amet :
+
+- **Consectetur** adipiscing elit sed do eiusmod
+- **Tempor** incididunt ut labore et dolore magna aliqua
+- **Ut enim** ad minim veniam quis nostrud exercitation
+- **Ullamco** laboris nisi ut aliquip ex ea commodo consequat

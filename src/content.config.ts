@@ -13,6 +13,7 @@ const docs = defineCollection({
     readingTime: z.number().optional(),
     prerequisites: z.array(z.string()).optional(),
     draft: z.boolean().default(false),
+    guideTitle: z.string().optional(),
   }),
 });
 

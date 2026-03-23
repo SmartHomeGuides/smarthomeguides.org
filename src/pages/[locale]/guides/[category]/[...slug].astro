@@ -6,15 +6,21 @@ import {
   getGuideLocale,
   getGuideCategory,
   getGuideSlug,
-  getGuidesByCategory,
+  parseEntryId,
   isIndexEntry,
   getBase,
+  getGroupedGuides,
+  getGuideEntryUrl,
+  buildLinearOrder,
 } from "@lib/guides";
-import { getLastModified, getContributors } from "@lib/git";
 import type { Category } from "@lib/guides";
+import { getLastModified, getContributors } from "@lib/git";
 
 export async function getStaticPaths() {
-  const allDocs = await getCollection("docs", (entry) => !entry.data.draft && !isIndexEntry(entry.id));
+  const allDocs = await getCollection(
+    "docs",
+    (entry) => !entry.data.draft && !isIndexEntry(entry.id),
+  );
 
   return allDocs.map((entry) => ({
     params: {
@@ -35,31 +41,48 @@ const base = getBase();
 
 const { Content, headings } = await render(entry);
 
-// Get sibling guides for sidebar and prev/next
-const siblings = await getGuidesByCategory(locale, category);
+// Grouped guides for sidebar
+const guideGroups = await getGroupedGuides(locale, category);
+
+// Linear order for prev/next navigation
+const linearOrder = buildLinearOrder(guideGroups);
 const currentSlug = getGuideSlug(entry.id);
-const currentIndex = siblings.findIndex(
+const currentIndex = linearOrder.findIndex(
   (s) => getGuideSlug(s.id) === currentSlug,
 );
 
 function makeLink(index: number) {
-  const guide = siblings[index];
+  const guide = linearOrder[index];
   if (!guide) return undefined;
   return {
-    href: `${base}${locale}/guides/${category}/${getGuideSlug(guide.id)}`,
+    href: getGuideEntryUrl(base, locale, category, guide),
     title: guide.data.title,
   };
 }
 
 const prev = currentIndex > 0 ? makeLink(currentIndex - 1) : undefined;
 const next =
-  currentIndex < siblings.length - 1
+  currentIndex < linearOrder.length - 1
     ? makeLink(currentIndex + 1)
     : undefined;
 
-// GitHub URLs — adapt the repo path to your actual repo
-const repoBase =
-  "https://github.com/smarthomeguides/smarthomeguides.org";
+// Active guide/chapter for sidebar highlighting
+const parsed = parseEntryId(entry.id);
+const activeGuideSlug = parsed.guideSlug;
+const activeChapterSlug = parsed.chapterSlug;
+
+// For multi-page guides, use guideTitle; for single-page, use title
+const displayTitle = entry.data.guideTitle ?? entry.data.title;
+
+// Breadcrumb: for chapters, link back to the guide (first chapter)
+const activeGroup = guideGroups.find((g) => g.guideSlug === activeGuideSlug);
+const guideHref =
+  activeGroup && activeGroup.isMultiPage
+    ? getGuideEntryUrl(base, locale, category, activeGroup.entries[0])
+    : undefined;
+
+// GitHub URLs
+const repoBase = "https://github.com/smarthomeguides/smarthomeguides.org";
 const filePath = entry.filePath ?? "";
 const editUrl = `${repoBase}/edit/main/${filePath}`;
 const issueUrl = `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(entry.data.title)}`;
@@ -73,8 +96,11 @@ const contributors = getContributors(filePath);
   description={entry.data.description}
   locale={locale}
   category={category}
-  guides={siblings}
-  activeSlug={currentSlug}
+  guideGroups={guideGroups}
+  activeGuideSlug={activeGuideSlug}
+  activeChapterSlug={activeChapterSlug}
+  guideTitle={activeGroup?.isMultiPage ? displayTitle : undefined}
+  guideHref={guideHref}
   headings={headings}
   editUrl={editUrl}
   issueUrl={issueUrl}

@@ -1,9 +1,13 @@
 ---
 import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
-import { categories, getGuideSlug, getBase } from "@lib/guides";
-import type { Category } from "@lib/guides";
-import type { CollectionEntry } from "astro:content";
+import {
+  categories,
+  getGuideSlug,
+  getGuideEntryUrl,
+  getBase,
+} from "@lib/guides";
+import type { Category, GuideGroup } from "@lib/guides";
 import { Home, BookOpen, Users, SquarePen, CircleAlert } from "@lucide/astro";
 
 interface Heading {
@@ -15,8 +19,9 @@ interface Heading {
 interface Props {
   locale: Locale;
   activeCategory?: Category;
-  guides?: CollectionEntry<"docs">[];
-  activeSlug?: string;
+  guideGroups?: GuideGroup[];
+  activeGuideSlug?: string;
+  activeChapterSlug?: string | null;
   headings?: Heading[];
   editUrl?: string;
   issueUrl?: string;
@@ -25,8 +30,9 @@ interface Props {
 const {
   locale,
   activeCategory,
-  guides,
-  activeSlug,
+  guideGroups,
+  activeGuideSlug,
+  activeChapterSlug,
   headings,
   editUrl,
   issueUrl,
@@ -73,7 +79,7 @@ const filteredHeadings =
         <li>
           <a
             href={`${base}${locale}/guides/${cat}/`}
-            class:list={[{ active: cat === activeCategory }]}
+            class:list={[{ "menu-active": cat === activeCategory }]}
           >
             {t(locale, `categories.${cat}.title` as const)}
           </a>
@@ -84,28 +90,66 @@ const filteredHeadings =
 
   {/* Guide list for current category */}
   {
-    guides && guides.length > 0 && activeCategory && (
+    guideGroups && guideGroups.length > 0 && activeCategory && (
       <>
         <div class="divider my-2" />
         <h3 class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-base-content/50">
           {t(locale, `categories.${activeCategory}.title` as const)}
         </h3>
         <ul class="menu menu-sm w-full gap-0.5">
-          {guides.map((guide) => {
-            const slug = getGuideSlug(guide.id);
-            const isActive = slug === activeSlug;
+          {guideGroups.map((group) => {
+            const isActiveGuide = group.guideSlug === activeGuideSlug;
+
+            if (group.isMultiPage) {
+              // Multi-page guide: parent with nested chapters
+              return (
+                <li>
+                  <details open={isActiveGuide}>
+                    <summary class:list={[{ "font-semibold": isActiveGuide }]}>
+                      {group.guideTitle}
+                    </summary>
+                    <ul>
+                      {group.entries.map((entry) => {
+                        const slug = getGuideSlug(entry.id);
+                        const chapterSlug = slug.split("/")[1];
+                        const isActiveChapter =
+                          isActiveGuide && chapterSlug === activeChapterSlug;
+                        return (
+                          <li>
+                            <a
+                              href={getGuideEntryUrl(
+                                base,
+                                locale,
+                                activeCategory,
+                                entry,
+                              )}
+                              class:list={[{ "menu-active": isActiveChapter }]}
+                            >
+                              {entry.data.title}
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </details>
+                </li>
+              );
+            }
+
+            // Single-page guide
+            const entry = group.entries[0];
             return (
               <li>
                 <a
-                  href={`${base}${locale}/guides/${activeCategory}/${slug}`}
-                  class:list={[{ active: isActive }]}
+                  href={getGuideEntryUrl(base, locale, activeCategory, entry)}
+                  class:list={[{ "menu-active": isActiveGuide }]}
                 >
-                  <span class="flex-1">{guide.data.title}</span>
-                  {guide.data.difficulty && (
+                  <span class="flex-1">{entry.data.title}</span>
+                  {entry.data.difficulty && (
                     <span class="badge badge-xs badge-outline">
                       {t(
                         locale,
-                        `guide.difficulty.${guide.data.difficulty}` as const,
+                        `guide.difficulty.${entry.data.difficulty}` as const,
                       )}
                     </span>
                   )}
