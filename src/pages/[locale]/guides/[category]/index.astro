@@ -12,6 +12,7 @@ import {
   categories,
   getGroupedGuides,
   getGuideEntryUrl,
+  getDifficultyBadgeClass,
   getIndexEntry,
   getBase,
 } from "@lib/guides";
@@ -104,14 +105,7 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
                     firstEntry,
                   );
                   const difficulty = group.difficulty;
-                  const badgeClass =
-                    difficulty === "beginner"
-                      ? "badge-success"
-                      : difficulty === "intermediate"
-                        ? "badge-warning"
-                        : difficulty === "advanced"
-                          ? "badge-error"
-                          : "";
+                  const badgeClass = getDifficultyBadgeClass(difficulty);
                   return (
                     <a
                       href={href}

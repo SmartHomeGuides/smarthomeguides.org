@@ -1,7 +1,9 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import DocsLayout from "@layouts/DocsLayout.astro";
+import GuideLanding from "@components/GuideLanding.astro";
 import type { Locale } from "@i18n/index";
+import { languages } from "@i18n/index";
 import {
   getGuideLocale,
   getGuideCategory,
@@ -13,53 +15,110 @@ import {
   getGroupedGuides,
   getGuideEntryUrl,
   buildLinearOrder,
+  categories,
 } from "@lib/guides";
-import type { Category } from "@lib/guides";
+import type { Category, GuideGroup } from "@lib/guides";
 import { getLastModified, getContributors } from "@lib/git";
 
+interface EntryProps {
+  entry: CollectionEntry<"docs">;
+  syntheticGroup?: never;
+}
+
+interface SyntheticProps {
+  entry?: never;
+  syntheticGroup: GuideGroup;
+}
+
 export async function getStaticPaths() {
-  // Include all entries except category-level index files.
-  // Guide-level index files (index.en.mdx inside a guide folder) ARE included
-  // — they render as the guide's landing page.
+  // Real entries (chapters + guide index files)
   const allDocs = await getCollection(
     "docs",
     (entry) => !entry.data.draft && !isCategoryIndexEntry(entry.id),
   );
 
-  return allDocs.map((entry) => ({
+  const paths = allDocs.map((entry) => ({
     params: {
       locale: getGuideLocale(entry.id),
       category: getGuideCategory(entry.id),
       slug: getGuideSlug(entry.id),
     },
-    props: { entry },
+    props: { entry } as EntryProps,
   }));
+
+  // Synthetic landing pages for multi-page guides without an index file
+  const guideIndexSlugs = new Set(
+    allDocs
+      .filter((e) => isGuideIndexEntry(e.id))
+      .map(
+        (e) =>
+          `${getGuideLocale(e.id)}/${getGuideCategory(e.id)}/${parseEntryId(e.id).guideSlug}`,
+      ),
+  );
+
+  for (const locale of Object.keys(languages)) {
+    for (const category of categories) {
+      const groups = await getGroupedGuides(locale as Locale, category);
+      for (const group of groups) {
+        if (!group.isMultiPage) continue;
+        const key = `${locale}/${category}/${group.guideSlug}`;
+        if (guideIndexSlugs.has(key)) continue; // already has an index file
+        paths.push({
+          params: {
+            locale,
+            category,
+            slug: group.guideSlug,
+          },
+          props: { syntheticGroup: group } as unknown as EntryProps,
+        });
+      }
+    }
+  }
+
+  return paths;
 }
 
-const { entry } = Astro.props;
+const props = Astro.props as EntryProps | SyntheticProps;
 const { locale, category } = Astro.params as {
   locale: Locale;
   category: Category;
 };
 const base = getBase();
 
-const { Content, headings } = await render(entry);
+const isSynthetic = "syntheticGroup" in props && !!props.syntheticGroup;
+const entry = isSynthetic ? null : (props as EntryProps).entry;
+const syntheticGroup = isSynthetic
+  ? (props as SyntheticProps).syntheticGroup
+  : null;
+
+// Render content if we have a real entry
+let Content: Awaited<ReturnType<typeof render>>["Content"] | null = null;
+let headings: { depth: number; slug: string; text: string }[] = [];
+if (entry) {
+  const rendered = await render(entry);
+  Content = rendered.Content;
+  headings = rendered.headings;
+}
 
 // Grouped guides for sidebar
 const guideGroups = await getGroupedGuides(locale, category);
 
-// Active guide/chapter for sidebar highlighting
-const parsed = parseEntryId(entry.id);
-const activeGuideSlug = parsed.guideSlug;
-const activeChapterSlug = parsed.chapterSlug;
-const isGuideLanding = isGuideIndexEntry(entry.id);
+const isGuideLanding =
+  isSynthetic || (entry ? isGuideIndexEntry(entry.id) : false);
+const parsedEntry = entry ? parseEntryId(entry.id) : null;
+const activeGuideSlug = isSynthetic
+  ? syntheticGroup.guideSlug
+  : (parsedEntry?.guideSlug ?? "");
+const activeChapterSlug = isSynthetic
+  ? null
+  : (parsedEntry?.chapterSlug ?? null);
 
-// Linear order for prev/next navigation (guide index pages have no prev/next)
+// Linear order for prev/next navigation (guide landing pages have no prev/next)
 const linearOrder = buildLinearOrder(guideGroups);
-const currentSlug = getGuideSlug(entry.id);
-const currentIndex = linearOrder.findIndex(
-  (s) => getGuideSlug(s.id) === currentSlug,
-);
+const currentSlug = entry ? getGuideSlug(entry.id) : null;
+const currentIndex = currentSlug
+  ? linearOrder.findIndex((s) => getGuideSlug(s.id) === currentSlug)
+  : -1;
 
 function makeLink(index: number) {
   const guide = linearOrder[index];
@@ -81,9 +140,10 @@ const next = isGuideLanding
     ? makeLink(currentIndex + 1)
     : undefined;
 
-// Breadcrumb: for chapters, link back to the guide root
-const activeGroup = guideGroups.find((g) => g.guideSlug === activeGuideSlug);
-const displayTitle = activeGroup?.guideTitle ?? entry.data.title;
+// Breadcrumb
+const activeGroup =
+  guideGroups.find((g) => g.guideSlug === activeGuideSlug) ?? syntheticGroup;
+const displayTitle = activeGroup?.guideTitle ?? entry?.data.title ?? "";
 const guideHref =
   activeGroup && activeGroup.isMultiPage && !isGuideLanding
     ? `${base}${locale}/guides/${category}/${activeGuideSlug}`
@@ -91,17 +151,19 @@ const guideHref =
 
 // GitHub URLs
 const repoBase = "https://github.com/smarthomeguides/smarthomeguides.org";
-const filePath = entry.filePath ?? "";
-const editUrl = `${repoBase}/edit/main/${filePath}`;
-const issueUrl = `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(entry.data.title)}`;
+const filePath = entry?.filePath ?? "";
+const editUrl = filePath ? `${repoBase}/edit/main/${filePath}` : undefined;
+const issueUrl = entry
+  ? `${repoBase}/issues/new?title=Issue+with:+${encodeURIComponent(entry.data.title)}`
+  : undefined;
 
-const lastModified = getLastModified(filePath);
-const contributors = getContributors(filePath);
+const lastModified = filePath ? getLastModified(filePath) : undefined;
+const contributors = filePath ? getContributors(filePath) : [];
 ---
 
 <DocsLayout
-  title={isGuideLanding ? displayTitle : entry.data.title}
-  description={activeGroup?.guideDescription ?? entry.data.description}
+  title={isGuideLanding ? displayTitle : (entry?.data.title ?? displayTitle)}
+  description={activeGroup?.guideDescription ?? entry?.data.description}
   locale={locale}
   category={category}
   guideGroups={guideGroups}
@@ -120,5 +182,11 @@ const contributors = getContributors(filePath);
   lastModified={lastModified}
   contributors={contributors}
 >
-  <Content />
+  {
+    Content ? (
+      <Content />
+    ) : activeGroup ? (
+      <GuideLanding locale={locale} category={category} group={activeGroup} />
+    ) : null
+  }
 </DocsLayout>

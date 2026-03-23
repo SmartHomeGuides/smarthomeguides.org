@@ -150,7 +150,7 @@ interface GuideMeta {
   difficulty?: "beginner" | "intermediate" | "advanced";
   order?: number;
   icon?: string;
-  tags?: string[];
+  tags?: Record<string, string[]>;
 }
 
 /**
@@ -176,6 +176,14 @@ function resolveLocalized(
   field: Record<string, string> | undefined,
   locale: Locale,
 ): string | undefined {
+  if (!field) return undefined;
+  return field[locale] ?? field.en;
+}
+
+function resolveLocalizedArray(
+  field: Record<string, string[]> | undefined,
+  locale: Locale,
+): string[] | undefined {
   if (!field) return undefined;
   return field[locale] ?? field.en;
 }
@@ -229,7 +237,7 @@ export async function getGroupedGuides(
           firstEntry.data.description,
         difficulty: meta?.difficulty ?? firstEntry.data.difficulty,
         icon: meta?.icon,
-        tags: meta?.tags,
+        tags: resolveLocalizedArray(meta?.tags, locale),
         order: meta?.order,
         isMultiPage,
         entries: chapters,
@@ -260,6 +268,22 @@ export function buildLinearOrder(
   groups: GuideGroup[],
 ): CollectionEntry<"docs">[] {
   return groups.flatMap((g) => g.entries);
+}
+
+/**
+ * Map a difficulty level to its DaisyUI badge class.
+ */
+export function getDifficultyBadgeClass(difficulty?: string): string {
+  switch (difficulty) {
+    case "beginner":
+      return "badge-success";
+    case "intermediate":
+      return "badge-warning";
+    case "advanced":
+      return "badge-error";
+    default:
+      return "";
+  }
 }
 
 /**

@@ -1,0 +1,102 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import {
+  getGuideEntryUrl,
+  getDifficultyBadgeClass,
+  getBase,
+} from "@lib/guides";
+import type { Category, GuideGroup } from "@lib/guides";
+
+interface Props {
+  locale: Locale;
+  category: Category;
+  group: GuideGroup;
+}
+
+const { locale, category, group } = Astro.props;
+const base = getBase();
+
+const difficulty = group.difficulty;
+const badgeClass = getDifficultyBadgeClass(difficulty);
+
+const totalReadingTime = group.entries.reduce(
+  (sum, e) => sum + (e.data.readingTime ?? 0),
+  0,
+);
+---
+
+<div class="space-y-8">
+  {/* Guide header */}
+  <div>
+    {
+      group.guideDescription && (
+        <p class="text-lg text-base-content/70">{group.guideDescription}</p>
+      )
+    }
+    <div class="mt-3 flex flex-wrap items-center gap-2">
+      {
+        difficulty && (
+          <span class={`badge ${badgeClass}`}>
+            {t(locale, `guide.difficulty.${difficulty}` as const)}
+          </span>
+        )
+      }
+      {
+        totalReadingTime > 0 && (
+          <span class="badge badge-ghost">
+            {t(locale, "guide.readingTime").replace(
+              "{minutes}",
+              String(totalReadingTime),
+            )}
+          </span>
+        )
+      }
+      {
+        group.tags?.map((tag) => (
+          <span class="badge badge-outline badge-sm">{tag}</span>
+        ))
+      }
+    </div>
+  </div>
+
+  {/* Chapter list */}
+  <div>
+    <h2 class="text-xl font-semibold">
+      {t(locale, "guide.tableOfContents")}
+    </h2>
+    <div class="mt-4 grid gap-3">
+      {
+        group.entries.map((entry, i) => {
+          const href = getGuideEntryUrl(base, locale, category, entry);
+          return (
+            <a
+              href={href}
+              class="group flex items-center gap-4 rounded-lg border border-base-300 p-4 transition-colors hover:border-primary"
+            >
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-base-200 text-sm font-semibold text-base-content/60 group-hover:bg-primary group-hover:text-primary-content">
+                {i + 1}
+              </span>
+              <div class="min-w-0 flex-1">
+                <span class="font-medium group-hover:text-primary">
+                  {entry.data.title}
+                </span>
+                {entry.data.readingTime && (
+                  <span class="ml-2 text-xs text-base-content/50">
+                    {t(locale, "guide.readingTime").replace(
+                      "{minutes}",
+                      String(entry.data.readingTime),
+                    )}
+                  </span>
+                )}
+              </div>
+              <span class="text-base-content/30 group-hover:text-primary">
+                &rarr;
+              </span>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</div>

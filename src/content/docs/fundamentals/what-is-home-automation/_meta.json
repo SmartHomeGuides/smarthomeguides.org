@@ -11,5 +11,8 @@
   "difficulty": "beginner",
   "order": 1,
   "icon": "house",
-  "tags": ["beginner", "overview", "smart-home"]
+  "tags": {
+    "en": ["beginner", "overview", "smart-home"],
+    "fr": ["débutant", "aperçu", "maison-connectée"]
+  }
 }
