@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Navbar from "@components/Navbar.astro";
+import Footer from "@components/Footer.astro";
+---
+
+<BaseLayout title="Page Not Found" locale="en">
+  <div class="flex min-h-screen flex-col">
+    <Navbar locale="en" />
+    <main
+      class="flex flex-1 flex-col items-center justify-center p-4 text-center"
+    >
+      <h1 class="text-6xl font-bold">404</h1>
+      <p class="mt-4 text-lg text-base-content/70">
+        The page you're looking for doesn't exist.
+      </p>
+      <a href="/" class="btn btn-primary mt-8">Go Home</a>
+    </main>
+    <Footer locale="en" />
+  </div>
+</BaseLayout>

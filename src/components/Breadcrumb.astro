@@ -14,6 +14,34 @@ interface Props {
 const { locale, category, guideTitle, chapterTitle, guideHref } = Astro.props;
 import { getBase } from "@lib/guides";
 const base = getBase();
+
+const siteOrigin = Astro.site?.origin ?? "https://smarthomeguides.github.io";
+
+// Build breadcrumb items for JSON-LD
+const crumbs: { name: string; href: string }[] = [
+  { name: t(locale, "nav.guides"), href: `${base}${locale}/guides` },
+  {
+    name: t(locale, `categories.${category}.title` as const),
+    href: `${base}${locale}/guides/${category}/`,
+  },
+];
+if (chapterTitle && guideHref) {
+  crumbs.push({ name: guideTitle, href: guideHref });
+  crumbs.push({ name: chapterTitle, href: Astro.url.pathname });
+} else {
+  crumbs.push({ name: guideTitle, href: Astro.url.pathname });
+}
+
+const breadcrumbSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: crumbs.map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: c.name,
+    item: new URL(c.href, siteOrigin).href,
+  })),
+});
 ---
 
 <div class="breadcrumbs text-sm">
@@ -40,3 +68,4 @@ const base = getBase();
     }
   </ul>
 </div>
+<script is:inline type="application/ld+json" set:html={breadcrumbSchema} />

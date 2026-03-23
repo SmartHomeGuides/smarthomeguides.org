@@ -6,6 +6,7 @@ import GitInfo from "@components/GitInfo.astro";
 import Giscus from "@components/Giscus.astro";
 import type { Locale } from "@i18n/index";
 import type { Category, GuideGroup } from "@lib/guides";
+import { getBase } from "@lib/guides";
 import type { Contributor } from "@lib/git";
 
 interface GuideLink {
@@ -52,6 +53,24 @@ const {
   lastModified,
   contributors = [],
 } = Astro.props;
+
+const base = getBase();
+const siteOrigin = Astro.site?.origin ?? "https://smarthomeguides.github.io";
+
+const articleSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description: description ?? "",
+  inLanguage: locale,
+  url: new URL(Astro.url.pathname, siteOrigin).href,
+  ...(lastModified && { dateModified: lastModified.toISOString() }),
+  author: {
+    "@type": "Organization",
+    name: "SmartHomeGuides",
+    url: new URL(base, siteOrigin).href,
+  },
+});
 ---
 
 <SidebarLayout
@@ -66,6 +85,7 @@ const {
   editUrl={editUrl}
   issueUrl={issueUrl}
 >
+  <script type="application/ld+json" is:inline set:html={articleSchema} />
   <div class="mx-auto w-full max-w-[1400px] flex-1">
     <main class="min-w-0 px-4 py-6 lg:px-10 lg:py-8" data-pagefind-body>
       <meta data-pagefind-filter="locale" content={locale} />
