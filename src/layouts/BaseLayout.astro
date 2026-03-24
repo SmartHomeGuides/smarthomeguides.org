@@ -9,12 +9,14 @@ interface Props {
   title: string;
   description?: string;
   locale?: Locale;
+  canonicalOverride?: string;
 }
 
 const {
   title,
   description = t("en", "site.description"),
   locale = "en",
+  canonicalOverride,
 } = Astro.props;
 
 const base = getBase();
@@ -25,18 +27,24 @@ const pageTitle = title
 
 // Canonical URL
 const siteOrigin = Astro.site?.origin ?? "https://smarthomeguides.github.io";
-const canonicalUrl = new URL(Astro.url.pathname, siteOrigin).href;
+const canonicalUrl = canonicalOverride
+  ? new URL(canonicalOverride, siteOrigin).href
+  : new URL(Astro.url.pathname, siteOrigin).href;
 
 // Hreflang alternates
 const pathname = Astro.url.pathname;
 const localeSegmentRe = /^(\/smarthomeguides\.org\/)(en|fr)(\/.*)?$/;
 const match = pathname.match(localeSegmentRe);
-const alternates = match
-  ? Object.keys(languages).map((lang) => ({
-      lang,
-      href: new URL(`${match[1]}${lang}${match[3] ?? ""}`, siteOrigin).href,
-    }))
-  : [];
+const isRoot = pathname === base || pathname === base.replace(/\/$/, "");
+const alternates =
+  match || isRoot
+    ? Object.keys(languages).map((lang) => ({
+        lang,
+        href: match
+          ? new URL(`${match[1]}${lang}${match[3] ?? ""}`, siteOrigin).href
+          : new URL(`${base}${lang}/`, siteOrigin).href,
+      }))
+    : [];
 
 // OG locale format (e.g. "en_US")
 const ogLocaleMap: Record<string, string> = { en: "en_US", fr: "fr_FR" };

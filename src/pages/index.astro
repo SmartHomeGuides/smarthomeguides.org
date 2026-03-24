@@ -1,55 +1,37 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import Navbar from "@components/Navbar.astro";
-import GlobalSidebar from "@components/GlobalSidebar.astro";
-import Footer from "@components/Footer.astro";
-import { t } from "@i18n/index";
+import HomeContent from "@components/HomeContent.astro";
+import { t, languages } from "@i18n/index";
+import { getBase } from "@lib/guides";
 
 const locale = "en";
-import { getBase } from "@lib/guides";
 const base = getBase();
 ---
 
-<BaseLayout title={t(locale, "home.hero.title")} locale={locale}>
-  <div class="drawer">
-    <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
+<BaseLayout
+  title={t(locale, "home.hero.title")}
+  locale={locale}
+  canonicalOverride={`${base}en/`}
+>
+  <HomeContent locale={locale} />
 
-    <div class="drawer-content flex min-h-screen flex-col">
-      <Navbar locale={locale} />
-
-      <main
-        class="flex flex-1 flex-col items-center justify-center p-4"
-        data-pagefind-ignore
-      >
-        <div class="max-w-2xl text-center">
-          <h1 class="text-4xl font-bold sm:text-5xl">
-            {t(locale, "home.hero.title")}
-          </h1>
-          <p class="mt-4 text-lg text-base-content/70">
-            {t(locale, "home.hero.subtitle")}
-          </p>
-          <div class="mt-8 flex flex-wrap justify-center gap-4">
-            <a href={`${base}en/guides/fundamentals/`} class="btn btn-primary">
-              {t(locale, "home.hero.cta")}
-            </a>
-            <a href={`${base}en/guides/`} class="btn btn-outline">
-              {t(locale, "home.hero.secondary")}
-            </a>
-          </div>
-        </div>
-      </main>
-
-      <Footer locale={locale} />
-    </div>
-
-    <div class="drawer-side z-50">
-      <label
-        for="sidebar-drawer"
-        class="drawer-overlay"
-        aria-label="Close sidebar"></label>
-      <aside class="min-h-full w-[250px] bg-base-100 p-4 pt-6">
-        <GlobalSidebar locale={locale} />
-      </aside>
-    </div>
-  </div>
+  <script
+    is:inline
+    data-supported={JSON.stringify(Object.keys(languages))}
+    data-base={base}
+  >
+    (function () {
+      const script = document.currentScript;
+      const supported = JSON.parse(script.dataset.supported);
+      const base = script.dataset.base;
+      const lang = (navigator.language || "").split("-")[0];
+      const target = supported.indexOf(lang) !== -1 ? lang : "en";
+      if (
+        window.location.pathname === base ||
+        window.location.pathname === base.slice(0, -1)
+      ) {
+        window.location.replace(base + target + "/");
+      }
+    })();
+  </script>
 </BaseLayout>
