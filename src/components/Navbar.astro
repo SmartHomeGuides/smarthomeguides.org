@@ -4,6 +4,7 @@ import { t } from "@i18n/index";
 import SearchBar from "@components/SearchBar.astro";
 import LanguageSwitcher from "@components/LanguageSwitcher.astro";
 import { Menu, Sun, Moon, Github, Search } from "@lucide/astro";
+import { REPO_URL } from "@lib/consts";
 
 interface Props {
   locale: Locale;
@@ -62,7 +63,7 @@ const currentPath = Astro.url.pathname;
     </button>
     <LanguageSwitcher locale={locale} currentPath={currentPath} />
     <a
-      href="https://github.com/smarthomeguides/smarthomeguides.org"
+      href={REPO_URL}
       target="_blank"
       rel="noopener noreferrer"
       class="btn btn-ghost btn-sm"

@@ -7,6 +7,7 @@ import Giscus from "@components/Giscus.astro";
 import type { Locale } from "@i18n/index";
 import type { Category, GuideGroup } from "@lib/guides";
 import { getBase } from "@lib/guides";
+import { SITE_URL } from "@lib/consts";
 import type { Contributor } from "@lib/git";
 
 interface GuideLink {
@@ -55,7 +56,7 @@ const {
 } = Astro.props;
 
 const base = getBase();
-const siteOrigin = Astro.site?.origin ?? "https://smarthomeguides.github.io";
+const siteOrigin = Astro.site?.origin ?? SITE_URL;
 
 const articleSchema = JSON.stringify({
   "@context": "https://schema.org",

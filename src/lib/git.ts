@@ -103,7 +103,7 @@ function assignRank(count: number): ContributorRank {
   return match ? match.rank : "newcomer";
 }
 
-const REPO = "smarthomeguides/smarthomeguides.org";
+import { REPO_SLUG as REPO } from "@lib/consts";
 
 /**
  * Fetch merged PR counts per GitHub username from the GitHub API.

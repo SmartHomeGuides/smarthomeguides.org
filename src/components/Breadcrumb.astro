@@ -13,9 +13,10 @@ interface Props {
 
 const { locale, category, guideTitle, chapterTitle, guideHref } = Astro.props;
 import { getBase } from "@lib/guides";
+import { SITE_URL } from "@lib/consts";
 const base = getBase();
 
-const siteOrigin = Astro.site?.origin ?? "https://smarthomeguides.github.io";
+const siteOrigin = Astro.site?.origin ?? SITE_URL;
 
 // Build breadcrumb items for JSON-LD
 const crumbs: { name: string; href: string }[] = [

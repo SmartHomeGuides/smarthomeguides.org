@@ -3,6 +3,7 @@ import "@/styles/global.css";
 import type { Locale } from "@i18n/index";
 import { t, languages } from "@i18n/index";
 import { getBase } from "@lib/guides";
+import { SITE_URL } from "@lib/consts";
 import SearchModal from "@components/SearchModal.astro";
 
 interface Props {
@@ -26,7 +27,7 @@ const pageTitle = title
   : `${siteName} — Smart Home guides for everyone`;
 
 // Canonical URL
-const siteOrigin = Astro.site?.origin ?? "https://smarthomeguides.github.io";
+const siteOrigin = Astro.site?.origin ?? SITE_URL;
 const canonicalUrl = canonicalOverride
   ? new URL(canonicalOverride, siteOrigin).href
   : new URL(Astro.url.pathname, siteOrigin).href;

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smarthomeguides.github.io/smarthomeguides.org/sitemap-index.xml
+Sitemap: https://smarthomeguides.org/sitemap-index.xml

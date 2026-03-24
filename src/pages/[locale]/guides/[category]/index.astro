@@ -1,5 +1,6 @@
 ---
 import { render } from "astro:content";
+import { REPO_URL } from "@lib/consts";
 import SidebarLayout from "@layouts/SidebarLayout.astro";
 import DocsLayout from "@layouts/DocsLayout.astro";
 import type { Locale } from "@i18n/index";
@@ -44,7 +45,7 @@ if (indexEntry) {
   headings = rendered.headings;
 }
 
-const repoBase = "https://github.com/smarthomeguides/smarthomeguides.org";
+const repoBase = REPO_URL;
 const filePath = indexEntry?.filePath ?? "";
 const editUrl = indexEntry ? `${repoBase}/edit/main/${filePath}` : undefined;
 const issueUrl = indexEntry
