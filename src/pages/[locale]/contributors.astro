@@ -106,29 +106,6 @@ const RankIcon: Record<ContributorRank, typeof Trophy> = {
                   <Icon class="h-3 w-3" />
                   {t(locale, `contributors.rank.${c.rank}` as const)}
                 </span>
-
-                <p class="text-sm text-base-content/60">
-                  {t(locale, "contributors.mergedPRs", {
-                    count: c.mergedPRs,
-                  })}
-                </p>
-
-                {c.guides.length > 0 && (
-                  <div class="mt-2 w-full text-left">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-                      {t(locale, "contributors.guidesContributed")}
-                    </p>
-                    <ul class="mt-1 space-y-1">
-                      {c.guides.map((g) => (
-                        <li>
-                          <a href={g.href} class="link link-hover text-sm">
-                            {g.title}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             </div>
           );
