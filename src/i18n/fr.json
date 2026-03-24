@@ -78,6 +78,9 @@
       "champion": "Champion"
     }
   },
+  "banner": {
+    "construction": "Ce site est en construction. Merci de revenir plus tard !"
+  },
   "footer": {
     "openSource": "Open source. Porté par la communauté.",
     "license": "Code : MIT. Contenu : CC BY-SA 4.0."

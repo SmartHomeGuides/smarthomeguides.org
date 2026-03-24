@@ -1,0 +1,48 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import { Construction, X } from "@lucide/astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const message = t(locale, "banner.construction");
+---
+
+<div
+  id="construction-banner"
+  class="sticky top-0 z-50 flex items-center justify-center gap-3 bg-warning px-4 py-2 text-sm text-warning-content"
+>
+  <Construction class="h-4 w-4 shrink-0" />
+  <span>{message}</span>
+  <button
+    id="dismiss-construction-banner"
+    class="btn btn-ghost btn-xs ml-2"
+    aria-label="Dismiss"
+  >
+    <X class="h-4 w-4" />
+  </button>
+</div>
+
+<script is:inline>
+  (function () {
+    const KEY = "dismiss-construction-banner";
+    const banner = document.getElementById("construction-banner");
+    if (!banner) return;
+
+    if (localStorage.getItem(KEY)) {
+      banner.remove();
+      return;
+    }
+
+    const btn = document.getElementById(KEY);
+    if (btn) {
+      btn.addEventListener("click", function () {
+        localStorage.setItem(KEY, "1");
+        banner.remove();
+      });
+    }
+  })();
+</script>
