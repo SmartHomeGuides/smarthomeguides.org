@@ -27,7 +27,7 @@ const base = getBase();
 const siteName = SITE_NAME;
 const pageTitle = title
   ? `${title} — ${siteName}`
-  : `${siteName} — Smart Home guides for everyone`;
+  : `${siteName} — ${t(locale, "home.hero.title")}`;
 
 // Canonical URL
 const siteOrigin = Astro.site?.origin ?? SITE_URL;
@@ -54,10 +54,10 @@ const alternates =
 const ogLocaleMap: Record<string, string> = { en: "en_US", fr: "fr_FR" };
 const ogLocale = ogLocaleMap[locale] ?? "en_US";
 
-// OG image: use per-page image if provided, otherwise fall back to default
+// OG image: use per-page image if provided, otherwise fall back to locale default
 const ogImage = ogImageProp
   ? new URL(`${base}${ogImageProp}`, siteOrigin).href
-  : new URL(`${base}og-default.png`, siteOrigin).href;
+  : new URL(`${base}og/${locale}/og-default.webp`, siteOrigin).href;
 
 // JSON-LD WebSite
 const websiteSchema = JSON.stringify({

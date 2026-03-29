@@ -70,6 +70,7 @@ const LOCALES: string[] = (astroConfig.i18n?.locales as string[]) ?? ["en"];
 interface I18nData {
   categories?: Record<string, { title?: string }>;
   guide?: { difficulty?: Record<string, string> };
+  home?: { hero?: { title?: string } };
 }
 
 function loadI18n(locale: string): I18nData {
@@ -150,7 +151,8 @@ function guideTemplate(
   );
 }
 
-function defaultTemplate(): ReturnType<typeof html> {
+function defaultTemplate(locale: string): ReturnType<typeof html> {
+  const tagline = i18nByLocale[locale]?.home?.hero?.title ?? "";
   return html`
     <div
       style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; background: linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #6366f1 100%); padding: 60px; gap: 24px;"
@@ -173,7 +175,7 @@ function defaultTemplate(): ReturnType<typeof html> {
       <p
         style="color: rgba(255,255,255,0.8); font-size: 28px; font-weight: 400; margin: 0; text-align: center;"
       >
-        ${SITE_NAME_MAIN} ${SITE_NAME_BADGE} for everyone
+        ${tagline}
       </p>
     </div>
   `;
@@ -185,8 +187,8 @@ async function renderToFile(
 ): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const svg = await satori(markup as any, satoriOptions);
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
-  writeFileSync(outputPath, png);
+  const webp = await sharp(Buffer.from(svg)).webp().toBuffer();
+  writeFileSync(outputPath, webp);
 }
 
 const force = process.argv.includes("--force");
@@ -220,7 +222,7 @@ async function main() {
     for (const locale of LOCALES) {
       const localeDir = join(OUTPUT_DIR, locale);
       mkdirSync(localeDir, { recursive: true });
-      const filename = `${category}-${guideSlug}.png`;
+      const filename = `og-${category}-${guideSlug}.webp`;
       const outputPath = join(localeDir, filename);
       const displayPath = `${locale}/${filename}`;
 
@@ -236,15 +238,21 @@ async function main() {
     }
   }
 
-  // Generate default OG image
-  const defaultPath = join(OUTPUT_DIR, "og-default.png");
-  if (!force && existsSync(defaultPath)) {
-    console.log(`  skip: og-default.png (already exists)`);
-    skipped++;
-  } else {
-    console.log(`  generate: og-default.png`);
-    await renderToFile(defaultTemplate(), defaultPath);
-    generated++;
+  // Generate per-locale default OG images
+  for (const locale of LOCALES) {
+    const localeDir = join(OUTPUT_DIR, locale);
+    mkdirSync(localeDir, { recursive: true });
+    const outputPath = join(localeDir, "og-default.webp");
+    const displayPath = `${locale}/og-default.webp`;
+
+    if (!force && existsSync(outputPath)) {
+      console.log(`  skip: ${displayPath} (already exists)`);
+      skipped++;
+    } else {
+      console.log(`  generate: ${displayPath}`);
+      await renderToFile(defaultTemplate(locale), outputPath);
+      generated++;
+    }
   }
 
   console.log(`\nDone! Generated: ${generated}, Skipped: ${skipped}`);
