@@ -2,9 +2,8 @@
 import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
 import SearchBar from "@components/SearchBar.astro";
-import LanguageSwitcher from "@components/LanguageSwitcher.astro";
-import { Menu, Sun, Moon, Github, Search } from "@lucide/astro";
-import { REPO_URL } from "@lib/consts";
+import SettingsMenu from "@components/SettingsMenu.astro";
+import { Menu, Search, Sun, Moon } from "@lucide/astro";
 
 interface Props {
   locale: Locale;
@@ -42,7 +41,7 @@ const currentPath = Astro.url.pathname;
     <SearchBar locale={locale} />
   </div>
 
-  {/* Right: search (mobile) + theme + language + github */}
+  {/* Right: search (mobile) + settings */}
   <div class="navbar-end gap-1">
     <button
       class="btn btn-ghost btn-sm md:hidden"
@@ -52,29 +51,14 @@ const currentPath = Astro.url.pathname;
       <Search class="h-5 w-5" />
     </button>
     <button
-      id="theme-toggle"
+      id="navbar-mode-toggle"
       class="btn btn-ghost btn-sm"
-      aria-label="Toggle theme"
+      aria-label="Toggle dark mode"
     >
-      {/* Sun icon (shown in dark mode) */}
-      <span id="theme-sun" class="hidden">
-        <Sun class="h-5 w-5" />
-      </span>
-      {/* Moon icon (shown in light mode) */}
-      <span id="theme-moon">
-        <Moon class="h-5 w-5" />
-      </span>
+      <span id="navbar-sun" class="hidden"><Sun class="h-5 w-5" /></span>
+      <span id="navbar-moon"><Moon class="h-5 w-5" /></span>
     </button>
-    <LanguageSwitcher locale={locale} currentPath={currentPath} />
-    <a
-      href={REPO_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="btn btn-ghost btn-sm"
-      aria-label={t(locale, "nav.github")}
-    >
-      <Github class="h-5 w-5" />
-    </a>
+    <SettingsMenu locale={locale} currentPath={currentPath} />
   </div>
 </header>
 
@@ -85,22 +69,11 @@ const currentPath = Astro.url.pathname;
     toggle.classList.remove("hidden");
   }
 
-  function updateIcons(theme: string) {
-    const sun = document.getElementById("theme-sun");
-    const moon = document.getElementById("theme-moon");
-    if (sun && moon) {
-      sun.classList.toggle("hidden", theme === "light");
-      moon.classList.toggle("hidden", theme === "dark");
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute("data-theme") || "light");
-
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-    updateIcons(next);
-  });
+  // Navbar dark/light toggle — delegates to the shared toggleMode function
+  document
+    .getElementById("navbar-mode-toggle")
+    ?.addEventListener("click", () => {
+      const w = window as Window & { __toggleMode?: () => void };
+      w.__toggleMode?.();
+    });
 </script>

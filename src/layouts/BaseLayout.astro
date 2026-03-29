@@ -70,7 +70,7 @@ const websiteSchema = JSON.stringify({
 ---
 
 <!doctype html>
-<html lang={locale} data-theme="light">
+<html lang={locale} data-theme="lofi">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -136,8 +136,8 @@ const websiteSchema = JSON.stringify({
         const theme =
           stored ||
           (window.matchMedia("(prefers-color-scheme: light)").matches
-            ? "light"
-            : "dark");
+            ? "lofi"
+            : "sunset");
         document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>

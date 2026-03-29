@@ -54,11 +54,26 @@ const { locale = "en", term } = Astro.props;
     wrapper.appendChild(script);
 
     // Keep Giscus theme in sync with the site theme toggle
+    const darkThemes = [
+      "dark",
+      "abyss",
+      "aqua",
+      "black",
+      "business",
+      "coffee",
+      "dim",
+      "dracula",
+      "forest",
+      "halloween",
+      "luxury",
+      "night",
+      "sunset",
+      "synthwave",
+    ];
     function updateGiscusTheme() {
-      const theme =
-        document.documentElement.getAttribute("data-theme") === "dark"
-          ? "dark"
-          : "light";
+      const current =
+        document.documentElement.getAttribute("data-theme") || "light";
+      const theme = darkThemes.indexOf(current) !== -1 ? "dark" : "light";
       const iframe = document.querySelector("iframe.giscus-frame");
       if (iframe) {
         iframe.contentWindow.postMessage(

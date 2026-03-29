@@ -49,7 +49,7 @@ const {
       (function () {
         if (
           window.matchMedia("(min-width: 1024px)").matches &&
-          localStorage.getItem("sidebar-open") === "true"
+          localStorage.getItem("sidebar-open") !== "false"
         ) {
           const cb = document.getElementById("sidebar-drawer");
           if (cb) cb.checked = true;

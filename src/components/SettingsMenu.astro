@@ -1,0 +1,268 @@
+---
+import type { Locale } from "@i18n/index";
+import { t, languages } from "@i18n/index";
+import { Settings, Sun, Moon, Globe, Github } from "@lucide/astro";
+import { REPO_URL } from "@lib/consts";
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+
+function switchLocaleInPath(path: string, from: Locale, to: Locale): string {
+  return path.replace(`/${from}/`, `/${to}/`);
+}
+
+const lightThemes = [
+  "light",
+  "acid",
+  "autumn",
+  "bumblebee",
+  "caramellatte",
+  "cmyk",
+  "corporate",
+  "cupcake",
+  "cyberpunk",
+  "emerald",
+  "fantasy",
+  "garden",
+  "lemonade",
+  "lofi",
+  "nord",
+  "pastel",
+  "retro",
+  "silk",
+  "valentine",
+  "winter",
+  "wireframe",
+];
+
+const darkThemes = [
+  "dark",
+  "abyss",
+  "aqua",
+  "black",
+  "business",
+  "coffee",
+  "dim",
+  "dracula",
+  "forest",
+  "halloween",
+  "luxury",
+  "night",
+  "sunset",
+  "synthwave",
+];
+---
+
+<div class="dropdown dropdown-end">
+  <div
+    tabindex="0"
+    role="button"
+    class="btn btn-ghost btn-sm"
+    aria-label="Settings"
+  >
+    <Settings class="h-5 w-5" />
+  </div>
+  <div
+    tabindex="0"
+    class="dropdown-content z-50 mt-2 w-60 rounded-box bg-base-200 p-3 shadow-xl"
+  >
+    {/* Language */}
+    <div
+      class="mb-1 flex items-center gap-2 px-1 text-xs font-bold uppercase tracking-wider opacity-60"
+    >
+      <Globe class="h-3.5 w-3.5" />
+      <span>{t(locale, "nav.language")}</span>
+    </div>
+    <div class="mb-3 flex gap-1">
+      {
+        Object.entries(languages).map(([code, name]) => (
+          <a
+            href={switchLocaleInPath(currentPath, locale, code as Locale)}
+            class:list={[
+              "btn btn-sm flex-1",
+              code === locale ? "btn-primary" : "btn-ghost",
+            ]}
+          >
+            {name}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="divider my-1"></div>
+
+    {/* Theme */}
+    <div class="mb-1 flex items-center justify-between">
+      <div
+        class="flex items-center gap-2 px-1 text-xs font-bold uppercase tracking-wider opacity-60"
+      >
+        <span id="mode-icon-sun" class="hidden"
+          ><Sun class="h-3.5 w-3.5" /></span
+        >
+        <span id="mode-icon-moon"><Moon class="h-3.5 w-3.5" /></span>
+        <span>Theme</span>
+      </div>
+      <label
+        class="swap swap-rotate btn btn-ghost btn-xs"
+        aria-label="Toggle dark mode"
+      >
+        <input type="checkbox" id="mode-toggle" />
+        <Sun class="swap-on h-4 w-4" />
+        <Moon class="swap-off h-4 w-4" />
+      </label>
+    </div>
+    <div class="max-h-48 overflow-y-auto">
+      <div id="light-themes" class="grid grid-cols-1 gap-0.5">
+        {
+          lightThemes.map((theme) => (
+            <button
+              class="theme-btn flex items-center gap-3 rounded-lg px-3 py-1.5 text-left text-sm transition-colors hover:bg-base-300"
+              data-set-theme={theme}
+              data-theme-type="light"
+            >
+              <div class="flex shrink-0 gap-0.5 rounded-md" data-theme={theme}>
+                <span class="h-4 w-1.5 rounded-l-sm bg-primary" />
+                <span class="h-4 w-1.5 bg-secondary" />
+                <span class="h-4 w-1.5 bg-accent" />
+                <span class="h-4 w-1.5 rounded-r-sm bg-neutral" />
+              </div>
+              <span class="capitalize">{theme}</span>
+            </button>
+          ))
+        }
+      </div>
+      <div id="dark-themes" class="hidden grid grid-cols-1 gap-0.5">
+        {
+          darkThemes.map((theme) => (
+            <button
+              class="theme-btn flex items-center gap-3 rounded-lg px-3 py-1.5 text-left text-sm transition-colors hover:bg-base-300"
+              data-set-theme={theme}
+              data-theme-type="dark"
+            >
+              <div class="flex shrink-0 gap-0.5 rounded-md" data-theme={theme}>
+                <span class="h-4 w-1.5 rounded-l-sm bg-primary" />
+                <span class="h-4 w-1.5 bg-secondary" />
+                <span class="h-4 w-1.5 bg-accent" />
+                <span class="h-4 w-1.5 rounded-r-sm bg-neutral" />
+              </div>
+              <span class="capitalize">{theme}</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="divider my-1"></div>
+
+    {/* GitHub */}
+    <a
+      href={REPO_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-base-300"
+    >
+      <Github class="h-4 w-4" />
+      <span>{t(locale, "nav.github")}</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  const darkThemeSet = new Set([
+    "dark",
+    "abyss",
+    "aqua",
+    "black",
+    "business",
+    "coffee",
+    "dim",
+    "dracula",
+    "forest",
+    "halloween",
+    "luxury",
+    "night",
+    "sunset",
+    "synthwave",
+  ]);
+
+  const current = document.documentElement.getAttribute("data-theme") || "lofi";
+  let isDark = darkThemeSet.has(current);
+
+  const modeToggle = document.getElementById(
+    "mode-toggle",
+  ) as HTMLInputElement | null;
+  const iconSun = document.getElementById("mode-icon-sun");
+  const iconMoon = document.getElementById("mode-icon-moon");
+  const lightList = document.getElementById("light-themes");
+  const darkList = document.getElementById("dark-themes");
+  const navbarSun = document.getElementById("navbar-sun");
+  const navbarMoon = document.getElementById("navbar-moon");
+
+  function updateModeUI() {
+    if (modeToggle) modeToggle.checked = isDark;
+    iconSun?.classList.toggle("hidden", !isDark);
+    iconMoon?.classList.toggle("hidden", isDark);
+    lightList?.classList.toggle("hidden", isDark);
+    darkList?.classList.toggle("hidden", !isDark);
+    navbarSun?.classList.toggle("hidden", !isDark);
+    navbarMoon?.classList.toggle("hidden", isDark);
+  }
+
+  function setActiveTheme(theme: string) {
+    document
+      .querySelectorAll<HTMLButtonElement>(".theme-btn")
+      .forEach((btn) => {
+        const isActive = btn.dataset.setTheme === theme;
+        btn.classList.toggle("bg-primary/10", isActive);
+        btn.classList.toggle("font-semibold", isActive);
+      });
+  }
+
+  function applyTheme(theme: string) {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    isDark = darkThemeSet.has(theme);
+    setActiveTheme(theme);
+    updateModeUI();
+  }
+
+  // Initialize
+  setActiveTheme(current);
+  updateModeUI();
+
+  // Shared toggle function used by both navbar button and dropdown toggle
+  function toggleMode() {
+    const lastLight = localStorage.getItem("theme-light") || "lofi";
+    const lastDark = localStorage.getItem("theme-dark") || "sunset";
+    const next = isDark ? lastLight : lastDark;
+    const currentTheme =
+      document.documentElement.getAttribute("data-theme") ?? "lofi";
+    localStorage.setItem(isDark ? "theme-dark" : "theme-light", currentTheme);
+    applyTheme(next);
+  }
+
+  const w = window as Window & { __toggleMode?: () => void };
+  w.__toggleMode = toggleMode;
+
+  // Toggle between light/dark mode (dropdown)
+  modeToggle?.addEventListener("change", () => {
+    toggleMode();
+  });
+
+  // Theme variant selection
+  document.querySelectorAll<HTMLButtonElement>(".theme-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const theme = btn.dataset.setTheme ?? "";
+      const type = btn.dataset.themeType ?? "light";
+      localStorage.setItem(
+        type === "dark" ? "theme-dark" : "theme-light",
+        theme,
+      );
+      applyTheme(theme);
+    });
+  });
+</script>
