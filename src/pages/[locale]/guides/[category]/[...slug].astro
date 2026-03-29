@@ -160,6 +160,9 @@ const issueUrl = entry
 
 const lastModified = filePath ? getLastModified(filePath) : undefined;
 const contributors = filePath ? getContributors(filePath) : [];
+
+// OG image per guide (locale-specific)
+const ogImage = `og/${locale}/${category}-${activeGuideSlug}.png`;
 ---
 
 <DocsLayout
@@ -182,6 +185,7 @@ const contributors = filePath ? getContributors(filePath) : [];
   next={next}
   lastModified={lastModified}
   contributors={contributors}
+  ogImage={ogImage}
 >
   {
     Content ? (

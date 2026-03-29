@@ -1,10 +1,10 @@
 {
   "site": {
-    "title": "SmartHomeGuides",
+    "title": "Smart Home Guides",
     "description": "Guides open source et communautaires pour les passionnés de domotique, de tous niveaux."
   },
   "nav": {
-    "title": "SmartHome",
+    "title": "Smart Home",
     "subtitle": "Guides",
     "home": "Accueil",
     "guides": "Guides",
@@ -68,7 +68,7 @@
   },
   "contributors": {
     "title": "Contributeurs",
-    "description": "Les personnes qui rendent SmartHomeGuides possible.",
+    "description": "Les personnes qui rendent Smart Home Guides possible.",
     "mergedPRs": "{count} PR fusionnées",
     "guidesContributed": "Guides auxquels il/elle a contribué",
     "rank": {

@@ -3,7 +3,7 @@ import "@/styles/global.css";
 import type { Locale } from "@i18n/index";
 import { t, languages } from "@i18n/index";
 import { getBase } from "@lib/guides";
-import { SITE_URL, UNDER_CONSTRUCTION } from "@lib/consts";
+import { SITE_NAME, SITE_URL, UNDER_CONSTRUCTION } from "@lib/consts";
 import SearchModal from "@components/SearchModal.astro";
 import UnderConstructionBanner from "@components/UnderConstructionBanner.astro";
 
@@ -12,6 +12,7 @@ interface Props {
   description?: string;
   locale?: Locale;
   canonicalOverride?: string;
+  ogImage?: string;
 }
 
 const {
@@ -19,10 +20,11 @@ const {
   description = t("en", "site.description"),
   locale = "en",
   canonicalOverride,
+  ogImage: ogImageProp,
 } = Astro.props;
 
 const base = getBase();
-const siteName = "SmartHomeGuides";
+const siteName = SITE_NAME;
 const pageTitle = title
   ? `${title} — ${siteName}`
   : `${siteName} — Smart Home guides for everyone`;
@@ -52,8 +54,10 @@ const alternates =
 const ogLocaleMap: Record<string, string> = { en: "en_US", fr: "fr_FR" };
 const ogLocale = ogLocaleMap[locale] ?? "en_US";
 
-// Default OG image
-const ogImage = new URL(`${base}og-default.png`, siteOrigin).href;
+// OG image: use per-page image if provided, otherwise fall back to default
+const ogImage = ogImageProp
+  ? new URL(`${base}${ogImageProp}`, siteOrigin).href
+  : new URL(`${base}og-default.png`, siteOrigin).href;
 
 // JSON-LD WebSite
 const websiteSchema = JSON.stringify({

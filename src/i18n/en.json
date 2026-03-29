@@ -1,10 +1,10 @@
 {
   "site": {
-    "title": "SmartHomeGuides",
+    "title": "Smart Home Guides",
     "description": "Open-source, community-driven guides for home automation enthusiasts at every level."
   },
   "nav": {
-    "title": "SmartHome",
+    "title": "Smart Home",
     "subtitle": "Guides",
     "home": "Home",
     "guides": "Guides",
@@ -68,7 +68,7 @@
   },
   "contributors": {
     "title": "Contributors",
-    "description": "The people who make SmartHomeGuides possible.",
+    "description": "The people who make Smart Home Guides possible.",
     "mergedPRs": "{count} merged PRs",
     "guidesContributed": "Guides contributed to",
     "rank": {

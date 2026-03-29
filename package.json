@@ -16,7 +16,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "og:generate": "npx tsx scripts/generate-og-images.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.0",
@@ -37,6 +38,9 @@
     "pagefind": "^1.4.0",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
+    "satori": "^0.26.0",
+    "satori-html": "^0.3.2",
+    "sharp": "^0.34.5",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0"
   },

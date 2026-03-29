@@ -7,7 +7,7 @@ import Giscus from "@components/Giscus.astro";
 import type { Locale } from "@i18n/index";
 import type { Category, GuideGroup } from "@lib/guides";
 import { getBase } from "@lib/guides";
-import { SITE_URL } from "@lib/consts";
+import { SITE_NAME, SITE_URL } from "@lib/consts";
 import type { Contributor } from "@lib/git";
 
 interface GuideLink {
@@ -33,6 +33,7 @@ interface Props {
   next?: GuideLink;
   lastModified?: Date;
   contributors?: Contributor[];
+  ogImage?: string;
 }
 
 const {
@@ -53,6 +54,7 @@ const {
   next,
   lastModified,
   contributors = [],
+  ogImage,
 } = Astro.props;
 
 const base = getBase();
@@ -68,7 +70,7 @@ const articleSchema = JSON.stringify({
   ...(lastModified && { dateModified: lastModified.toISOString() }),
   author: {
     "@type": "Organization",
-    name: "SmartHomeGuides",
+    name: SITE_NAME,
     url: new URL(base, siteOrigin).href,
   },
 });
@@ -85,6 +87,7 @@ const articleSchema = JSON.stringify({
   headings={headings}
   editUrl={editUrl}
   issueUrl={issueUrl}
+  ogImage={ogImage}
 >
   <script type="application/ld+json" is:inline set:html={articleSchema} />
   <div class="mx-auto w-full max-w-[1400px] flex-1">

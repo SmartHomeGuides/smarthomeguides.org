@@ -18,6 +18,7 @@ interface Props {
   headings?: { depth: number; slug: string; text: string }[];
   editUrl?: string;
   issueUrl?: string;
+  ogImage?: string;
 }
 
 const {
@@ -31,10 +32,16 @@ const {
   headings = [],
   editUrl,
   issueUrl,
+  ogImage,
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} locale={locale}>
+<BaseLayout
+  title={title}
+  description={description}
+  locale={locale}
+  ogImage={ogImage}
+>
   <div class="drawer lg:drawer-open">
     <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
 
