@@ -22,8 +22,10 @@ const currentPath = Astro.url.pathname;
       for="sidebar-drawer"
       class="btn btn-ghost btn-sm hidden"
       id="sidebar-toggle"
+      aria-label="Toggle sidebar"
     >
       <Menu class="h-5 w-5" />
+      <span class="sr-only">Toggle sidebar</span>
     </label>
     <a
       href={`${base}${locale}/guides`}
