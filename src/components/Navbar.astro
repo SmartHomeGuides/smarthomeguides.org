@@ -83,7 +83,6 @@ const currentPath = Astro.url.pathname;
   const toggle = document.getElementById("sidebar-toggle");
   if (toggle && document.getElementById("sidebar-drawer")) {
     toggle.classList.remove("hidden");
-    toggle.classList.add("lg:hidden");
   }
 
   function updateIcons(theme: string) {

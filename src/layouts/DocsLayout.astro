@@ -1,5 +1,6 @@
 ---
 import SidebarLayout from "@layouts/SidebarLayout.astro";
+import MiniToc from "@components/MiniToc.astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
 import GuideNav from "@components/GuideNav.astro";
 import GitInfo from "@components/GitInfo.astro";
@@ -117,4 +118,5 @@ const articleSchema = JSON.stringify({
       />
     </main>
   </div>
+  <MiniToc headings={headings} />
 </SidebarLayout>

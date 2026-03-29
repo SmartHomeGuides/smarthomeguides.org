@@ -42,8 +42,20 @@ const {
   locale={locale}
   ogImage={ogImage}
 >
-  <div class="drawer lg:drawer-open">
+  <div class="drawer">
     <input id="sidebar-drawer" type="checkbox" class="drawer-toggle" />
+    <script is:inline>
+      // Restore sidebar state before paint to avoid transition flash
+      (function () {
+        if (
+          window.matchMedia("(min-width: 1024px)").matches &&
+          localStorage.getItem("sidebar-open") === "true"
+        ) {
+          const cb = document.getElementById("sidebar-drawer");
+          if (cb) cb.checked = true;
+        }
+      })();
+    </script>
 
     <div class="drawer-content flex min-h-screen flex-col">
       <Navbar locale={locale} />
@@ -60,7 +72,7 @@ const {
         class="drawer-overlay"
         aria-label="Close sidebar"></label>
       <aside
-        class="min-h-full w-[250px] border-r border-base-300 bg-base-100 p-4 pt-6"
+        class="min-h-full w-[250px] border-r border-base-300 bg-base-100/60 p-4 pt-6 backdrop-blur-xl lg:bg-base-100 lg:backdrop-blur-none"
       >
         <GlobalSidebar
           locale={locale}
@@ -76,3 +88,74 @@ const {
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  const checkbox = document.getElementById(
+    "sidebar-drawer",
+  ) as HTMLInputElement | null;
+  if (checkbox) {
+    // Persist state changes on desktop
+    checkbox.addEventListener("change", () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        localStorage.setItem("sidebar-open", String(checkbox.checked));
+      }
+    });
+  }
+</script>
+
+<style is:global>
+  /* Desktop: prevent DaisyUI's page scroll lock when drawer is checked */
+  @media (min-width: 1024px) {
+    :root:has(.drawer-toggle:checked) {
+      overflow: auto !important;
+    }
+  }
+</style>
+
+<style>
+  /* Desktop: convert drawer from overlay to push mode */
+  @media (min-width: 1024px) {
+    .drawer {
+      display: flex;
+      flex-direction: row-reverse;
+      overflow: visible !important;
+      height: auto !important;
+    }
+
+    .drawer-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .drawer-side {
+      position: sticky !important;
+      top: 0;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      z-index: 41 !important;
+      width: 0;
+      height: 100vh;
+      overflow: hidden;
+      transition: width 300ms ease;
+      background: none !important;
+    }
+
+    .drawer-side > .drawer-overlay {
+      display: none !important;
+    }
+
+    .drawer-side > aside {
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .drawer-toggle:checked ~ .drawer-side {
+      width: 250px;
+    }
+
+    /* Hide mini-toc when sidebar is open */
+    .drawer-toggle:checked ~ .drawer-content .mini-toc {
+      display: none !important;
+    }
+  }
+</style>

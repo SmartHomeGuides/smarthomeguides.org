@@ -1,0 +1,155 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{
+  filteredHeadings.length > 0 && (
+    <nav
+      class="mini-toc fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:flex"
+      aria-label="Page sections"
+    >
+      <ul class="flex max-h-[60vh] flex-col gap-1.5 overflow-y-auto">
+        {filteredHeadings.map((h) => (
+          <li>
+            <a
+              href={`#${h.slug}`}
+              data-slug={h.slug}
+              data-depth={h.depth}
+              class="flex items-center gap-2"
+            >
+              <span
+                class:list={[
+                  "mini-toc-bar rounded-full bg-base-content/20 transition-colors duration-200",
+                  h.depth === 2 ? "h-0.5 w-8" : "ml-2 h-0.5 w-5",
+                ]}
+              />
+              <span
+                class:list={[
+                  "mini-toc-label whitespace-nowrap text-xs text-base-content/70",
+                  h.depth === 2 ? "font-medium" : "pl-2",
+                ]}
+              >
+                {h.text}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  /* Default: show bars, hide labels */
+  .mini-toc-bar {
+    transition:
+      background-color 200ms ease,
+      opacity 200ms ease;
+  }
+
+  .mini-toc-label {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      max-width 300ms ease,
+      opacity 200ms ease 100ms;
+  }
+
+  /* Hover: container gets background + border, bars disappear, labels appear */
+  .mini-toc {
+    transition:
+      background-color 200ms ease,
+      border-color 200ms ease,
+      padding 200ms ease;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 0;
+  }
+
+  .mini-toc:hover {
+    background-color: oklch(from var(--color-base-100) l c h / 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-color: var(--color-base-300);
+    padding: 1.5rem 1.25rem;
+  }
+
+  .mini-toc:hover .mini-toc-bar {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition:
+      opacity 150ms ease,
+      width 150ms ease;
+  }
+
+  .mini-toc:hover .mini-toc-label {
+    max-width: 14rem;
+    opacity: 1;
+    transition:
+      max-width 300ms ease,
+      opacity 200ms ease;
+  }
+
+  /* Active label styling on hover */
+  .mini-toc:hover a.is-active .mini-toc-label {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  const nav = document.querySelector(".mini-toc");
+  if (nav) {
+    const links = nav.querySelectorAll<HTMLAnchorElement>("a[data-slug]");
+    const slugToLink = new Map<string, HTMLAnchorElement>();
+    links.forEach((link) => {
+      const slug = link.dataset.slug;
+      if (slug) slugToLink.set(slug, link);
+    });
+
+    const headingEls = Array.from(slugToLink.keys())
+      .map((slug) => document.getElementById(slug))
+      .filter((el): el is HTMLElement => el !== null);
+
+    function updateActive(slug: string) {
+      links.forEach((link) => {
+        const bar = link.querySelector(".mini-toc-bar");
+        if (!bar) return;
+        if (link.dataset.slug === slug) {
+          bar.classList.remove("bg-base-content/20");
+          bar.classList.add("bg-primary");
+          link.classList.add("is-active");
+        } else {
+          bar.classList.add("bg-base-content/20");
+          bar.classList.remove("bg-primary");
+          link.classList.remove("is-active");
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (visible.length > 0) {
+          updateActive(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-80px 0px -70% 0px",
+        threshold: 0,
+      },
+    );
+
+    headingEls.forEach((el) => observer.observe(el));
+  }
+</script>
