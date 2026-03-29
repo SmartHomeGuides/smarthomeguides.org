@@ -40,7 +40,12 @@ const grouped = await Promise.all(
         grouped.map((cat) => (
           <div class="card bg-base-200 shadow-sm">
             <div class="card-body">
-              <h2 class="card-title">{cat.title}</h2>
+              <a
+                href={`${base}${locale}/guides/${cat.key}/`}
+                class="card-title link link-hover"
+              >
+                {cat.title}
+              </a>
               <p class="text-sm text-base-content/70">{cat.description}</p>
               {cat.guideGroups.length > 0 ? (
                 <ul class="mt-4 space-y-2">
