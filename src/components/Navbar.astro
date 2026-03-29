@@ -19,7 +19,11 @@ const currentPath = Astro.url.pathname;
 <header class="navbar sticky top-0 z-50 border-b border-base-300 bg-base-100">
   {/* Left: hamburger + logo */}
   <div class="navbar-start gap-2">
-    <label for="sidebar-drawer" class="btn btn-ghost btn-sm lg:hidden">
+    <label
+      for="sidebar-drawer"
+      class="btn btn-ghost btn-sm hidden"
+      id="sidebar-toggle"
+    >
       <Menu class="h-5 w-5" />
     </label>
     <a
@@ -75,6 +79,13 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <script>
+  // Show burger menu only when the sidebar drawer exists on the page
+  const toggle = document.getElementById("sidebar-toggle");
+  if (toggle && document.getElementById("sidebar-drawer")) {
+    toggle.classList.remove("hidden");
+    toggle.classList.add("lg:hidden");
+  }
+
   function updateIcons(theme: string) {
     const sun = document.getElementById("theme-sun");
     const moon = document.getElementById("theme-moon");
