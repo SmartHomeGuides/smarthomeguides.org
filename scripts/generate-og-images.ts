@@ -189,6 +189,8 @@ async function renderToFile(
   writeFileSync(outputPath, png);
 }
 
+const force = process.argv.includes("--force");
+
 async function main() {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -222,7 +224,7 @@ async function main() {
       const outputPath = join(localeDir, filename);
       const displayPath = `${locale}/${filename}`;
 
-      if (existsSync(outputPath)) {
+      if (!force && existsSync(outputPath)) {
         console.log(`  skip: ${displayPath} (already exists)`);
         skipped++;
         continue;
@@ -236,7 +238,7 @@ async function main() {
 
   // Generate default OG image
   const defaultPath = join(OUTPUT_DIR, "og-default.png");
-  if (existsSync(defaultPath)) {
+  if (!force && existsSync(defaultPath)) {
     console.log(`  skip: og-default.png (already exists)`);
     skipped++;
   } else {

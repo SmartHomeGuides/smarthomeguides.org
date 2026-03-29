@@ -17,7 +17,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "og:generate": "npx tsx scripts/generate-og-images.ts"
+    "og:generate": "npx tsx scripts/generate-og-images.ts",
+    "og:generate:force": "npx tsx scripts/generate-og-images.ts --force"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.0",
