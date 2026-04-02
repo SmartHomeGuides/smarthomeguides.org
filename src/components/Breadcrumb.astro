@@ -5,7 +5,7 @@ import { categories } from "@lib/guides";
 import type { Category } from "@lib/guides";
 import { getBase } from "@lib/guides";
 import { SITE_URL } from "@lib/consts";
-import { ChevronDown } from "@lucide/astro";
+import { ChevronDown, House } from "@lucide/astro";
 
 interface Props {
   locale: Locale;
@@ -22,6 +22,7 @@ const siteOrigin = Astro.site?.origin ?? SITE_URL;
 
 // Build breadcrumb items for JSON-LD
 const crumbs: { name: string; href: string }[] = [
+  { name: t(locale, "nav.home"), href: `${base}${locale}/` },
   { name: t(locale, "nav.guides"), href: `${base}${locale}/guides` },
 ];
 if (category) {
@@ -56,6 +57,11 @@ const breadcrumbSchema = JSON.stringify({
 >
   <div class="breadcrumbs text-sm overflow-visible">
     <ul>
+      <li>
+        <a href={`${base}${locale}/`} aria-label={t(locale, "nav.home")}
+          ><House class="h-4 w-4" /></a
+        >
+      </li>
       <li>
         <a href={`${base}${locale}/guides`}>{t(locale, "nav.guides")}</a>
       </li>
