@@ -1,0 +1,51 @@
+<div
+  id="reading-progress"
+  class="pointer-events-none fixed top-0 left-0 z-[100] h-[3px] w-full"
+  aria-hidden="true"
+>
+  <div
+    id="reading-progress-bar"
+    class="h-full origin-left bg-primary"
+    style="scale: 0 1;"
+  >
+  </div>
+</div>
+
+<script>
+  const bar = document.getElementById("reading-progress-bar");
+  const main = document.querySelector<HTMLElement>("main[data-pagefind-body]");
+
+  if (bar && main) {
+    const barEl = bar;
+    const mainEl = main;
+    let ticking = false;
+
+    function updateProgress() {
+      const mainRect = mainEl.getBoundingClientRect();
+      const total = mainEl.offsetHeight - window.innerHeight;
+
+      if (total <= 0) {
+        barEl.style.scale = "1 1";
+        ticking = false;
+        return;
+      }
+
+      const progress = Math.min(Math.max(-mainRect.top / total, 0), 1);
+      barEl.style.scale = `${progress} 1`;
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(updateProgress);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+
+    updateProgress();
+  }
+</script>

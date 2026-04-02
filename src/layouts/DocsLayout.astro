@@ -5,6 +5,7 @@ import Breadcrumb from "@components/Breadcrumb.astro";
 import GuideNav from "@components/GuideNav.astro";
 import GitInfo from "@components/GitInfo.astro";
 import Giscus from "@components/Giscus.astro";
+import ReadingProgress from "@components/ReadingProgress.astro";
 import type { Locale } from "@i18n/index";
 import type { Category, GuideGroup } from "@lib/guides";
 import { getBase } from "@lib/guides";
@@ -91,6 +92,7 @@ const articleSchema = JSON.stringify({
   ogImage={ogImage}
 >
   <script type="application/ld+json" is:inline set:html={articleSchema} />
+  <ReadingProgress />
   <div class="mx-auto w-full max-w-[1400px] flex-1">
     <main class="min-w-0 px-4 pt-4 pb-6 lg:px-10 lg:pb-8" data-pagefind-body>
       <meta data-pagefind-filter="locale" content={locale} />
