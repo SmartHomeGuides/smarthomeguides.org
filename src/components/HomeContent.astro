@@ -3,7 +3,13 @@ import Navbar from "@components/Navbar.astro";
 import Footer from "@components/Footer.astro";
 import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
-import { getBase } from "@lib/guides";
+import {
+  categories,
+  getGroupedGuides,
+  getBase,
+  type Category,
+} from "@lib/guides";
+import { BookOpen, Layers, Cpu, BookA, ArrowRight } from "@lucide/astro";
 
 interface Props {
   locale: Locale;
@@ -11,21 +17,38 @@ interface Props {
 
 const { locale } = Astro.props;
 const base = getBase();
+
+const categoryData = await Promise.all(
+  categories.map(async (cat) => ({
+    key: cat,
+    title: t(locale, `categories.${cat}.title` as const),
+    description: t(locale, `categories.${cat}.description` as const),
+    guideGroups: await getGroupedGuides(locale, cat),
+  })),
+);
+
+const categoryIcons: Record<Category, typeof BookOpen> = {
+  fundamentals: BookOpen,
+  intermediate: Layers,
+  advanced: Cpu,
+  glossary: BookA,
+};
 ---
 
 <div class="flex min-h-screen flex-col">
   <Navbar locale={locale} />
 
-  <main
-    class="flex flex-1 flex-col items-center justify-center p-4"
-    data-pagefind-ignore
-  >
-    <div class="max-w-2xl text-center">
+  <main class="flex-1" data-pagefind-ignore>
+    <!-- Hero -->
+    <section class="mx-auto max-w-4xl px-4 pt-16 pb-12 text-center">
       <h1 class="text-4xl font-bold sm:text-5xl">
         {t(locale, "home.hero.title")}
       </h1>
       <p class="mt-4 text-lg text-base-content/70">
         {t(locale, "home.hero.subtitle")}
+      </p>
+      <p class="mx-auto mt-3 max-w-xl text-base text-base-content/60">
+        {t(locale, "home.hero.description")}
       </p>
       <div class="mt-8 flex flex-wrap justify-center gap-4">
         <a
@@ -38,7 +61,52 @@ const base = getBase();
           {t(locale, "home.hero.secondary")}
         </a>
       </div>
-    </div>
+    </section>
+
+    <!-- Category card grid -->
+    <section class="mx-auto max-w-5xl px-4 pb-16">
+      <div class="mb-8 text-center">
+        <h2 class="text-2xl font-bold">
+          {t(locale, "home.categories.heading")}
+        </h2>
+        <p class="mt-2 text-base-content/60">
+          {t(locale, "home.categories.subheading")}
+        </p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        {
+          categoryData.map((cat) => {
+            const Icon = categoryIcons[cat.key];
+            const count = cat.guideGroups.length;
+            return (
+              <a
+                href={`${base}${locale}/guides/${cat.key}/`}
+                class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md"
+              >
+                <div class="card-body">
+                  <div class="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon class="h-5 w-5" />
+                  </div>
+                  <h3 class="card-title">{cat.title}</h3>
+                  <p class="text-sm text-base-content/70">{cat.description}</p>
+                  <div class="card-actions mt-2 items-center justify-between">
+                    <span class="badge badge-ghost badge-sm">
+                      {count > 1
+                        ? t(locale, "home.guideCount", { count })
+                        : count === 1
+                          ? t(locale, "home.guideCountSingular", { count })
+                          : t(locale, "home.comingSoon")}
+                    </span>
+                    <ArrowRight class="h-4 w-4 text-base-content/30" />
+                  </div>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
+    </section>
   </main>
 
   <Footer locale={locale} />

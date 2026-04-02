@@ -12,32 +12,32 @@ We champion the core values of the [Open Home Foundation](https://www.openhomefo
 
 Guides are organized into four pillars:
 
-| Category         | Audience                | Examples                                                            |
-| :--------------- | :---------------------- | :------------------------------------------------------------------ |
-| **Fundamentals** | Complete beginners      | What is home automation, protocols explained, choosing a hub        |
-| **Intermediate** | Users with a setup      | MQTT, energy dashboards, Node-RED, voice assistants                 |
-| **Advanced**     | Power users & devs      | Custom ESPHome firmware, DIY sensors, local AI, security hardening  |
-| **Glossary**     | Everyone                | Searchable reference of terms, protocols, and acronyms              |
+| Category         | Audience           | Examples                                                           |
+| :--------------- | :----------------- | :----------------------------------------------------------------- |
+| **Fundamentals** | Complete beginners | What is home automation, protocols explained, choosing a hub       |
+| **Intermediate** | Users with a setup | MQTT, energy dashboards, Node-RED, voice assistants                |
+| **Advanced**     | Power users & devs | Custom ESPHome firmware, DIY sensors, local AI, security hardening |
+| **Glossary**     | Everyone           | Searchable reference of terms, protocols, and acronyms             |
 
 All content lives as `.mdx` files in `src/content/docs/`, versioned with Git, reviewable via pull requests.
 
 ## Tech Stack
 
-| Layer              | Technology                  |
-| :----------------- | :-------------------------- |
-| Framework          | Astro v6                    |
-| Language           | TypeScript (strictest)      |
-| Styling            | Tailwind CSS v4 + DaisyUI 5 |
-| Content            | MDX                         |
-| Search             | Pagefind                    |
-| Comments & voting  | Giscus (GitHub Discussions) |
-| i18n               | English + French            |
+| Layer             | Technology                  |
+| :---------------- | :-------------------------- |
+| Framework         | Astro v6                    |
+| Language          | TypeScript (strictest)      |
+| Styling           | Tailwind CSS v4 + DaisyUI 5 |
+| Content           | MDX                         |
+| Search            | Pagefind                    |
+| Comments & voting | Giscus (GitHub Discussions) |
+| i18n              | English + French            |
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/en/about/previous-releases#release-schedule) lts/krypton (v24) (use [nvm](https://github.com/nvm-sh/nvm) — the `.nvmrc` is included)
+- [Node.js](https://nodejs.org/en/about/previous-releases#release-schedule) lts/krypton (v24) (use [nvm](https://github.com/nvm-sh/nvm) - the `.nvmrc` is included)
 - [pnpm](https://pnpm.io/) v10+
 
 ### Setup
@@ -90,7 +90,7 @@ src/content/docs/fundamentals/
 
 ## Contributing
 
-We welcome contributions of all kinds — new guides, translations, typo fixes, code improvements.
+We welcome contributions of all kinds - new guides, translations, typo fixes, code improvements.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the content template, style guide, i18n process, and PR workflow.
 

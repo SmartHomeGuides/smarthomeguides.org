@@ -58,9 +58,17 @@
     "hero": {
       "title": "Smart Home for everyone",
       "subtitle": "Open-source, community-driven tutorials for home automation",
+      "description": "From your first smart plug to custom firmware - free guides built by the community, for the community.",
       "cta": "Start learning",
       "secondary": "Browse guides"
-    }
+    },
+    "categories": {
+      "heading": "Explore by category",
+      "subheading": "Pick your path - whether you're just getting started or ready for advanced projects."
+    },
+    "guideCount": "{count} guides",
+    "guideCountSingular": "{count} guide",
+    "comingSoon": "Coming soon"
   },
   "search": {
     "placeholder": "Search…",

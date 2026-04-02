@@ -211,7 +211,7 @@ export async function getGroupedGuides(
 
   const groups: GuideGroup[] = [];
   for (const [guideSlug, groupEntries] of groupMap) {
-    // Filter out guide-level index entries — they're landing pages, not chapters
+    // Filter out guide-level index entries - they're landing pages, not chapters
     const chapters = groupEntries.filter((e) => !isGuideIndexEntry(e.id));
     const isMultiPage =
       chapters.length > 0 &&

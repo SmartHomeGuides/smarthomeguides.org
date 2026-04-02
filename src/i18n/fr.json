@@ -57,10 +57,18 @@
   "home": {
     "hero": {
       "title": "La domotique pour tous",
-      "subtitle": "Tutoriels open source et communautaires pour la maison connectée — de votre première prise connectée au firmware personnalisé.",
+      "subtitle": "Tutoriels open source et communautaires pour la maison connectée",
+      "description": "De votre première prise connectée au firmware personnalisé - des guides gratuits créés par la communauté, pour la communauté.",
       "cta": "Commencer",
       "secondary": "Parcourir les guides"
-    }
+    },
+    "categories": {
+      "heading": "Explorer par catégorie",
+      "subheading": "Choisissez votre parcours - que vous débutiez ou soyez prêt pour des projets avancés."
+    },
+    "guideCount": "{count} guides",
+    "guideCountSingular": "{count} guide",
+    "comingSoon": "Bientôt disponible"
   },
   "search": {
     "placeholder": "Rechercher…",
