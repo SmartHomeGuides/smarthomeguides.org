@@ -1,19 +1,21 @@
 ---
 import type { Locale } from "@i18n/index";
 import { t } from "@i18n/index";
+import { categories } from "@lib/guides";
 import type { Category } from "@lib/guides";
+import { getBase } from "@lib/guides";
+import { SITE_URL } from "@lib/consts";
+import { ChevronDown } from "@lucide/astro";
 
 interface Props {
   locale: Locale;
-  category: Category;
-  guideTitle: string;
+  category?: Category;
+  guideTitle?: string;
   chapterTitle?: string;
   guideHref?: string;
 }
 
 const { locale, category, guideTitle, chapterTitle, guideHref } = Astro.props;
-import { getBase } from "@lib/guides";
-import { SITE_URL } from "@lib/consts";
 const base = getBase();
 
 const siteOrigin = Astro.site?.origin ?? SITE_URL;
@@ -21,16 +23,20 @@ const siteOrigin = Astro.site?.origin ?? SITE_URL;
 // Build breadcrumb items for JSON-LD
 const crumbs: { name: string; href: string }[] = [
   { name: t(locale, "nav.guides"), href: `${base}${locale}/guides` },
-  {
+];
+if (category) {
+  crumbs.push({
     name: t(locale, `categories.${category}.title` as const),
     href: `${base}${locale}/guides/${category}/`,
-  },
-];
-if (chapterTitle && guideHref) {
-  crumbs.push({ name: guideTitle, href: guideHref });
-  crumbs.push({ name: chapterTitle, href: Astro.url.pathname });
-} else {
-  crumbs.push({ name: guideTitle, href: Astro.url.pathname });
+  });
+}
+if (guideTitle) {
+  if (chapterTitle && guideHref) {
+    crumbs.push({ name: guideTitle, href: guideHref });
+    crumbs.push({ name: chapterTitle, href: Astro.url.pathname });
+  } else {
+    crumbs.push({ name: guideTitle, href: Astro.url.pathname });
+  }
 }
 
 const breadcrumbSchema = JSON.stringify({
@@ -45,28 +51,59 @@ const breadcrumbSchema = JSON.stringify({
 });
 ---
 
-<div class="breadcrumbs text-sm">
-  <ul>
-    <li>
-      <a href={`${base}${locale}/guides`}>{t(locale, "nav.guides")}</a>
-    </li>
-    <li>
-      <a href={`${base}${locale}/guides/${category}/`}>
-        {t(locale, `categories.${category}.title` as const)}
-      </a>
-    </li>
-    {
-      chapterTitle && guideHref ? (
-        <>
+<div
+  class="sticky top-[64px] z-40 -mx-4 bg-base-100 px-4 py-2 lg:-mx-10 lg:px-10"
+>
+  <div class="breadcrumbs text-sm overflow-visible">
+    <ul>
+      <li>
+        <a href={`${base}${locale}/guides`}>{t(locale, "nav.guides")}</a>
+      </li>
+      {
+        category && (
           <li>
-            <a href={guideHref}>{guideTitle}</a>
+            <div class="dropdown dropdown-bottom">
+              <div
+                tabindex="0"
+                role="button"
+                class="btn btn-ghost btn-xs gap-1 border border-base-300"
+              >
+                {t(locale, `categories.${category}.title` as const)}
+                <ChevronDown class="h-3 w-3" />
+              </div>
+              <ul
+                tabindex="0"
+                class="dropdown-content z-50 menu menu-sm mb-1 w-44 rounded-box bg-base-200 p-1 shadow-lg"
+              >
+                {categories.map((cat) => (
+                  <li>
+                    <a
+                      href={`${base}${locale}/guides/${cat}/`}
+                      class:list={{ active: cat === category }}
+                    >
+                      {t(locale, `categories.${cat}.title` as const)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </li>
-          <li>{chapterTitle}</li>
-        </>
-      ) : (
-        <li>{guideTitle}</li>
-      )
-    }
-  </ul>
+        )
+      }
+      {
+        guideTitle &&
+          (chapterTitle && guideHref ? (
+            <>
+              <li>
+                <a href={guideHref}>{guideTitle}</a>
+              </li>
+              <li>{chapterTitle}</li>
+            </>
+          ) : (
+            <li>{guideTitle}</li>
+          ))
+      }
+    </ul>
+  </div>
 </div>
 <script is:inline type="application/ld+json" set:html={breadcrumbSchema} />

@@ -16,6 +16,7 @@ import {
 import { getLastModified, getContributors } from "@lib/git";
 import type { Category } from "@lib/guides";
 import { LayoutGrid, List } from "@lucide/astro";
+import Breadcrumb from "@components/Breadcrumb.astro";
 
 export async function getStaticPaths() {
   const paths = [];
@@ -88,7 +89,8 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
       guideGroups={guideGroups}
     >
       <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8 lg:px-10">
-        <h1 class="text-3xl font-bold">{categoryTitle}</h1>
+        <Breadcrumb locale={locale} category={category} />
+        <h1 class="mt-4 text-3xl font-bold">{categoryTitle}</h1>
         <p class="mt-2 text-base-content/60">{categoryDescription}</p>
 
         {guideGroups.length > 0 ? (

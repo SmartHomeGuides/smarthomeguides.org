@@ -8,6 +8,7 @@ import {
   getGuideEntryUrl,
   getBase,
 } from "@lib/guides";
+import Breadcrumb from "@components/Breadcrumb.astro";
 
 export function getStaticPaths() {
   return Object.keys(languages).map((locale) => ({
@@ -30,7 +31,8 @@ const grouped = await Promise.all(
 
 <SidebarLayout title={t(locale, "nav.guides")} locale={locale}>
   <main class="mx-auto max-w-5xl flex-1 px-4 py-12">
-    <h1 class="text-4xl font-bold">{t(locale, "nav.guides")}</h1>
+    <Breadcrumb locale={locale} />
+    <h1 class="mt-4 text-4xl font-bold">{t(locale, "nav.guides")}</h1>
     <p class="mt-2 text-base-content/70">
       {t(locale, "site.description")}
     </p>
