@@ -17,6 +17,14 @@ import { getLastModified, getContributors } from "@lib/git";
 import type { Category } from "@lib/guides";
 import { LayoutGrid, List } from "@lucide/astro";
 import Breadcrumb from "@components/Breadcrumb.astro";
+import {
+  getGlossaryTerms,
+  groupTermsByLetter,
+  findRelatedGuides,
+} from "@lib/glossary";
+import GlossaryAlphabetBar from "@components/GlossaryAlphabetBar.astro";
+import GlossarySearch from "@components/GlossarySearch.astro";
+import GlossaryTermCard from "@components/GlossaryTermCard.astro";
 
 export async function getStaticPaths() {
   const paths = [];
@@ -59,6 +67,21 @@ const categoryDescription = t(
   `categories.${category}.description` as const,
 );
 
+// Glossary-specific data
+const isGlossary = category === "glossary";
+const glossaryTerms = isGlossary ? await getGlossaryTerms(locale) : [];
+const letterGroups = isGlossary ? groupTermsByLetter(glossaryTerms) : new Map();
+const activeLetters = [...letterGroups.keys()];
+
+// Pre-compute related guide counts for glossary index cards
+const relatedGuideCounts = new Map<string, number>();
+if (isGlossary) {
+  for (const term of glossaryTerms) {
+    const related = await findRelatedGuides(term.data.title, locale);
+    relatedGuideCounts.set(term.id, related.length);
+  }
+}
+
 const indexFilePath = indexEntry?.filePath ?? "";
 const lastModified = indexFilePath ? getLastModified(indexFilePath) : undefined;
 const contributors = indexFilePath ? getContributors(indexFilePath) : [];
@@ -93,7 +116,67 @@ const contributors = indexFilePath ? getContributors(indexFilePath) : [];
         <h1 class="mt-4 text-3xl font-bold">{categoryTitle}</h1>
         <p class="mt-2 text-base-content/60">{categoryDescription}</p>
 
-        {guideGroups.length > 0 ? (
+        {isGlossary ? (
+          /* ── Glossary layout ── */
+          glossaryTerms.length > 0 ? (
+            <>
+              <div class="mt-2">
+                <span class="badge badge-ghost">
+                  {t(locale, "glossary.termCount").replace(
+                    "{count}",
+                    String(glossaryTerms.length),
+                  )}
+                </span>
+              </div>
+
+              <div class="mt-6">
+                <GlossarySearch locale={locale} />
+              </div>
+
+              <GlossaryAlphabetBar activeLetters={activeLetters} />
+
+              <div id="glossary-terms" class="mt-4 space-y-8">
+                {[...letterGroups.entries()].map(([letter, terms]) => (
+                  <div class="glossary-letter-group">
+                    <h2
+                      id={`letter-${letter}`}
+                      class="scroll-mt-28 border-b border-base-300 pb-1 text-lg font-bold text-base-content/50"
+                    >
+                      {letter}
+                    </h2>
+                    <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {terms.map((term) => {
+                        const href = getGuideEntryUrl(
+                          base,
+                          locale,
+                          category,
+                          term,
+                        );
+                        return (
+                          <GlossaryTermCard
+                            title={term.data.title}
+                            description={term.data.description}
+                            href={href}
+                            relatedGuideCount={
+                              relatedGuideCounts.get(term.id) ?? 0
+                            }
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div class="mt-12 text-center">
+              <p class="text-base-content/60">
+                {t(locale, "guide.comingSoon")}
+              </p>
+            </div>
+          )
+        ) : /* ── Standard category layout ── */
+        guideGroups.length > 0 ? (
           <>
             {/* View toggle */}
             <div class="mt-6 flex justify-end gap-1">

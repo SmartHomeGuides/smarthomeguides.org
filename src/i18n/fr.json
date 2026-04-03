@@ -89,6 +89,12 @@
   "banner": {
     "construction": "Ce site est en construction. Merci de revenir plus tard !"
   },
+  "glossary": {
+    "searchPlaceholder": "Rechercher des termes...",
+    "noResults": "Aucun terme correspondant.",
+    "relatedGuides": "Guides associés",
+    "termCount": "{count} termes"
+  },
   "footer": {
     "openSource": "Open source. Porté par la communauté.",
     "license": "Code : MIT. Contenu : CC BY-SA 4.0."

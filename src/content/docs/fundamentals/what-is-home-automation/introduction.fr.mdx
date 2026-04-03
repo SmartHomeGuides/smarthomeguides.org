@@ -8,51 +8,54 @@ import Callout from "@components/mdx/Callout.astro";
 
 ## Introduction
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+La domotique, avec Matter, consiste à utiliser des appareils connectés qui communiquent via des protocoles sans fil pour rendre votre maison plus confortable, efficace et sécurisée. Qu'il s'agisse d'une lumière qui s'allume quand vous entrez dans une pièce ou d'un thermostat qui s'ajuste selon qui est à la maison, l'automatisation met votre logement au service de votre quotidien.
 
-> « Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. »
+Au cœur d'une maison connectée, les appareils communiquent entre eux — via des protocoles comme Zigbee, Z-Wave ou le Wi-Fi — et un hub ou contrôleur central les orchestre. Beaucoup de passionnés utilisent Home Assistant comme plateforme, car il est open source et garde tout en local.
+
+> « La meilleure automatisation est celle que vous oubliez — elle fonctionne, tout simplement. »
 
 <Callout type="info" title="À qui s'adresse ce guide ?">
-  Lorem ipsum dolor sit amet, **consectetur adipiscing elit**. Sed do eiusmod
-  tempor incididunt ut labore et dolore magna aliqua.
+  Ce guide est destiné à toute personne curieuse de la domotique, même si vous
+  n'avez jamais configuré un appareil connecté. Aucune expérience en
+  programmation n'est requise.
 </Callout>
-
----
 
 ## Concepts clés
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Test, voici Matter!
+
+Avant de plonger, voici les notions fondamentales que vous rencontrerez tout au long de ce guide.
 
 ### Protocoles
 
-Ut enim ad minim veniam, quis nostrud exercitation :
+Les appareils connectés ont besoin d'un langage commun pour communiquer. Les protocoles les plus populaires en domotique sont :
 
-| Protocole  | Portée   | Consommation | Idéal pour         |
-| ---------- | -------- | ------------ | ------------------ |
-| Lorem      | ~30 m    | Élevée       | Ipsum, dolor       |
-| Sit        | ~10-20 m | Très basse   | Amet, consectetur  |
-| Adipiscing | ~30 m    | Basse        | Elit, sed          |
-| Eiusmod    | ~10-30 m | Très basse   | Tempor, incididunt |
-| Labore     | Variable | Variable     | Dolore, magna      |
+| Protocole | Portée   | Consommation | Idéal pour                        |
+| --------- | -------- | ------------ | --------------------------------- |
+| Zigbee    | ~10-20 m | Très basse   | Capteurs, ampoules, interrupteurs |
+| Z-Wave    | ~30 m    | Basse        | Serrures, thermostats             |
+| Wi-Fi     | ~30 m    | Élevée       | Caméras, enceintes                |
+| Matter    | Variable | Variable     | Appareils multi-écosystèmes       |
 
 ### Hub vs sans hub
 
-- **Lorem ipsum** : Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-  - Avantages : incididunt ut labore, et dolore magna aliqua
-  - Inconvénients : ut enim ad minim, veniam quis nostrud
-- **Exercitation** : Ullamco laboris nisi ut aliquip ex ea commodo.
-  - Avantages : consequat duis aute, irure dolor
-  - Inconvénients : in reprehenderit, in voluptate velit
+- **Avec hub** : Un contrôleur central (comme Home Assistant) gère tous les appareils et exécute vos automatisations localement.
+  - Avantages : rapide, privé, fonctionne sans internet
+  - Inconvénients : installation initiale nécessaire, courbe d'apprentissage
+- **Sans hub / cloud uniquement** : Chaque appareil se connecte directement au cloud du fabricant.
+  - Avantages : mise en route rapide, pas de matériel supplémentaire
+  - Inconvénients : dépendance à internet, préoccupations de confidentialité
 
 <Callout type="tip" title="Notre recommandation">
-  Lorem ipsum dolor sit amet, **consectetur adipiscing elit**. Sed do eiusmod
-  tempor incididunt ut labore et dolore magna aliqua.
+  Un hub local vous donne le plus de contrôle. Beaucoup commencent sans hub et
+  migrent vers Home Assistant une fois qu'ils dépassent les routines cloud
+  simples.
 </Callout>
 
 ### Les trois couches
 
-Curabitur pretium tincidunt lacus :
+Toute maison connectée repose sur trois couches :
 
-1. **Lorem** - ipsum dolor sit amet, consectetur adipiscing
-2. **Sed do** - eiusmod tempor incididunt ut labore
-3. **Dolore** - magna aliqua ut enim ad minim veniam
+1. **Appareils** — capteurs, interrupteurs, lumières et autres équipements
+2. **Connectivité** — les protocoles (Zigbee, Z-Wave, Wi-Fi, MQTT) qui permettent aux appareils de communiquer
+3. **Automatisation** — les règles qui font agir les appareils sans intervention manuelle

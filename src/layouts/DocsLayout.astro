@@ -122,3 +122,13 @@ const articleSchema = JSON.stringify({
   </div>
   <MiniToc headings={headings} />
 </SidebarLayout>
+
+<script>
+  // On touch devices, tapping a glossary hint navigates to the glossary page
+  document.querySelectorAll<HTMLElement>(".glossary-hint").forEach((el) => {
+    el.addEventListener("click", () => {
+      const href = el.dataset.glossaryHref;
+      if (href) window.location.href = href;
+    });
+  });
+</script>

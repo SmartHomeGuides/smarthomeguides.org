@@ -1,0 +1,37 @@
+---
+title: "Z-Wave"
+description: "Un protocole maillé sans fil conçu spécifiquement pour la domotique, fonctionnant sur des fréquences sub-GHz pour éviter les interférences Wi-Fi."
+category: "glossary"
+order: 6
+---
+
+## Qu'est-ce que Z-Wave ?
+
+**Z-Wave** est un protocole de communication sans fil conçu spécifiquement pour la domotique. Contrairement à Zigbee et au Wi-Fi, Z-Wave fonctionne sur des fréquences sub-GHz (800–900 MHz), ce qui réduit les interférences et améliore la pénétration des murs.
+
+## Caractéristiques principales
+
+- **Fréquence sub-GHz** : 868 MHz (UE), 908 MHz (US) — évite la congestion du 2,4 GHz
+- **Réseau maillé** : Jusqu'à 232 appareils dans un seul réseau
+- **Interopérabilité** : La certification Z-Wave garantit la compatibilité entre marques
+- **Basse consommation** : Les appareils sur batterie durent des mois voire des années
+- **Portée** : 30–100 m par saut en extérieur, moins en intérieur
+
+## Z-Wave vs. Zigbee
+
+| Caractéristique | Z-Wave                  | Zigbee                               |
+| --------------- | ----------------------- | ------------------------------------ |
+| Fréquence       | Sub-GHz                 | 2,4 GHz                              |
+| Appareils max.  | 232                     | 65 000+                              |
+| Interférences   | Faibles                 | Plus élevées (partage avec le Wi-Fi) |
+| Certification   | Obligatoire             | Optionnelle                          |
+| Écosystème      | Plus petit, sélectionné | Plus grand, varié                    |
+
+## Démarrer avec Z-Wave
+
+Vous avez besoin d'un **contrôleur Z-Wave** (clé USB ou hub) :
+
+- **Z-Wave JS** dans Home Assistant
+- Clés USB **Aeotec Z-Stick** ou **Zooz ZST39**
+- **SmartThings Hub** (Z-Wave intégré)
+- **Hubitat Elevation** (Z-Wave intégré)

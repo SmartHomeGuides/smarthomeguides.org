@@ -1,0 +1,86 @@
+---
+import { Search } from "@lucide/astro";
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<div class="relative">
+  <Search
+    class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-base-content/40"
+  />
+  <input
+    id="glossary-search"
+    type="text"
+    placeholder={t(locale, "glossary.searchPlaceholder")}
+    class="input input-bordered w-full pl-10"
+    autocomplete="off"
+  />
+</div>
+
+<p
+  id="glossary-no-results"
+  class="mt-8 hidden text-center text-base-content/60"
+>
+  {t(locale, "glossary.noResults")}
+</p>
+
+<script>
+  const input = document.getElementById("glossary-search") as HTMLInputElement;
+  const noResults = document.getElementById("glossary-no-results");
+  const alphabetBar = document.getElementById("alphabet-bar");
+
+  let timer: ReturnType<typeof setTimeout>;
+
+  input?.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => filter(input.value), 150);
+  });
+
+  function filter(query: string) {
+    const q = query.toLowerCase().trim();
+    const terms = document.querySelectorAll<HTMLElement>(".glossary-term");
+    const groups = document.querySelectorAll<HTMLElement>(
+      ".glossary-letter-group",
+    );
+
+    let anyVisible = false;
+
+    terms.forEach((el) => {
+      const term = (el.dataset.term ?? "").toLowerCase();
+      const desc = (el.dataset.description ?? "").toLowerCase();
+      const match = !q || term.includes(q) || desc.includes(q);
+      el.classList.toggle("hidden", !match);
+      if (match) anyVisible = true;
+    });
+
+    // Hide empty letter groups
+    groups.forEach((group) => {
+      const visibleTerms = group.querySelectorAll(
+        ".glossary-term:not(.hidden)",
+      );
+      group.classList.toggle("hidden", visibleTerms.length === 0);
+    });
+
+    // Update alphabet bar
+    if (alphabetBar) {
+      const links = alphabetBar.querySelectorAll<HTMLElement>("[data-letter]");
+      links.forEach((link) => {
+        const letter = link.dataset.letter ?? "";
+        const group = document.getElementById(`letter-${letter}`);
+        const groupContainer = group?.closest(".glossary-letter-group");
+        const isHidden = groupContainer?.classList.contains("hidden") ?? true;
+        if (link.tagName === "A") {
+          link.classList.toggle("opacity-30", isHidden);
+        }
+      });
+    }
+
+    noResults?.classList.toggle("hidden", anyVisible);
+  }
+</script>

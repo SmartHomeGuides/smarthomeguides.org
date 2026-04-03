@@ -1,0 +1,31 @@
+---
+title: "MQTT"
+description: "A lightweight messaging protocol used in smart homes for reliable device-to-device communication via a central broker."
+category: "glossary"
+order: 4
+---
+
+## What is MQTT?
+
+**MQTT** (Message Queuing Telemetry Transport) is a lightweight publish/subscribe messaging protocol designed for constrained devices and low-bandwidth networks. It is widely used in smart home and IoT applications.
+
+## How It Works
+
+1. A **broker** (server) sits at the center — e.g., Mosquitto
+2. Devices **publish** messages to **topics** (e.g., `home/living-room/temperature`)
+3. Other devices **subscribe** to topics to receive updates
+4. The broker routes messages from publishers to subscribers
+
+## Why Use MQTT?
+
+- **Lightweight**: Minimal overhead, suitable for microcontrollers
+- **Reliable**: Supports QoS (Quality of Service) levels 0, 1, and 2
+- **Real-time**: Near-instant message delivery
+- **Decoupled**: Publishers and subscribers don't need to know about each other
+
+## Common Smart Home Uses
+
+- **Zigbee2MQTT**: Bridges Zigbee devices to MQTT
+- **Tasmota**: ESP-based firmware that speaks MQTT natively
+- **Home Assistant**: Full MQTT integration for device control
+- **ESPHome**: Generates firmware with MQTT support for ESP devices

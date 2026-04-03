@@ -1,0 +1,31 @@
+---
+title: "MQTT"
+description: "Un protocole de messagerie léger utilisé en domotique pour une communication fiable entre appareils via un broker central."
+category: "glossary"
+order: 4
+---
+
+## Qu'est-ce que MQTT ?
+
+**MQTT** (Message Queuing Telemetry Transport) est un protocole de messagerie léger de type publication/abonnement, conçu pour les appareils à ressources limitées et les réseaux à faible bande passante. Il est largement utilisé dans la domotique et l'IoT.
+
+## Comment ça fonctionne
+
+1. Un **broker** (serveur) se trouve au centre — par exemple Mosquitto
+2. Les appareils **publient** des messages sur des **topics** (ex. : `maison/salon/temperature`)
+3. D'autres appareils **s'abonnent** aux topics pour recevoir les mises à jour
+4. Le broker achemine les messages des éditeurs vers les abonnés
+
+## Pourquoi utiliser MQTT ?
+
+- **Léger** : Surcharge minimale, adapté aux microcontrôleurs
+- **Fiable** : Supporte les niveaux de QoS (Qualité de Service) 0, 1 et 2
+- **Temps réel** : Livraison quasi instantanée des messages
+- **Découplé** : Les éditeurs et abonnés n'ont pas besoin de se connaître
+
+## Utilisations courantes en domotique
+
+- **Zigbee2MQTT** : Passerelle entre appareils Zigbee et MQTT
+- **Tasmota** : Firmware pour ESP qui communique nativement en MQTT
+- **Home Assistant** : Intégration MQTT complète pour le contrôle des appareils
+- **ESPHome** : Génère des firmwares avec support MQTT pour les appareils ESP

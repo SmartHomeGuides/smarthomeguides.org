@@ -20,6 +20,8 @@ import {
 } from "@lib/guides";
 import type { Category, GuideGroup } from "@lib/guides";
 import { getLastModified, getContributors } from "@lib/git";
+import { findRelatedGuides } from "@lib/glossary";
+import GlossaryRelatedGuides from "@components/GlossaryRelatedGuides.astro";
 
 interface EntryProps {
   entry: CollectionEntry<"docs">;
@@ -163,6 +165,12 @@ const contributors = filePath ? getContributors(filePath) : [];
 
 // OG image per guide (locale-specific)
 const ogImage = `og/${locale}/og-${category}-${activeGuideSlug}.webp`;
+
+// Glossary: auto-detect related guides by scanning guide content
+const relatedGuides =
+  category === "glossary" && entry
+    ? await findRelatedGuides(entry.data.title, locale)
+    : [];
 ---
 
 <DocsLayout
@@ -189,7 +197,12 @@ const ogImage = `og/${locale}/og-${category}-${activeGuideSlug}.webp`;
 >
   {
     Content ? (
-      <Content />
+      <>
+        <Content />
+        {relatedGuides.length > 0 && (
+          <GlossaryRelatedGuides guides={relatedGuides} locale={locale} />
+        )}
+      </>
     ) : activeGroup ? (
       <GuideLanding locale={locale} category={category} group={activeGroup} />
     ) : null

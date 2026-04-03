@@ -1,0 +1,49 @@
+---
+import type { Locale } from "@i18n/index";
+import { t } from "@i18n/index";
+import { getDifficultyBadgeClass } from "@lib/guides";
+import type { ResolvedGuide } from "@lib/glossary";
+
+interface Props {
+  guides: ResolvedGuide[];
+  locale: Locale;
+}
+
+const { guides, locale } = Astro.props;
+---
+
+{
+  guides.length > 0 && (
+    <section class="mt-10 border-t border-base-300 pt-8">
+      <h2 class="mb-4 text-xl font-bold">
+        {t(locale, "glossary.relatedGuides")}
+      </h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {guides.map((guide) => (
+          <a
+            href={guide.href}
+            class="card bg-base-200 shadow-sm transition-shadow hover:shadow-md"
+          >
+            <div class="card-body p-4">
+              <h3 class="card-title text-base">{guide.title}</h3>
+              {guide.description && (
+                <p class="line-clamp-2 text-sm text-base-content/70">
+                  {guide.description}
+                </p>
+              )}
+              {guide.difficulty && (
+                <div class="card-actions mt-1">
+                  <span
+                    class={`badge badge-sm ${getDifficultyBadgeClass(guide.difficulty)}`}
+                  >
+                    {t(locale, `guide.difficulty.${guide.difficulty}` as const)}
+                  </span>
+                </div>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}

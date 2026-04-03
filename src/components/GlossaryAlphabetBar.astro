@@ -1,0 +1,36 @@
+---
+interface Props {
+  activeLetters: string[];
+}
+
+const { activeLetters } = Astro.props;
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+---
+
+<nav
+  id="alphabet-bar"
+  class="sticky top-16 z-30 flex gap-1 overflow-x-auto bg-base-100/95 py-2 backdrop-blur-sm"
+  aria-label="Alphabetical index"
+>
+  {
+    alphabet.map((letter) => {
+      const isActive = activeLetters.includes(letter);
+      return isActive ? (
+        <a
+          href={`#letter-${letter}`}
+          class="alphabet-link btn btn-ghost btn-sm min-w-8 font-mono"
+          data-letter={letter}
+        >
+          {letter}
+        </a>
+      ) : (
+        <span
+          class="btn btn-ghost btn-sm btn-disabled min-w-8 font-mono opacity-30"
+          data-letter={letter}
+        >
+          {letter}
+        </span>
+      );
+    })
+  }
+</nav>

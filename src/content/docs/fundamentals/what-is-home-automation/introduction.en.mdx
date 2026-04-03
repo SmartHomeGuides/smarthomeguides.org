@@ -8,51 +8,52 @@ import Callout from "@components/mdx/Callout.astro";
 
 ## Introduction
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Home automation is the practice of using smart devices that communicate over wireless protocols to make your home more comfortable, efficient, and secure. Whether it's a light that turns on when you walk into a room or a thermostat that adjusts itself based on who's home, automation puts your house to work for you.
 
-> "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+At its core, a smart home relies on devices that talk to each other — using protocols like Zigbee, Z-Wave, or Wi-Fi — and a central hub or controller to orchestrate them. Many enthusiasts run Home Assistant as their platform of choice because it is open-source and keeps everything local.
+
+> "The best automation is the one you forget about — it just works."
 
 <Callout type="info" title="Who is this guide for?">
-  Lorem ipsum dolor sit amet, **consectetur adipiscing elit**. Sed do eiusmod
-  tempor incididunt ut labore et dolore magna aliqua.
+  This guide is for anyone curious about home automation, even if you have never
+  set up a smart device before. No coding experience is required.
 </Callout>
 
 ---
 
 ## Key Concepts
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Before diving in, here are the core ideas you will encounter throughout this guide.
 
 ### Protocols
 
-Ut enim ad minim veniam, quis nostrud exercitation:
+Smart devices need a common language to communicate. The most popular protocols in home automation are:
 
-| Protocol   | Range   | Power Usage | Best For           |
-| ---------- | ------- | ----------- | ------------------ |
-| Lorem      | ~30m    | High        | Ipsum, dolor       |
-| Sit        | ~10-20m | Very Low    | Amet, consectetur  |
-| Adipiscing | ~30m    | Low         | Elit, sed          |
-| Eiusmod    | ~10-30m | Very Low    | Tempor, incididunt |
-| Labore     | Varies  | Varies      | Dolore, magna      |
+| Protocol | Range   | Power Usage | Best For                 |
+| -------- | ------- | ----------- | ------------------------ |
+| Zigbee   | ~10-20m | Very Low    | Sensors, bulbs, switches |
+| Z-Wave   | ~30m    | Low         | Locks, thermostats       |
+| Wi-Fi    | ~30m    | High        | Cameras, speakers        |
+| Matter   | Varies  | Varies      | Cross-ecosystem devices  |
 
 ### Hub vs Hubless
 
-- **Lorem ipsum**: Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-  - Pros: incididunt ut labore, et dolore magna aliqua
-  - Cons: ut enim ad minim, veniam quis nostrud
-- **Exercitation**: Ullamco laboris nisi ut aliquip ex ea commodo.
-  - Pros: consequat duis aute, irure dolor
-  - Cons: in reprehenderit, in voluptate velit
+- **Hub-based**: A central controller (like Home Assistant) manages all devices and runs your automations locally.
+  - Pros: fast, private, works without internet
+  - Cons: requires initial setup, learning curve
+- **Hubless / cloud-only**: Each device connects directly to the manufacturer's cloud.
+  - Pros: quick to set up, no extra hardware
+  - Cons: depends on internet, privacy concerns
 
 <Callout type="tip" title="Our recommendation">
-  Lorem ipsum dolor sit amet, **consectetur adipiscing elit**. Sed do eiusmod
-  tempor incididunt ut labore et dolore magna aliqua.
+  A local hub gives you the most control. Many people start hubless and migrate
+  to Home Assistant once they outgrow simple cloud routines.
 </Callout>
 
 ### The Three Layers
 
-Curabitur pretium tincidunt lacus:
+Every smart home has three layers:
 
-1. **Lorem** - ipsum dolor sit amet, consectetur adipiscing
-2. **Sed do** - eiusmod tempor incididunt ut labore
-3. **Dolore** - magna aliqua ut enim ad minim veniam
+1. **Devices** — sensors, switches, lights, and other hardware
+2. **Connectivity** — the protocols (Zigbee, Z-Wave, Wi-Fi, MQTT) that let devices talk
+3. **Automation** — the rules that make devices act without manual input
