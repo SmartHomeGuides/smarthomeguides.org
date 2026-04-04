@@ -1,0 +1,30 @@
+{
+  "title": {
+    "en": "Introduction to Home Automation",
+    "fr": "Introduction à la domotique"
+  },
+  "description": {
+    "en": "Everything you need to know before starting your smart home journey. From core concepts to planning your first setup.",
+    "fr": "Tout ce qu'il faut savoir avant de se lancer dans la domotique. Des concepts fondamentaux à la planification de votre première installation."
+  },
+  "category": "fundamentals",
+  "difficulty": "beginner",
+  "order": 2,
+  "icon": "book-open",
+  "tags": {
+    "en": [
+      "beginner",
+      "introduction",
+      "smart-home",
+      "home-assistant",
+      "privacy"
+    ],
+    "fr": [
+      "débutant",
+      "introduction",
+      "maison-connectée",
+      "home-assistant",
+      "vie-privée"
+    ]
+  }
+}
