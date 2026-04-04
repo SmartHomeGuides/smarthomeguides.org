@@ -1,0 +1,82 @@
+---
+title: "Security & Privacy"
+readingTime: 4
+order: 5
+---
+
+import Callout from "@components/mdx/Callout.astro";
+
+## An honest starting point
+
+Here is something most smart home guides gloss over: a home without smart devices has no digital attack surface. No network vulnerabilities. No firmware to update. No accounts to secure. Adding smart devices means adding doors: digital doors that, if left unlocked, someone could walk through.
+
+That is not a reason to avoid home automation. It is a reason to be intentional about it.
+
+## What is actually at risk?
+
+Forget the Hollywood hacking scenarios. Here is what can realistically go wrong with a poorly secured smart home:
+
+- **Someone accesses your camera feed.** If your camera connects to a cloud service with a weak password, it is not hard for an attacker to get in.
+- **A device phones home with your habits.** Some devices report when you are home, when you leave, what your routines look like, and send all of it to a server you do not control.
+- **A weak device becomes a gateway.** One cheap, unpatched device on your network can be an entry point to everything else: your laptop, your files, your accounts.
+- **A company changes the rules.** Privacy policies get updated. Companies get acquired. Data that was "private" yesterday gets shared tomorrow.
+
+None of this is inevitable. All of it is preventable with a few simple habits.
+
+## Practical habits, not chores
+
+You do not need to become a cybersecurity expert. These are straightforward actions you do once (or rarely) that make a big difference:
+
+### Use strong, unique passwords
+
+Every device, every account, a different password. A password manager makes this easy: you remember one password, it handles the rest. This single habit blocks the vast majority of attacks.
+
+### Put your smart devices on their own network
+
+Most home routers let you create a guest network. Put your smart home devices on it, and keep your computers and phones on the main network. This way, even if a device is compromised, it cannot reach your personal files. Some routers call this a VLAN (same idea, just a more technical setup).
+
+### Choose local-first devices
+
+This is the single most effective thing you can do for privacy. If a device does not send data to the internet, that data cannot be leaked, sold, or harvested. It stays in your home. Period. (We covered this in detail in the previous chapter.)
+
+### Check what apps ask for
+
+Before installing a smart home app, look at the permissions it requests. Does a light bulb app need access to your contacts? Your location at all times? If the permissions do not match the function, that is a red flag.
+
+### Disable features you do not use
+
+If your device has a microphone you do not use, turn it off. If it offers cloud sync and you are running locally, disable it. Every feature you do not need is an unnecessary exposure.
+
+## The firmware question
+
+In a non-smart home, nothing needs updating, because nothing has software. Smart devices do have software, and like any software, it can have security flaws that get patched over time.
+
+This is a real trade-off of home automation. The good news: if you use a hub like Home Assistant, it can notify you when updates are available and often handle them for you. It is not a daily task; more like a few clicks every few weeks. But it matters, and it is honest to say that this is one more thing you take on when you go smart.
+
+## Privacy is a design choice
+
+Privacy is not a feature you add later. It is a decision you make from the start, with every device you buy and every service you connect.
+
+The simplest rule: **data that never leaves your home cannot be compromised.** Local-first is not just a convenience preference. It is the foundation of a private smart home.
+
+<Callout type="tip" title="Do not let this chapter scare you">
+  A few simple habits (strong passwords, a separate network, local-first
+  devices) make your smart home far more secure than most people's laptops or
+  phones already are. This is manageable. You have got this.
+</Callout>
+
+## Quick security checklist
+
+| Action                                    | Effort                                   | Impact    |
+| ----------------------------------------- | ---------------------------------------- | --------- |
+| Unique password per device and account    | 5 minutes each                           | High      |
+| Separate Wi-Fi network for smart devices  | 30 minutes, once                         | High      |
+| Choose local-first devices                | No extra effort, just a buying criterion | Very high |
+| Disable unused features (mic, cloud sync) | 2 minutes per device                     | Medium    |
+| Keep your hub updated                     | A few clicks every few weeks             | Medium    |
+
+Most of this is set-and-forget. Do it once, and your smart home is already ahead of the curve.
+
+In the next chapter, we will bust some of the most common myths about home automation, including a few you might believe right now.
+
+{/* TODO: image placeholder - home network diagram with smart devices on a separate network segment */}

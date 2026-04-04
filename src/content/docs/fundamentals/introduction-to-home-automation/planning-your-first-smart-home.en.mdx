@@ -1,0 +1,89 @@
+---
+title: "Planning Your First Smart Home"
+readingTime: 4
+order: 7
+---
+
+import Callout from "@components/mdx/Callout.astro";
+import LinkCard from "@components/mdx/LinkCard.astro";
+
+## Before you buy anything
+
+You do not need a plan for everything. But spending ten minutes thinking before your first purchase will save you hours of frustration later.
+
+The biggest mistake beginners make is buying first and thinking second. A device that looked great in a review might not solve any problem you actually have. So before opening your wallet, open a notepad.
+
+## Start with a problem, not a product
+
+Do not buy a smart bulb because it is on sale. Buy it because you are tired of leaving the hallway light on all night. Do not get a smart thermostat because it looks cool. Get it because you are wasting money heating an empty house.
+
+Good automation starts with a real annoyance. The technology is the solution, not the starting point.
+
+## Questions to ask yourself
+
+Before you get started, sit down for five minutes and think through these:
+
+- **What annoys me most about my home right now?** That is your first automation.
+- **Who else lives here, and will they be on board?** Automation that frustrates your household is worse than no automation.
+- **Do I care about privacy enough to go local-first from the start?** (After reading this guide, you probably do.)
+- **What is my budget for the first three months?** You do not need much, but it helps to have a number in mind.
+
+## The platform: Home Assistant
+
+After everything you have read in this guide (local-first, privacy, reliability, no cloud dependency), one platform checks every box: **Home Assistant**.
+
+It is open-source, backed by the [Open Home Foundation](https://www.openhomefoundation.org/), and has the largest community in home automation. It runs locally, supports virtually every smart home protocol and device, and does not depend on any company's cloud service to function.
+
+This is where we recommend you start. It is not the only option, but it is the one that best aligns with the values we have talked about throughout this guide: **privacy, choice, and sustainability.**
+
+## Choosing your hub hardware
+
+Home Assistant needs a device to run on, a small always-on computer in your home. Here are your options, from simplest to most advanced:
+
+| Option                       | Cost     | Setup                                        | Best for                                                        |
+| ---------------------------- | -------- | -------------------------------------------- | --------------------------------------------------------------- |
+| **Home Assistant Green**     | ~$99     | Plug and play: plug it in, follow the wizard | Beginners who want zero friction                                |
+| **An old PC or laptop**      | Free     | Install Home Assistant OS (HAOS)             | Budget-friendly reuse of hardware you already own               |
+| **A dedicated mini PC**      | $100–300 | Install HAOS                                 | A permanent, quiet, energy-efficient setup                      |
+| **A server (Proxmox, etc.)** | $300+    | Virtualized setup, more complex              | Advanced users who want Home Assistant alongside other services |
+
+<Callout type="tip" title="Not sure? Start with Home Assistant Green">
+  It is designed to just work. Plug it into your router, follow the on-screen
+  setup, and you are running Home Assistant in minutes. No technical knowledge
+  needed.
+</Callout>
+
+This is just the hub, the brain of your smart home. Devices and protocol adapters (like a Zigbee USB stick) come on top. We will cover those in dedicated guides.
+
+## Common beginner mistakes
+
+A few traps that are easy to fall into:
+
+- **Buying devices from five different ecosystems.** Stick to one protocol (Zigbee or Z-Wave are great local-first choices) and one hub to start. Mixing everything on day one creates chaos.
+- **Automating everything at once.** Start with one room, one routine. Get it right before expanding. (Remember Chapter 3.)
+- **Ignoring the rest of the household.** If your partner or roommate cannot use the lights without an app, you have already failed. Everyone needs to benefit.
+- **Choosing cloud-only devices without realizing it.** Check before you buy: does this device work locally, or does it require the manufacturer's cloud? This one decision shapes your entire setup.
+
+## You are ready
+
+You do not need to know everything. You do not need the perfect setup on day one. You need one device, one automation, one small win. The rest follows naturally.
+
+Home Assistant is local-first, privacy-respecting, community-driven, and future-proof. It does not lock you into one manufacturer or one protocol. Start small, and you will have a foundation that grows with you, not against you.
+
+Welcome to home automation.
+
+---
+
+## What to read next
+
+<LinkCard
+  title="What is Home Automation?"
+  description="A deeper look at smart devices, protocols, and how your connected home works under the hood."
+  href="/en/guides/fundamentals/what-is-home-automation"
+/>
+
+<LinkCard
+  title="Glossary"
+  description="Definitions of key terms like Zigbee, Z-Wave, MQTT, Matter, and more."
+  href="/en/guides/glossary"
+/>

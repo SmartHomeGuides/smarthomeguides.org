@@ -1,0 +1,81 @@
+---
+title: "Cloud vs Local - Understanding the Trade-offs"
+readingTime: 4
+order: 4
+---
+
+import Callout from "@components/mdx/Callout.astro";
+
+## A tale of two setups
+
+Imagine you rent a storage unit across town. It is convenient because someone else maintains it, keeps it clean, handles security. But they hold the keys. They can raise the rent. They can change the rules. And if the company goes under, you have to scramble to find your stuff.
+
+Now imagine you have your own garage. You manage it yourself. It is always there, always accessible, and nobody else has a say in how you use it. A little more work upfront, but it is yours.
+
+This is the difference between cloud and local in home automation, and it matters more than most beginners realize.
+
+## What "cloud" means
+
+When a smart device is cloud-based, here is what happens every time you use it:
+
+1. You tap "turn on the light" in an app
+2. The command travels over the internet to the manufacturer's server
+3. The server processes it and sends a command back
+4. Your light turns on
+
+Every action takes a round trip through the internet. That means:
+
+- **You need an internet connection** for your own light switch to work
+- **The manufacturer sees every command**, when you turn on lights, when you leave, your routines
+- **If their servers go down**, your devices stop responding
+- **If the company shuts down or drops the product**, your device becomes a paperweight
+
+This has happened. Repeatedly. Smart home companies have shut down servers, discontinued products, and turned functioning hardware into e-waste overnight. When a cloud service disappears, there is nothing you can do. The device was never really yours.
+
+## What "local" means
+
+A local smart home works differently. Everything happens inside your home:
+
+1. A hub on your home network talks directly to your devices
+2. Commands travel a few meters, not thousands of kilometers
+3. No internet needed. No outside server involved.
+
+Your data stays home. Your devices respond instantly. And if your internet goes out, your smart home keeps working, because it never needed the internet in the first place.
+
+## The comparison
+
+|                           | Cloud                                  | Local                          |
+| ------------------------- | -------------------------------------- | ------------------------------ |
+| **Setup**                 | Easy (download an app)                 | More involved: set up a hub    |
+| **Speed**                 | Noticeable delay (internet round-trip) | Near-instant                   |
+| **Works offline?**        | No                                     | Yes                            |
+| **Privacy**               | Your data leaves your home             | Your data stays home           |
+| **Depends on a company?** | Yes (they can shut it down anytime)    | No, you own it                 |
+| **Maintenance**           | They handle it                         | You handle it                  |
+| **Sustainability**        | Device becomes e-waste if service ends | Device keeps working for years |
+
+## Why this matters
+
+This is not an abstract tech debate. It is about real consequences:
+
+- Your internet goes out during a storm. Do your lights still work?
+- A company gets acquired and "sunsets" your product. Do you lose your investment?
+- You wonder who is watching your camera feed. Is the answer "only you"?
+
+<Callout type="warning" title="A real pattern">
+  Major smart home brands have shut down cloud services with little warning,
+  turning perfectly functional hardware into useless plastic. A local setup
+  protects you from this entirely.
+</Callout>
+
+## Our stance
+
+This guide aligns with the values of the [Open Home Foundation](https://www.openhomefoundation.org/): **privacy, choice, and sustainability.**
+
+You would not give a stranger the keys to your house. Do not give a company the keys to your data.
+
+**Start local if you can.** If you already have cloud-based devices, that is fine. You do not need to throw them out. But the next time you buy a device, make privacy part of the decision. Every local device you add is one less thing that depends on someone else's server.
+
+In the next chapter, we will dig deeper into security and privacy: what the real risks are, and how a few simple habits keep your smart home safe.
+
+{/* TODO: image placeholder - diagram showing cloud path (device → internet → server → internet → device) vs local path (device → hub → device) */}
