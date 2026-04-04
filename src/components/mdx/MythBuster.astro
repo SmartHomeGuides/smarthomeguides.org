@@ -1,0 +1,37 @@
+---
+import { t, defaultLocale, languages } from "@i18n/index";
+
+interface Props {
+  myth: string;
+  reality: string;
+}
+
+const { myth, reality } = Astro.props;
+const segment = Astro.url.pathname.split("/")[1] ?? defaultLocale;
+const locale = segment in languages ? (segment as "en" | "fr") : defaultLocale;
+---
+
+<div class="my-6">
+  <div class="chat chat-start">
+    <div class="chat-header mb-1">
+      <span class="badge badge-error badge-sm"
+        >{t(locale, "components.mythBuster.myth")}</span
+      >
+    </div>
+    <div class="chat-bubble chat-bubble-error bg-error/10 text-base-content">
+      {myth}
+    </div>
+  </div>
+  <div class="chat chat-end mt-2">
+    <div class="chat-header mb-1">
+      <span class="badge badge-success badge-sm"
+        >{t(locale, "components.mythBuster.reality")}</span
+      >
+    </div>
+    <div
+      class="chat-bubble chat-bubble-success bg-success/10 text-base-content"
+    >
+      {reality}
+    </div>
+  </div>
+</div>
