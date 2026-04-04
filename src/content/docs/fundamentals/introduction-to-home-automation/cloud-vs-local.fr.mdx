@@ -1,0 +1,81 @@
+---
+title: "Cloud ou local : comprendre les compromis"
+readingTime: 4
+order: 4
+---
+
+import Callout from "@components/mdx/Callout.astro";
+
+## Une question de clés
+
+Imaginez que vous louez un box de stockage à l'autre bout de la ville. C'est pratique : quelqu'un d'autre s'occupe de l'entretien, de la sécurité, de la gestion. Mais c'est lui qui a les clés. Il peut augmenter le loyer. Changer les règles. Et si la société met la clé sous la porte, il faudra récupérer vos affaires en catastrophe.
+
+Maintenant, imaginez que vous avez votre propre garage. C'est vous qui gérez. Il est toujours là, toujours accessible, et personne n'a son mot à dire sur ce que vous en faites. Un peu plus de boulot au départ, mais c'est le vôtre.
+
+Voilà toute la différence entre le cloud et le local en domotique. Et cette différence compte bien plus que ne le pensent la plupart des débutants.
+
+## Ce que « cloud » veut dire concrètement
+
+Quand un appareil connecté passe par le cloud, voici ce qui se passe à chaque utilisation :
+
+1. Vous appuyez sur « allumer la lumière » dans l'appli
+2. La commande part sur internet jusqu'au serveur du fabricant
+3. Le serveur traite la demande et renvoie une instruction
+4. Votre lumière s'allume
+
+Chaque action fait un aller-retour sur internet. Du coup :
+
+- **Il vous faut une connexion internet** pour que votre propre interrupteur fonctionne
+- **Le fabricant voit passer chaque commande** : quand vous allumez les lumières, quand vous partez, quelles sont vos habitudes
+- **Si leurs serveurs tombent**, vos appareils ne répondent plus
+- **Si l'entreprise ferme ou abandonne le produit**, votre appareil devient un presse-papiers
+
+C'est déjà arrivé. Plusieurs fois. Des entreprises domotiques ont coupé leurs serveurs, abandonné des produits et transformé du matériel fonctionnel en déchets électroniques du jour au lendemain. Quand un service cloud disparaît, il n'y a rien à faire : l'appareil ne vous a en fait jamais vraiment appartenu.
+
+## Ce que « local » veut dire concrètement
+
+Une installation domotique locale fonctionne autrement. Tout se passe chez vous :
+
+1. Un hub sur votre réseau domestique communique directement avec vos appareils
+2. Les commandes parcourent quelques mètres, pas des milliers de kilomètres
+3. Pas besoin d'internet. Aucun serveur extérieur dans la boucle.
+
+Vos données restent chez vous. Vos appareils répondent quasi instantanément. Et si votre connexion internet tombe, votre maison connectée continue de tourner, tout simplement parce qu'elle n'en a jamais eu besoin.
+
+## La comparaison
+
+|                               | Cloud                                             | Local                                                 |
+| ----------------------------- | ------------------------------------------------- | ----------------------------------------------------- |
+| **Mise en place**             | Facile (on télécharge une appli)                  | Plus de boulot au départ : installer un hub           |
+| **Vitesse**                   | Délai perceptible (aller-retour internet)         | Quasi instantané                                      |
+| **Fonctionne hors ligne ?**   | Non                                               | Oui                                                   |
+| **Vie privée**                | Vos données quittent votre domicile               | Vos données restent chez vous                         |
+| **Dépend d'une entreprise ?** | Oui (elle peut couper le service quand elle veut) | Non, c'est vous qui en êtes propriétaire              |
+| **Maintenance**               | C'est le fabricant qui s'en occupe                | C'est vous qui vous en occupez                        |
+| **Pérennité**                 | L'appareil devient inutile si le service s'arrête | L'appareil continue de fonctionner pendant des années |
+
+## Pourquoi c'est important
+
+Ce n'est pas un débat technique abstrait. Ce sont des conséquences bien réelles :
+
+- Votre connexion internet tombe pendant un orage. Est-ce que vos lumières fonctionnent encore ?
+- Une entreprise est rachetée et « arrête » votre produit. Est-ce que vous perdez votre investissement ?
+- Vous vous demandez qui regarde le flux de votre caméra. Est-ce que la réponse est « vous seul » ?
+
+<Callout type="warning" title="Un phénomène bien réel">
+  De grandes marques domotiques ont fermé leurs services cloud sans prévenir,
+  transformant du matériel parfaitement fonctionnel en plastique inutile. Une
+  installation locale vous protège totalement de ce risque.
+</Callout>
+
+## Notre position
+
+Ce guide s'inscrit dans les valeurs de l'[Open Home Foundation](https://www.openhomefoundation.org/) : **vie privée, liberté de choix et durabilité.**
+
+Vous ne donneriez pas les clés de votre maison à un inconnu. Ne donnez pas les clés de vos données à une entreprise.
+
+**Commencez en local si vous le pouvez.** Si vous avez déjà des appareils cloud, pas de panique. Inutile de tout jeter. Mais la prochaine fois que vous achetez un appareil, intégrez la vie privée dans vos critères de choix. Chaque appareil local que vous ajoutez, c'est une dépendance en moins vis-a-vis du serveur de quelqu'un d'autre.
+
+Dans le prochain chapitre, on creuse le sujet de la sécurité et de la vie privée : quels sont les vrais risques, et comment quelques bonnes habitudes suffisent à garder votre maison connectée en sécurité.
+
+{/* TODO: image placeholder - diagram showing cloud path (device → internet → server → internet → device) vs local path (device → hub → device) */}

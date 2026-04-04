@@ -1,0 +1,82 @@
+---
+title: "Sécurité et vie privée"
+readingTime: 4
+order: 5
+---
+
+import Callout from "@components/mdx/Callout.astro";
+
+## Commençons par être honnêtes
+
+Voici ce que la plupart des guides domotiques passent sous silence : une maison sans appareils connectés n'offre aucune surface d'attaque numérique. Pas de vulnérabilités réseau. Pas de firmware à mettre à jour. Pas de comptes à sécuriser. Ajouter des appareils connectés, c'est ajouter des portes. Des portes numériques que quelqu'un pourrait franchir si on les laisse ouvertes.
+
+Ce n'est pas une raison pour renoncer à la domotique. C'est une raison pour l'aborder en connaissance de cause.
+
+## Les vrais risques
+
+Oubliez les scénarios de piratage à la Hollywood. Voici ce qui peut concrètement mal tourner avec une maison connectée mal sécurisée :
+
+- **Quelqu'un accède au flux de votre caméra.** Si votre caméra passe par un service cloud avec un mot de passe faible, un attaquant n'aura pas grand mal à s'y connecter.
+- **Un appareil envoie vos habitudes à l'extérieur.** Certains appareils transmettent des données sur vos heures de présence, vos absences, vos routines, le tout vers un serveur que vous ne contrôlez pas.
+- **Un appareil vulnérable sert de porte d'entrée.** Un seul appareil bas de gamme, non mis à jour, sur votre réseau peut servir de point d'accès à tout le reste : votre ordinateur, vos fichiers, vos comptes.
+- **Une entreprise change les règles du jeu.** Les politiques de confidentialité évoluent. Les entreprises se font racheter. Des données qui étaient « privées » hier peuvent se retrouver partagées demain.
+
+Rien de tout cela n'est inévitable. Tout est évitable avec quelques bonnes habitudes.
+
+## Des gestes simples, pas des corvées
+
+Pas besoin de devenir expert en cybersécurité. Ce sont des actions simples, à faire une fois (ou rarement), qui font une vraie différence.
+
+### Des mots de passe solides et uniques
+
+Un mot de passe différent pour chaque appareil, chaque compte. Un gestionnaire de mots de passe rend la chose très simple : vous retenez un seul mot de passe principal, il gère tout le reste. Cette seule habitude bloque la grande majorité des attaques.
+
+### Vos appareils connectés sur un réseau à part
+
+La plupart des box internet et routeurs permettent de créer un réseau Wi-Fi invité. Mettez-y vos appareils domotiques et gardez vos ordinateurs et téléphones sur le réseau principal. Comme ça, même si un appareil est compromis, il ne peut pas atteindre vos fichiers personnels. Certains routeurs proposent aussi la notion de VLAN (même principe, configuration un peu plus technique).
+
+### Privilégiez les appareils qui fonctionnent en local
+
+C'est la mesure la plus efficace pour protéger votre vie privée. Si un appareil n'envoie pas de données sur internet, ces données ne peuvent être ni divulguées, ni vendues, ni exploitées. Elles restent chez vous, point. (On a détaillé ce sujet dans le chapitre précédent.)
+
+### Vérifiez les autorisations des applications
+
+Avant d'installer une appli domotique, regardez ce qu'elle demande comme autorisations. Une appli pour piloter des ampoules a-t-elle vraiment besoin d'accéder à vos contacts ? À votre localisation en permanence ? Si les autorisations ne collent pas avec la fonction, c'est mauvais signe.
+
+### Désactivez ce que vous n'utilisez pas
+
+Votre appareil a un micro que vous n'utilisez pas ? Désactivez-le. Il propose une synchronisation cloud alors que vous fonctionnez en local ? Désactivez-la. Chaque fonctionnalité inutilisée, c'est une surface d'exposition en plus pour rien.
+
+## La question des mises à jour
+
+Dans une maison non connectée, rien n'a besoin d'être mis à jour parce que rien n'embarque de logiciel. Les appareils connectés, si. Et comme tout logiciel, ils peuvent contenir des failles de sécurité qui sont corrigées au fil du temps.
+
+C'est un vrai compromis de la domotique, il faut l'admettre. La bonne nouvelle : si vous utilisez un hub comme Home Assistant, il peut vous signaler les mises à jour disponibles et souvent les appliquer pour vous. Concrètement, ce n'est pas une corvée quotidienne, plutôt quelques clics toutes les deux ou trois semaines. Mais c'est important, et autant être franc : c'est une responsabilité supplémentaire qui vient avec la maison connectée.
+
+## La vie privée, c'est un choix de conception
+
+La vie privée, ça ne se rajoute pas après coup. C'est une décision que vous prenez dès le départ, à chaque appareil que vous achetez, à chaque service que vous connectez.
+
+La règle la plus simple : **des données qui ne quittent jamais votre domicile ne peuvent pas être compromises.** Le local-first, ce n'est pas juste une question de confort. C'est le fondement même d'une maison connectée respectueuse de votre vie privée.
+
+<Callout type="tip" title="Ne laissez pas ce chapitre vous faire peur">
+  Quelques gestes simples (mots de passe solides, réseau séparé, appareils en
+  local) suffisent à rendre votre maison connectée bien plus sécurisée que la
+  plupart des PC portables ou smartphones. C'est tout à fait gérable, promis.
+</Callout>
+
+## Checklist sécurité
+
+| Action                                                      | Effort                                               | Impact     |
+| ----------------------------------------------------------- | ---------------------------------------------------- | ---------- |
+| Un mot de passe unique par appareil et par compte           | 5 min par appareil                                   | Elevé      |
+| Réseau Wi-Fi séparé pour les appareils connectés            | 30 min, une seule fois                               | Elevé      |
+| Privilégier les appareils fonctionnant en local             | Zéro effort supplémentaire, juste un critère d'achat | Tres élevé |
+| Désactiver les fonctionnalités inutiles (micro, sync cloud) | 2 min par appareil                                   | Moyen      |
+| Maintenir son hub à jour                                    | Quelques clics toutes les 2-3 semaines               | Moyen      |
+
+La plupart de ces actions se font une seule fois. Faites-les, et votre maison connectée sera déjà bien mieux protégée que la moyenne.
+
+Dans le prochain chapitre, on s'attaque aux idées reçues les plus répandues sur la domotique, y compris certaines auxquelles vous croyez peut-être en ce moment.
+
+{/* TODO: image placeholder - home network diagram with smart devices on a separate network segment */}
