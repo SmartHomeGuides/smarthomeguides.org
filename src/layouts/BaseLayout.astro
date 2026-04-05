@@ -70,19 +70,19 @@ const websiteSchema = JSON.stringify({
 ---
 
 <!doctype html>
-<html lang={locale} data-theme="lofi">
+<html lang={locale} data-theme="honeymilk">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta
       name="theme-color"
-      content="#4f46e5"
+      content="#e8dcc8"
       media="(prefers-color-scheme: light)"
     />
     <meta
       name="theme-color"
-      content="#312e81"
+      content="#2b2816"
       media="(prefers-color-scheme: dark)"
     />
 
@@ -136,8 +136,8 @@ const websiteSchema = JSON.stringify({
         const theme =
           stored ||
           (window.matchMedia("(prefers-color-scheme: light)").matches
-            ? "lofi"
-            : "sunset");
+            ? "honeymilk"
+            : "incognito");
         document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>

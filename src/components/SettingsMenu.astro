@@ -15,46 +15,9 @@ function switchLocaleInPath(path: string, from: Locale, to: Locale): string {
   return path.replace(`/${from}/`, `/${to}/`);
 }
 
-const lightThemes = [
-  "light",
-  "acid",
-  "autumn",
-  "bumblebee",
-  "caramellatte",
-  "cmyk",
-  "corporate",
-  "cupcake",
-  "cyberpunk",
-  "emerald",
-  "fantasy",
-  "garden",
-  "lemonade",
-  "lofi",
-  "nord",
-  "pastel",
-  "retro",
-  "silk",
-  "valentine",
-  "winter",
-  "wireframe",
-];
+const lightThemes = ["honeymilk"];
 
-const darkThemes = [
-  "dark",
-  "abyss",
-  "aqua",
-  "black",
-  "business",
-  "coffee",
-  "dim",
-  "dracula",
-  "forest",
-  "halloween",
-  "luxury",
-  "night",
-  "sunset",
-  "synthwave",
-];
+const darkThemes = ["incognito"];
 ---
 
 <div class="dropdown dropdown-end">
@@ -173,6 +136,7 @@ const darkThemes = [
 
 <script>
   const darkThemeSet = new Set([
+    "incognito",
     "dark",
     "abyss",
     "aqua",
@@ -189,7 +153,8 @@ const darkThemes = [
     "synthwave",
   ]);
 
-  const current = document.documentElement.getAttribute("data-theme") || "lofi";
+  const current =
+    document.documentElement.getAttribute("data-theme") || "honeymilk";
   let isDark = darkThemeSet.has(current);
 
   const modeToggle = document.getElementById(
@@ -236,8 +201,8 @@ const darkThemes = [
 
   // Shared toggle function used by both navbar button and dropdown toggle
   function toggleMode() {
-    const lastLight = localStorage.getItem("theme-light") || "lofi";
-    const lastDark = localStorage.getItem("theme-dark") || "sunset";
+    const lastLight = localStorage.getItem("theme-light") || "honeymilk";
+    const lastDark = localStorage.getItem("theme-dark") || "incognito";
     const next = isDark ? lastLight : lastDark;
     const currentTheme =
       document.documentElement.getAttribute("data-theme") ?? "lofi";

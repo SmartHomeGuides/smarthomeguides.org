@@ -54,22 +54,7 @@ const { locale = "en", term } = Astro.props;
     wrapper.appendChild(script);
 
     // Keep Giscus theme in sync with the site theme toggle
-    const darkThemes = [
-      "dark",
-      "abyss",
-      "aqua",
-      "black",
-      "business",
-      "coffee",
-      "dim",
-      "dracula",
-      "forest",
-      "halloween",
-      "luxury",
-      "night",
-      "sunset",
-      "synthwave",
-    ];
+    const darkThemes = ["incognito"];
     function updateGiscusTheme() {
       const current =
         document.documentElement.getAttribute("data-theme") || "light";

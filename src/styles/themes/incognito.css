@@ -1,0 +1,33 @@
+@plugin "daisyui/theme" {
+  name: "incognito";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(18% 0.008 105);
+  --color-base-200: oklch(14% 0.007 105);
+  --color-base-300: oklch(23% 0.01 100);
+  --color-base-content: oklch(84% 0.018 75);
+  --color-primary: oklch(100% 0 0);
+  --color-primary-content: oklch(0% 0 0);
+  --color-secondary: oklch(30% 0.02 90);
+  --color-secondary-content: oklch(84% 0.018 75);
+  --color-accent: oklch(55% 0.155 28);
+  --color-accent-content: oklch(18% 0.008 105);
+  --color-neutral-content: oklch(84% 0.018 75);
+  --color-info: oklch(60% 0.199 265.638);
+  --color-info-content: oklch(18% 0.008 105);
+  --color-success: oklch(55% 0.095 166.913);
+  --color-success-content: oklch(18% 0.008 105);
+  --color-warning: oklch(75% 0.189 84.429);
+  --color-warning-content: oklch(18% 0.008 105);
+  --color-error: oklch(60% 0.191 22.216);
+  --color-error-content: oklch(18% 0.008 105);
+  --radius-selector: 2rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 2px;
+  --depth: 1;
+  --noise: 1;
+}
