@@ -34,6 +34,12 @@
       "description": "Référence consultable des termes, protocoles et acronymes de la maison connectée."
     }
   },
+  "components": {
+    "mythBuster": {
+      "myth": "Mythe",
+      "reality": "Réalité"
+    }
+  },
   "guide": {
     "readingTime": "{minutes} min de lecture",
     "lastUpdated": "Dernière mise à jour",

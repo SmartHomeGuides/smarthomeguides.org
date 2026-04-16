@@ -1,0 +1,89 @@
+---
+title: "Préparer sa première maison connectée"
+readingTime: 4
+order: 7
+---
+
+import Callout from "@components/mdx/Callout.astro";
+import LinkCard from "@components/mdx/LinkCard.astro";
+
+## Avant d'acheter quoi que ce soit
+
+Pas besoin de planifier dans les moindres détails. Mais prendre dix minutes pour réfléchir avant votre premier achat vous évitera des heures de galère par la suite.
+
+L'erreur numéro un des débutants, c'est d'acheter d'abord et de réfléchir ensuite. Un appareil qui avait l'air génial dans un test ne résout peut-être aucun problème que vous avez vraiment. Du coup, avant de sortir la carte bleue, sortez un bloc-notes.
+
+## Partez d'un problème, pas d'un produit
+
+N'achetez pas une ampoule connectée parce qu'elle est en promo. Achetez-la parce que vous en avez marre de laisser la lumière du couloir allumée toute la nuit. Ne prenez pas un thermostat connecté parce qu'il a un beau design. Prenez-le parce que vous chauffez une maison vide et que ça se voit sur la facture.
+
+Une bonne automatisation part toujours d'un vrai agacement du quotidien. La technologie, c'est la solution, pas le point de départ.
+
+## Les bonnes questions à se poser
+
+Avant de vous lancer, prenez cinq minutes pour réfléchir à ces points :
+
+- **Qu'est-ce qui m'agace le plus chez moi en ce moment ?** Voilà votre première automatisation.
+- **Qui d'autre vit ici, et est-ce que tout le monde sera partant ?** Une automatisation qui complique la vie de votre conjoint(e) ou de vos colocataires, c'est pire que pas d'automatisation du tout.
+- **Est-ce que la vie privée compte assez pour moi pour partir en local dès le départ ?** (Après avoir lu ce guide, la réponse est probablement oui.)
+- **Quel budget je me donne pour les trois premiers mois ?** Pas besoin d'une fortune, mais avoir un ordre de grandeur en tête, ça aide.
+
+## La plateforme : Home Assistant
+
+Au vu de tout ce qu'on a abordé dans ce guide (local d'abord, vie privée, fiabilité, pas de dépendance au cloud), une seule plateforme coche toutes les cases : **Home Assistant**.
+
+C'est open source, soutenu par l'[Open Home Foundation](https://www.openhomefoundation.org/), et c'est tout simplement la plus grande communauté domotique au monde. Ça tourne en local, ça supporte quasiment tous les protocoles et appareils du marché, et ça ne dépend d'aucun cloud pour fonctionner.
+
+C'est par là qu'on vous recommande de commencer. Ce n'est pas la seule option, mais c'est celle qui colle le mieux avec les valeurs dont on a parlé tout au long de ce guide : **vie privée, liberté de choix et pérennité.**
+
+## Choisir le matériel pour votre hub
+
+Home Assistant a besoin d'un appareil pour tourner : un petit ordinateur allumé en permanence chez vous. Voici vos options, de la plus simple à la plus avancée :
+
+| Option                         | Coût          | Installation                                      | Idéal pour                                                                   |
+| ------------------------------ | ------------- | ------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Home Assistant Green**       | ~99 €         | Plug and play : on branche et on suit l'assistant | Les débutants qui veulent zéro prise de tête                                 |
+| **Un vieux PC ou portable**    | Gratuit       | Installer Home Assistant OS (HAOS)                | Réutiliser du matos qu'on a déjà                                             |
+| **Un mini PC dédié**           | 100 à 300 €   | Installer HAOS                                    | Une installation permanente, silencieuse et économe                          |
+| **Un serveur (Proxmox, etc.)** | 300 € et plus | Installation en VM, plus complexe                 | Les utilisateurs avancés qui veulent Home Assistant à côté d'autres services |
+
+<Callout type="tip" title="Pas sûr ? Partez sur le Home Assistant Green">
+  Il est conçu pour fonctionner sans se prendre la tête. Branchez-le sur votre
+  box, suivez l'assistant à l'écran, et Home Assistant tourne en quelques
+  minutes. Aucune compétence technique requise.
+</Callout>
+
+On parle ici uniquement du hub, le cerveau de votre maison connectée. Les appareils et les adaptateurs de protocole (comme une clé USB Zigbee) viennent en complément. On les abordera dans des guides dédiés.
+
+## Les erreurs classiques du débutant
+
+Quelques pièges faciles à éviter :
+
+- **Acheter des appareils de cinq écosystèmes différents.** Tenez-vous à un seul protocole pour commencer (Zigbee ou Z-Wave sont d'excellents choix locaux) et un seul hub. Tout mélanger dès le premier jour, c'est le chaos garanti.
+- **Tout automatiser d'un coup.** Commencez par une pièce, une routine. Faites les choses bien avant de vous étendre. (Souvenez-vous du chapitre 3.)
+- **Ignorer les autres habitants de la maison.** Si votre conjoint(e) ou votre coloc ne peut pas allumer les lumières sans passer par une appli, c'est raté. Tout le monde doit y trouver son compte.
+- **Choisir des appareils 100 % cloud sans s'en rendre compte.** Vérifiez avant d'acheter : est-ce que cet appareil fonctionne en local, ou est-ce qu'il a besoin du cloud du fabricant ? Cette seule question conditionne toute votre installation.
+
+## C'est parti
+
+Pas besoin de tout savoir. Pas besoin de l'installation parfaite dès le premier jour. Il vous faut un appareil, une automatisation, une première petite victoire. Le reste vient naturellement.
+
+Home Assistant, c'est du local d'abord, du respect de la vie privée, une communauté active et un projet pérenne. Ça ne vous enferme dans aucun fabricant ni aucun protocole. Commencez petit, et vous aurez une base qui grandit avec vous, pas contre vous.
+
+Bienvenue dans le monde de la domotique.
+
+---
+
+## À lire ensuite
+
+<LinkCard
+  title="Qu'est-ce que la domotique ?"
+  description="Plongée dans les appareils connectés, les protocoles, et le fonctionnement de votre maison connectée sous le capot."
+  href="/fr/guides/fundamentals/what-is-home-automation"
+/>
+
+<LinkCard
+  title="Glossaire"
+  description="Les définitions des termes essentiels : Zigbee, Z-Wave, MQTT, Matter, et bien d'autres."
+  href="/fr/guides/glossary"
+/>

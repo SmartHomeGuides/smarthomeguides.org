@@ -34,6 +34,12 @@
       "description": "Searchable reference of smart home terms, protocols, and acronyms."
     }
   },
+  "components": {
+    "mythBuster": {
+      "myth": "Myth",
+      "reality": "Reality"
+    }
+  },
   "guide": {
     "readingTime": "{minutes} min read",
     "lastUpdated": "Last updated",
